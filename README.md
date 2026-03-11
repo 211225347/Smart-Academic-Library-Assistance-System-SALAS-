@@ -1,4 +1,4 @@
-# 📚 Smart Academic Library Assistance System (SALAS)
+# Smart Academic Library Assistance System (SALAS)
 
 > An intelligent, AI-powered academic library platform designed to help university students efficiently discover, access, and manage academic resources — books, journals, research papers, and more.
 
@@ -15,7 +15,7 @@ Once completed, this system will allow students to:
 
 ---
 
-## 📄 Project Documents
+##  Project Documents
 
 | Document | Description |
 |---|---|
@@ -24,7 +24,7 @@ Once completed, this system will allow students to:
 
 ---
 
-## 🛠️ Planned Technology Stack
+## Planned Technology Stack
 
 | Layer | Technology |
 |---|---|
@@ -38,7 +38,7 @@ Once completed, this system will allow students to:
 
 ---
 
-## 📁 Repository Structure (Planned)
+## Repository Structure (Planned)
 
 ```
 smart-academic-library/
@@ -56,6 +56,6 @@ smart-academic-library/
 
 ## 👤 Author
 
-**[Your Name]**  
+**Phola Qwalana 211225347**  
 Software Engineering — Assignment 3  
-Submitted: March 2026
+Submitted:15 March 2026
