@@ -1,1 +1,1 @@
-# Smart-Academic-Library-Assistance-System-SALAS-
+# Smart Academic Library Assistance System (SALAS)
