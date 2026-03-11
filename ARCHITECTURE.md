@@ -1,6 +1,6 @@
 # ARCHITECTURE.md — Smart Academic Library Assistance System (SALAS)
 
-> C4 Model Architectural Diagrams using Mermaid  
+> C4 Model Architectural Diagrams using GitHub-compatible Mermaid syntax  
 > Covers: Context → Container → Component → Code (Class Diagram)
 
 ---
@@ -26,73 +26,84 @@ SALAS is decomposed into independently buildable modules (Search, Recommendation
 > Shows who uses SALAS and what external systems it interacts with.
 
 ```mermaid
-C4Context
-    title System Context Diagram — Smart Academic Library Assistance System (SALAS)
+flowchart TD
+    student(["👤 University Student\n─────────────────\nSearches resources, borrows\nbooks, views recommendations\nand manages reading lists"])
+    librarian(["👤 Librarian / Admin\n─────────────────\nManages catalogue, monitors\nborrowing activity, generates\nusage reports"])
 
-    Person(student, "University Student", "Searches for resources, borrows books, views recommendations and manages their academic reading")
-    Person(librarian, "Librarian / Admin", "Manages the library catalogue, monitors borrowing activity, and generates usage reports")
+    salas["🏛️ SALAS\n─────────────────\nSmart Academic Library\nAssistance System\n─────────────────\nProvides intelligent search,\npersonalized recommendations,\nborrowing management, and\na student dashboard"]
 
-    System(salas, "SALAS", "Smart Academic Library Assistance System — provides intelligent search, personalized recommendations, borrowing management, and a student dashboard")
+    email["📧 Email Service\n─────────────────\nSends notifications for\ndue dates, reservations,\nand new arrivals\n(SendGrid / SMTP)"]
+    portal["🏫 University Portal\n─────────────────\nExternal university system\nthat provides student\nenrollment and course data"]
+    openlib["📖 Open Library API\n─────────────────\nExternal API that provides\nbook metadata, cover images,\nand ISBN data"]
 
-    System_Ext(emailService, "Email Service", "Sends notifications for due dates, reservations, and new arrivals (e.g., SendGrid / SMTP)")
-    System_Ext(universityPortal, "University Portal", "External university system that links student enrollment and course data")
-    System_Ext(openLibraryAPI, "Open Library API", "External API used to enrich resource metadata: cover images, abstracts, ISBNs")
+    student -- "Searches, borrows, views dashboard [HTTPS]" --> salas
+    librarian -- "Manages catalogue, views reports [HTTPS]" --> salas
+    salas -- "Sends email notifications [SMTP / REST]" --> email
+    salas -- "Fetches student course data [REST API]" --> portal
+    salas -- "Fetches book metadata [REST API]" --> openlib
 
-    Rel(student, salas, "Searches resources, borrows books, views dashboard", "HTTPS")
-    Rel(librarian, salas, "Manages catalogue, views reports", "HTTPS")
-    Rel(salas, emailService, "Sends email notifications", "SMTP / REST API")
-    Rel(salas, universityPortal, "Fetches student course enrollment data", "REST API")
-    Rel(salas, openLibraryAPI, "Fetches book metadata and cover images", "REST API")
+    style salas fill:#1168BD,color:#fff,stroke:#0b4884
+    style student fill:#08427B,color:#fff,stroke:#052e56
+    style librarian fill:#08427B,color:#fff,stroke:#052e56
+    style email fill:#666,color:#fff,stroke:#444
+    style portal fill:#666,color:#fff,stroke:#444
+    style openlib fill:#666,color:#fff,stroke:#444
 ```
 
 ---
 
 ## C4 Level 2 — Container Diagram
 
-> Shows the major deployable units (containers) inside SALAS and how they communicate.
+> Shows the major deployable containers inside SALAS and how they communicate.
 
 ```mermaid
-C4Container
-    title Container Diagram — Smart Academic Library Assistance System (SALAS)
+flowchart TD
+    student(["👤 University Student"])
+    librarian(["👤 Librarian / Admin"])
 
-    Person(student, "University Student", "Uses the web app to search, borrow, and track resources")
-    Person(librarian, "Librarian", "Manages catalogue and views reports via the web app")
+    subgraph salas["SALAS — System Boundary"]
+        webApp["🖥️ Student Web App\n─────────────────\nReact.js + Tailwind CSS\n─────────────────\nResponsive SPA providing\nsearch, dashboard, and\nresource browsing"]
 
-    System_Boundary(salas, "SALAS System Boundary") {
+        adminApp["🖥️ Admin Web App\n─────────────────\nReact.js\n─────────────────\nInterface for librarians\nto manage catalogue and\nview usage reports"]
 
-        Container(webApp, "Student Web App", "React.js + Tailwind CSS", "Responsive single-page application providing the student dashboard, search interface, and resource browsing")
+        apiGateway["⚙️ Library REST API\n─────────────────\nNode.js + Express.js\n─────────────────\nCentral backend handling auth,\nsearch, borrowing, resource\nmanagement, and notifications"]
 
-        Container(adminApp, "Admin / Librarian Web App", "React.js", "Interface for librarians to manage catalogue inventory, view borrowing logs, and generate reports")
+        recommendEngine["🤖 Recommendation Engine\n─────────────────\nPython + Flask + scikit-learn\n─────────────────\nComputes personalized resource\nrecommendations using\ncollaborative filtering"]
 
-        Container(apiGateway, "Library REST API", "Node.js + Express.js", "Central backend API that handles authentication, search queries, borrowing logic, and resource management. Exposes endpoints for web apps and external integrations")
+        searchEngine["🔍 Search Service\n─────────────────\nElasticsearch\n─────────────────\nFull-text search index for\nall library resources"]
 
-        Container(recommendationService, "Recommendation Engine", "Python + Flask + scikit-learn", "Microservice that computes personalized resource recommendations using collaborative filtering on student borrowing and search history")
+        database[("🗄️ Primary Database\n─────────────────\nPostgreSQL\n─────────────────\nStores users, resources,\nloans, reservations,\nand reading lists")]
 
-        Container(searchEngine, "Search Service", "Elasticsearch", "Full-text search engine that indexes all library resources and returns ranked, filtered results in under 2 seconds")
+        cache[("⚡ Cache Layer\n─────────────────\nRedis\n─────────────────\nCaches search results,\nsession tokens, and\nrecommendation outputs")]
+    end
 
-        Container(database, "Primary Database", "PostgreSQL", "Stores all persistent data: users, resources, loans, reservations, reading lists, and recommendation logs")
+    email["📧 Email Service\n(SendGrid)"]
+    openlib["📖 Open Library API"]
 
-        Container(cache, "Cache Layer", "Redis", "Caches frequent search results, session tokens, and recommendation outputs to reduce latency")
-    }
+    student -- "HTTPS" --> webApp
+    librarian -- "HTTPS" --> adminApp
+    webApp -- "REST/JSON" --> apiGateway
+    adminApp -- "REST/JSON" --> apiGateway
+    apiGateway -- "SQL/TCP" --> database
+    apiGateway -- "REST/HTTP" --> searchEngine
+    apiGateway -- "Redis Protocol" --> cache
+    apiGateway -- "REST/HTTP" --> recommendEngine
+    apiGateway -- "REST API" --> email
+    apiGateway -- "REST API" --> openlib
+    recommendEngine -- "SQL/TCP" --> database
+    searchEngine -- "Logstash Sync" --> database
 
-    System_Ext(emailService, "Email Service (SendGrid)", "External email delivery service")
-    System_Ext(openLibraryAPI, "Open Library API", "External book metadata service")
-
-    Rel(student, webApp, "Uses", "HTTPS")
-    Rel(librarian, adminApp, "Uses", "HTTPS")
-
-    Rel(webApp, apiGateway, "API calls", "REST / JSON / HTTPS")
-    Rel(adminApp, apiGateway, "API calls", "REST / JSON / HTTPS")
-
-    Rel(apiGateway, database, "Reads and writes data", "SQL / TCP")
-    Rel(apiGateway, searchEngine, "Sends search queries", "REST / HTTP")
-    Rel(apiGateway, cache, "Caches sessions and results", "Redis Protocol")
-    Rel(apiGateway, recommendationService, "Requests recommendations", "REST / HTTP")
-    Rel(apiGateway, emailService, "Triggers email notifications", "REST API")
-    Rel(apiGateway, openLibraryAPI, "Fetches book metadata", "REST API")
-
-    Rel(recommendationService, database, "Reads borrowing and search history", "SQL / TCP")
-    Rel(searchEngine, database, "Syncs resource index", "JDBC / Logstash")
+    style webApp fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style adminApp fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style apiGateway fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style recommendEngine fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style searchEngine fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style database fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style cache fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style student fill:#08427B,color:#fff,stroke:#052e56
+    style librarian fill:#08427B,color:#fff,stroke:#052e56
+    style email fill:#666,color:#fff,stroke:#444
+    style openlib fill:#666,color:#fff,stroke:#444
 ```
 
 ---
@@ -102,53 +113,75 @@ C4Container
 > Zooms into the Library REST API container and shows its internal components.
 
 ```mermaid
-C4Component
-    title Component Diagram — Library REST API (Node.js / Express.js)
+flowchart TD
+    webApp(["🖥️ Student Web App"])
+    adminApp(["🖥️ Admin Web App"])
 
-    Container_Boundary(api, "Library REST API") {
+    subgraph api["Library REST API — Node.js / Express.js"]
+        authMiddleware["🔒 Auth Middleware\n─────────────────\nJWT Verification\n─────────────────\nValidates tokens on all\nprotected routes"]
 
-        Component(authController, "Auth Controller", "Express Router + JWT", "Handles student and librarian login, registration, token refresh, and logout. Issues signed JWT tokens")
+        authController["🔑 Auth Controller\n─────────────────\nExpress Router + JWT\n─────────────────\nHandles login, registration,\ntoken refresh and logout"]
 
-        Component(searchController, "Search Controller", "Express Router", "Receives search requests from the frontend, applies filters (author, year, availability), and forwards to the Search Service")
+        searchController["🔍 Search Controller\n─────────────────\nExpress Router\n─────────────────\nReceives queries, applies\nfilters, forwards to\nElasticsearch"]
 
-        Component(resourceController, "Resource Controller", "Express Router", "Handles CRUD operations for library resources: create, update, delete catalogue items (librarian only)")
+        resourceController["📚 Resource Controller\n─────────────────\nExpress Router\n─────────────────\nCRUD operations for\ncatalogue items\n(librarian only)"]
 
-        Component(borrowController, "Borrow & Reservation Controller", "Express Router", "Manages book borrowing lifecycle: check availability, create loan record, update inventory, trigger due-date notifications")
+        borrowController["📋 Borrow Controller\n─────────────────\nExpress Router\n─────────────────\nManages loan lifecycle:\ncheck, create, update\ninventory"]
 
-        Component(dashboardController, "Student Dashboard Controller", "Express Router", "Returns consolidated dashboard data: active loans, due dates, borrowing history, saved items, and notification feed")
+        dashboardController["📊 Dashboard Controller\n─────────────────\nExpress Router\n─────────────────\nReturns loans, due dates,\nhistory, saved items\nfor student view"]
 
-        Component(recommendController, "Recommendation Controller", "Express Router", "Proxies recommendation requests to the Python Recommendation Engine and returns personalized resource lists")
+        recommendController["🤖 Recommendation Controller\n─────────────────\nExpress Router\n─────────────────\nProxies requests to\nPython Recommendation\nEngine"]
 
-        Component(authMiddleware, "Auth Middleware", "JWT Verification", "Validates JWT tokens on all protected routes and attaches the authenticated user context to each request")
+        notificationService["📧 Notification Service\n─────────────────\nNode.js Service\n─────────────────\nSchedules and sends\nemail notifications\nfor due dates"]
 
-        Component(notificationService, "Notification Service", "Node.js Service Class", "Schedules and dispatches email notifications via the external email provider for due dates and reservation updates")
+        dal["🗃️ Data Access Layer\n─────────────────\nSequelize ORM\n─────────────────\nAbstracts all SQL queries\nModels: User, Resource,\nLoan, Reservation"]
+    end
 
-        Component(dataAccessLayer, "Data Access Layer", "Sequelize ORM", "Abstracts all SQL queries to PostgreSQL. Provides models for User, Resource, Loan, Reservation, and ReadingList")
-    }
+    db[("🗄️ PostgreSQL")]
+    es["🔍 Elasticsearch"]
+    rec["🤖 Recommendation Engine"]
+    emailSvc["📧 Email Service"]
 
-    ContainerDb(database, "PostgreSQL Database", "PostgreSQL", "Persistent storage for all entities")
-    Container(searchEngine, "Elasticsearch", "Search Engine", "Full-text search index")
-    Container(recommendationService, "Recommendation Engine", "Python / Flask", "ML recommendation microservice")
-    System_Ext(emailService, "Email Service", "SendGrid")
+    webApp --> authMiddleware
+    adminApp --> authMiddleware
+    authMiddleware --> authController
+    authMiddleware --> searchController
+    authMiddleware --> resourceController
+    authMiddleware --> borrowController
+    authMiddleware --> dashboardController
+    authMiddleware --> recommendController
 
-    Rel(authController, dataAccessLayer, "Validates credentials, creates users")
-    Rel(searchController, searchEngine, "Forwards search queries", "REST")
-    Rel(resourceController, dataAccessLayer, "CRUD for resources")
-    Rel(resourceController, searchEngine, "Re-indexes updated resources", "REST")
-    Rel(borrowController, dataAccessLayer, "Creates/updates loan records")
-    Rel(borrowController, notificationService, "Triggers due-date emails")
-    Rel(dashboardController, dataAccessLayer, "Reads loans, history, saved items")
-    Rel(recommendController, recommendationService, "GET /recommendations/{studentId}", "REST")
-    Rel(notificationService, emailService, "Sends email via API", "REST")
-    Rel(dataAccessLayer, database, "SQL queries", "TCP")
-    Rel(authMiddleware, authController, "Validates tokens for protected routes")
+    authController --> dal
+    searchController --> es
+    resourceController --> dal
+    resourceController --> es
+    borrowController --> dal
+    borrowController --> notificationService
+    dashboardController --> dal
+    recommendController --> rec
+    notificationService --> emailSvc
+    dal --> db
+
+    style authMiddleware fill:#85BBF0,color:#000,stroke:#5a9fd4
+    style authController fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style searchController fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style resourceController fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style borrowController fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style dashboardController fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style recommendController fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style notificationService fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style dal fill:#438DD5,color:#fff,stroke:#2b6cb0
+    style db fill:#1168BD,color:#fff,stroke:#0b4884
+    style es fill:#1168BD,color:#fff,stroke:#0b4884
+    style rec fill:#1168BD,color:#fff,stroke:#0b4884
+    style emailSvc fill:#666,color:#fff,stroke:#444
 ```
 
 ---
 
-## C4 Level 4 — Code Diagram (Resource Entity & Data Access)
+## C4 Level 4 — Code Diagram (Class Diagram)
 
-> Illustrates the key classes and relationships for the Resource domain model.
+> Illustrates the key classes and relationships for the core domain model.
 
 ```mermaid
 classDiagram
@@ -173,7 +206,6 @@ classDiagram
         +String author
         +String isbn
         +String genre
-        +String domain
         +int totalCopies
         +int availableCopies
         +String location
@@ -267,9 +299,9 @@ classDiagram
 
 | C4 Level | Diagram | Key Insight |
 |---|---|---|
-| **Level 1 — Context** | System in its environment | SALAS serves students & librarians; integrates with email, university portal, and Open Library API |
+| **Level 1 — Context** | System in its environment | SALAS serves students and librarians; integrates with email, university portal, and Open Library API |
 | **Level 2 — Container** | Deployable services | 7 containers: React SPA, Admin SPA, REST API, Recommendation Engine, Elasticsearch, PostgreSQL, Redis |
-| **Level 3 — Component** | API internals | 8 components inside the API: Auth, Search, Resource, Borrow, Dashboard, Recommendation, Notification, Data Access Layer |
+| **Level 3 — Component** | API internals | 8 components inside the API: Auth Middleware, Auth, Search, Resource, Borrow, Dashboard, Recommendation, Notification, and Data Access Layer |
 | **Level 4 — Code** | Class-level design | 8 core classes covering users, resources, loans, reservations, reading lists, recommendations, search, and notifications |
 
 The architecture follows a **microservices-lite** pattern: a central REST API handles most logic, while the computationally intensive Recommendation Engine is separated as an independent Python microservice. This maximises simplicity for solo development while enabling scalability.
