@@ -34,14 +34,14 @@ Once completed, this system will allow students to:
 
 ## Project Documents
 
-### Assignment 3 — System Specification & Architecture
+### Assignment 3 System Specification & Architecture
 
 | Document | Description |
 |---|---|
 | [SPECIFICATION.md](./SPECIFICATION.md) | Full system specification including domain, problem statement, functional & non-functional requirements, and use cases |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | C4 architectural diagrams (Context, Container, Component, Code) modeled using Mermaid |
 
-### Assignment 4 — Stakeholder & System Requirements
+### Assignment 4 Stakeholder & System Requirements
 
 | Document | Description |
 |---|---|
@@ -87,7 +87,7 @@ smart-academic-library/
 ## 👤 Author
 
 **Phola Qwalana 211225347**  
-Software Engineering — Assignment 3 & 4  
+Software Engineering Assignment 3 & 4  
 Submitted: March 2026
 
 
@@ -131,5 +131,5 @@ smart-academic-library/
 ## 👤 Author
 
 **Phola Qwalana 211225347**  
-Software Engineering — Assignment 4  
+Software Engineering Assignment 4  
 Submitted:15 March 2026
