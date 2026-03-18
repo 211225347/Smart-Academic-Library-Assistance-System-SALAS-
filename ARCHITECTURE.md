@@ -299,9 +299,9 @@ classDiagram
 
 | C4 Level | Diagram | Key Insight |
 |---|---|---|
-| **Level 1 — Context** | System in its environment | SALAS serves students and librarians; integrates with email, university portal, and Open Library API |
-| **Level 2 — Container** | Deployable services | 7 containers: React SPA, Admin SPA, REST API, Recommendation Engine, Elasticsearch, PostgreSQL, Redis |
-| **Level 3 — Component** | API internals | 8 components inside the API: Auth Middleware, Auth, Search, Resource, Borrow, Dashboard, Recommendation, Notification, and Data Access Layer |
-| **Level 4 — Code** | Class-level design | 8 core classes covering users, resources, loans, reservations, reading lists, recommendations, search, and notifications |
+| **Level 1: Context** | System in its environment | SALAS serves students and librarians; integrates with email, university portal, and Open Library API |
+| **Level 2: Container** | Deployable services | 7 containers: React SPA, Admin SPA, REST API, Recommendation Engine, Elasticsearch, PostgreSQL, Redis |
+| **Level 3: Component** | API internals | 8 components inside the API: Auth Middleware, Auth, Search, Resource, Borrow, Dashboard, Recommendation, Notification, and Data Access Layer |
+| **Level 4: Code** | Class-level design | 8 core classes covering users, resources, loans, reservations, reading lists, recommendations, search, and notifications |
 
 The architecture follows a **microservices-lite** pattern: a central REST API handles most logic, while the computationally intensive Recommendation Engine is separated as an independent Python microservice. This maximises simplicity for solo development while enabling scalability.
