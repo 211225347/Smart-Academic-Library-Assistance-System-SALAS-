@@ -1,8 +1,8 @@
-# REFLECTION.md — Challenges in Balancing Stakeholder Needs
+# REFLECTION.md Challenges in Balancing Stakeholder Needs
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 4: Reflection  
-> Building on Assignment 3 — SALAS
+> Building on Assignment 3 SALAS
 
 ---
 
@@ -16,7 +16,7 @@ Conducting stakeholder analysis and requirements elicitation for SALAS revealed 
 
 One of the most significant tensions was between **students' right to data privacy** and the **Data Science team's need for rich behavioral data** to build an effective recommendation model.
 
-Students and university administrators (under POPIA compliance obligations) want minimal personal data collected and the right to have all data deleted upon request. The recommendation engine, however, depends on detailed borrowing history, search patterns, and course enrollment data to produce meaningful suggestions — the more data, the better the model.
+Students and university administrators (under POPIA compliance obligations) want minimal personal data collected and the right to have all data deleted upon request. The recommendation engine, however, depends on detailed borrowing history, search patterns, and course enrollment data to produce meaningful suggestions, the more data, the better the model.
 
 **How I balanced this:**
 The requirement was resolved by mandating full anonymization of all data before it enters the training pipeline (FR-05, NFR-11). Student profiles used for model training are pseudonymized with no direct identifiers. A cold-start solution was also added: new students with no history receive course-based default recommendations, reducing the pressure to collect personal data immediately. The right to erasure is implemented as a "delete my data" feature that removes personal records within 30 days, while anonymized aggregate signals may be retained.
@@ -47,18 +47,18 @@ FR-07 was scoped to three specifically timed email triggers (3 days before due, 
 
 ## Challenge 4: Librarian Efficiency vs. Data Integrity Controls
 
-Librarians want a **fast, frictionless catalogue management tool** — they need to add, update, and delete resources quickly, especially during large new acquisitions. Imposing too many validation steps or confirmation dialogs slows them down significantly.
+Librarians want a **fast, frictionless catalogue management tool**, they need to add, update, and delete resources quickly, especially during large new acquisitions. Imposing too many validation steps or confirmation dialogs slows them down significantly.
 
 On the other hand, the university administrator and IT administrator need strong **data integrity controls**: accidental deletions, duplicate entries, and unvalidated ISBNs cause downstream problems in search accuracy, inventory counts, and reporting.
 
 **How I balanced this:**
-FR-06 introduces ISBN validation and bulk CSV import to speed up large data entry tasks, while the deletion block on resources with active loans prevents accidental removal of in-use items without adding friction to normal operations. Rather than confirmation dialogs for every action, a **soft-delete and undo window** approach was proposed — deletions are reversible within 60 seconds, after which they are committed. This gives librarians speed and trust without sacrificing data integrity.
+FR-06 introduces ISBN validation and bulk CSV import to speed up large data entry tasks, while the deletion block on resources with active loans prevents accidental removal of in-use items without adding friction to normal operations. Rather than confirmation dialogs for every action, a **soft-delete and undo window** approach was proposed, deletions are reversible within 60 seconds, after which they are committed. This gives librarians speed and trust without sacrificing data integrity.
 
 ---
 
 ## Challenge 5: Accessibility Requirements vs. Development Complexity
 
-The accessibility stakeholder (students with disabilities) requires a fully WCAG 2.1 AA compliant interface. While this is ethically non-negotiable and legally important, implementing full accessibility — ARIA live regions, keyboard navigation, screen reader testing, sufficient contrast — significantly increases frontend development time and complexity for a solo developer.
+The accessibility stakeholder (students with disabilities) requires a fully WCAG 2.1 AA compliant interface. While this is ethically non-negotiable and legally important, implementing full accessibility, ARIA live regions, keyboard navigation, screen reader testing, sufficient contrast, significantly increases frontend development time and complexity for a solo developer.
 
 **How I balanced this:**
 Rather than treating accessibility as a post-launch audit, NFR-01 and FR-12 embed accessibility as a core requirement from the start. Using a React component library with built-in accessibility (such as Radix UI or Headless UI) means most accessibility patterns are handled at the component level without custom implementation. Automated Lighthouse CI checks are included in the deployment pipeline to catch regressions early. This approach makes accessibility achievable within solo development constraints while maintaining compliance.
@@ -71,6 +71,6 @@ Rather than treating accessibility as a post-launch audit, NFR-01 and FR-12 embe
 
 **Specificity prevents arguments.** Vague requirements like "the system should be fast" create ambiguity that leads to disputes during testing. Writing measurable acceptance criteria (e.g., "p95 search latency ≤ 2,000ms") forces clarity upfront and makes it impossible to argue about whether a requirement has been met.
 
-**Priority frameworks help.** Using MoSCoW (Must Have / Should Have / Could Have / Won't Have) to categorize requirements made it easier to make trade-off decisions when stakeholder needs conflicted — lower-priority needs simply gave way to higher-priority ones rather than creating deadlock.
+**Priority frameworks help.** Using MoSCoW (Must Have / Should Have / Could Have / Won't Have) to categorize requirements made it easier to make trade-off decisions when stakeholder needs conflicted, lower-priority needs simply gave way to higher-priority ones rather than creating deadlock.
 
-**Technical and human concerns are equally important.** The most interesting challenges in this assignment were not purely technical — they were human. Balancing a student's desire for personalization with their right to privacy, or a librarian's need for speed with an administrator's need for control, required empathy and design thinking as much as software engineering knowledge.
+**Technical and human concerns are equally important.** The most interesting challenges in this assignment were not purely technical, they were human. Balancing a student's desire for personalization with their right to privacy, or a librarian's need for speed with an administrator's need for control, required empathy and design thinking as much as software engineering knowledge.
