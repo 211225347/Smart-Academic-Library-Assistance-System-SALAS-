@@ -1,4 +1,4 @@
-# SPECIFICATION.md — Smart Academic Library Assistance System (SALAS)
+# SPECIFICATION.md Smart Academic Library Assistance System (SALAS)
 
 ---
 
