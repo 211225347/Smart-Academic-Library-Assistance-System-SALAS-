@@ -1,8 +1,8 @@
-# SRD.md — System Requirements Document
+# SRD.md System Requirements Document
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 4: System Requirements Document  
-> Building on Assignment 3 — SALAS  
+> Building on Assignment 3 SALAS  
 > Version: 1.0 | Date: March 2026
 
 ---
@@ -191,7 +191,7 @@ SALAS is a web-based intelligent library management and resource discovery platf
 
 ---
 
-### FR-12: Accessibility-Compliant Interface
+### FR-12: Accessibility Compliant Interface
 **Statement:** The system shall implement a fully accessible user interface compliant with WCAG 2.1 Level AA, including screen reader support, full keyboard navigation, sufficient color contrast ratios, and descriptive alt-text on all images.
 
 **Stakeholder:** Student with Accessibility Needs, University Administrator
