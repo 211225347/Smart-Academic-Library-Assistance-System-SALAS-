@@ -1,4 +1,4 @@
-# ARCHITECTURE.md — Smart Academic Library Assistance System (SALAS)
+# ARCHITECTURE.md Smart Academic Library Assistance System (SALAS)
 
 > C4 Model Architectural Diagrams using GitHub-compatible Mermaid syntax  
 > Covers: Context → Container → Component → Code (Class Diagram)
@@ -21,7 +21,7 @@ SALAS is decomposed into independently buildable modules (Search, Recommendation
 
 ---
 
-## C4 Level 1 — System Context Diagram
+## C4 Level 1: System Context Diagram
 
 > Shows who uses SALAS and what external systems it interacts with.
 
@@ -52,7 +52,7 @@ flowchart TD
 
 ---
 
-## C4 Level 2 — Container Diagram
+## C4 Level 2: Container Diagram
 
 > Shows the major deployable containers inside SALAS and how they communicate.
 
@@ -108,7 +108,7 @@ flowchart TD
 
 ---
 
-## C4 Level 3 — Component Diagram (Library REST API)
+## C4 Level 3: Component Diagram (Library REST API)
 
 > Zooms into the Library REST API container and shows its internal components.
 
@@ -179,7 +179,7 @@ flowchart TD
 
 ---
 
-## C4 Level 4 — Code Diagram (Class Diagram)
+## C4 Level 4: Code Diagram (Class Diagram)
 
 > Illustrates the key classes and relationships for the core domain model.
 
