@@ -1,6 +1,6 @@
 # Smart Academic Library Assistance System (SALAS)
 
-> An intelligent, AI-powered academic library platform designed to help university students efficiently discover, access, and manage academic resources — books, journals, research papers, and more.
+> An intelligent, AI-powered academic library platform designed to help university students efficiently discover, access, and manage academic resources, books, journals, research papers, and more.
 
 ## Overview
 
@@ -15,9 +15,9 @@ Once completed, this system will allow students to:
 
 ---
 
-##  Project Documents# Smart Academic Library Assistance System (SALAS)
+##  Project Documents Smart Academic Library Assistance System (SALAS)
 
-> An intelligent, AI-powered academic library platform designed to help university students efficiently discover, access, and manage academic resources — books, journals, research papers, and more.
+> An intelligent, AI-powered academic library platform designed to help university students efficiently discover, access, and manage academic resources, books, journals, research papers, and more.
 
 ## Overview
 
@@ -46,7 +46,7 @@ Once completed, this system will allow students to:
 | Document | Description |
 |---|---|
 | [STAKEHOLDERS.md](./STAKEHOLDERS.md) | Detailed stakeholder analysis: roles, key concerns, pain points, and success metrics for 7 stakeholders |
-| [SRD.md](./SRD.md) | System Requirements Document — 12 functional requirements with acceptance criteria + 14 non-functional requirements across 6 quality categories |
+| [SRD.md](./SRD.md) | System Requirements Document: 12 functional requirements with acceptance criteria + 14 non-functional requirements across 6 quality categories |
 | [REFLECTION.md](./REFLECTION.md) | Reflection on challenges faced in balancing competing stakeholder needs during requirements elicitation |
 
 ---
@@ -65,7 +65,7 @@ Once completed, this system will allow students to:
 
 ---
 
-## 📁 Repository Structure (Planned)
+## Repository Structure 
 
 ```
 smart-academic-library/
@@ -84,7 +84,7 @@ smart-academic-library/
 
 ---
 
-## 👤 Author
+## Author
 
 **Phola Qwalana 211225347**  
 Software Engineering Assignment 3 & 4  
@@ -112,7 +112,7 @@ Submitted: March 2026
 
 ---
 
-## Repository Structure (Planned)
+## Repository Structure
 
 ```
 smart-academic-library/
@@ -128,7 +128,7 @@ smart-academic-library/
 
 ---
 
-## 👤 Author
+## Author
 
 **Phola Qwalana 211225347**  
 Software Engineering Assignment 4  
