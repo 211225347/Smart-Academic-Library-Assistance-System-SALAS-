@@ -1,13 +1,13 @@
-# USE_CASE_SPECIFICATIONS.md — Use Case Specifications
+# USE_CASE_SPECIFICATIONS.md Use Case Specifications
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 5: Detailed Use Case Specifications  
-> Building on Assignments 3 & 4 — SALAS  
-> Version: 1.0 | Date: March 2026
+> Building on Assignments 3 & 4 SALAS  
+> Date: March 2026
 
 ---
 
-## UC01 — Register and Login
+## UC01 Register and Login
 
 | Field | Detail |
 |---|---|
@@ -45,7 +45,7 @@
 
 ---
 
-## UC02 — Search Library Catalogue
+## UC02 Search Library Catalogue
 
 | Field | Detail |
 |---|---|
@@ -85,7 +85,7 @@
 
 ---
 
-## UC03 — Borrow / Reserve a Book
+## UC03 Borrow / Reserve a Book
 
 | Field | Detail |
 |---|---|
@@ -121,7 +121,7 @@
 
 ---
 
-## UC04 — View Student Dashboard
+## UC04 View Student Dashboard
 
 | Field | Detail |
 |---|---|
@@ -154,7 +154,7 @@
 
 ---
 
-## UC05 — Receive Personalized Recommendations
+## UC05 Receive Personalized Recommendations
 
 | Field | Detail |
 |---|---|
@@ -187,7 +187,7 @@
 
 ---
 
-## UC06 — Manage Library Catalogue
+## UC06 Manage Library Catalogue
 
 | Field | Detail |
 |---|---|
@@ -225,7 +225,7 @@
 
 ---
 
-## UC07 — Automated Overdue Notifications
+## UC07 Automated Overdue Notifications
 
 | Field | Detail |
 |---|---|
@@ -259,7 +259,7 @@
 
 ---
 
-## UC08 — Generate Usage Reports
+## UC08 Generate Usage Reports
 
 | Field | Detail |
 |---|---|
