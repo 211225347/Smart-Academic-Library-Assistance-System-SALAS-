@@ -29,7 +29,7 @@ Writing the basic flow of each use case was straightforward, it is essentially t
 
 For instance, the race condition in UC03 (Borrow a Book), where the last copy of a book is taken between the moment a student clicks "Borrow" and the moment the server processes the request, was not captured in any of the Assignment 4 requirements. Modelling the use case forced this scenario to the surface. Without an alternative flow to handle it, the system would either show a confusing error or silently fail. Writing the use case specification effectively acted as a requirements gap analysis, revealing an implicit requirement that had been missed.
 
-This experience reinforced that use case specifications are not just documentation of what has already been decided — they are a discovery tool that surfaces hidden requirements and ambiguities.
+This experience reinforced that use case specifications are not just documentation of what has already been decided, they are a discovery tool that surfaces hidden requirements and ambiguities.
 
 ## Challenge 4: Designing Testable Test Cases
 
@@ -41,7 +41,7 @@ The non-functional test cases were particularly difficult to specify. NFR-07 (1,
 
 A recurring structural challenge across this assignment was maintaining consistency with Assignments 3 and 4. Every use case had to align with a functional requirement from the SRD. Every test case had to reference a requirement ID. Every actor had to correspond to a stakeholder from the stakeholder analysis. When any element was added or adjusted in Assignment 5, it had the potential to create inconsistencies upstream.
 
-For example, when writing UC06 (Manage Library Catalogue), the bulk CSV import alternative flow was added — but this feature was already listed in FR-06's acceptance criteria from Assignment 4, so it was consistent. However, the export timeout scenario in UC08 (Generate Reports) extended beyond what FR-08 explicitly covered, requiring a judgment call about whether to add it as an implicit requirement or leave it as an implementation detail.
+For example, when writing UC06 (Manage Library Catalogue), the bulk CSV import alternative flow was added, but this feature was already listed in FR-06's acceptance criteria from Assignment 4, so it was consistent. However, the export timeout scenario in UC08 (Generate Reports) extended beyond what FR-08 explicitly covered, requiring a judgment call about whether to add it as an implicit requirement or leave it as an implementation detail.
 
 Managing this traceability manually across five documents is already challenging; in a real project with dozens of requirements and hundreds of test cases, this is where requirements management tools like Jira, Confluence, or dedicated traceability matrices become essential. This assignment gave a concrete appreciation for why such tooling exists.
 
