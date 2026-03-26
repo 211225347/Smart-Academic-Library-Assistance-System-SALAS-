@@ -34,4 +34,4 @@ SALAS unifies the library experience with smart search, personalized recommendat
 
 ## Author
 **Phola Qwalana 211225347**
-Software Engineering — Assignments 3, 4 & 5 |30 March 2026
+Software Engineering Assignments 3, 4 and 5 30 March 2026
