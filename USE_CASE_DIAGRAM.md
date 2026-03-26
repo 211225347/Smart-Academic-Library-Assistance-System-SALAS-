@@ -1,9 +1,9 @@
-# USE_CASE_DIAGRAM.md — Use Case Diagram
+# USE_CASE_DIAGRAM.md Use Case Diagram
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 5: Use Case Modeling  
-> Building on Assignments 3 & 4 — SALAS  
-> Version: 1.0 | Date: March 2026
+> Building on Assignments 3 & 4 SALAS  
+> Date: March 2026
 
 ---
 
