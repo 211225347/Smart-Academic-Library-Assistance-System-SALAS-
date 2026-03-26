@@ -9,20 +9,20 @@ SALAS unifies the library experience with smart search, personalized recommendat
 
 ## 📄 Project Documents
 
-### Assignment 3 — System Specification & Architecture
+### Assignment 3, System Specification & Architecture
 | Document | Description |
 |---|---|
 | [SPECIFICATION.md](./SPECIFICATION.md) | System specification, domain, problem statement, requirements |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | C4 diagrams in Mermaid |
 
-### Assignment 4 — Stakeholder & System Requirements
+### Assignment 4, Stakeholder & System Requirements
 | Document | Description |
 |---|---|
 | [STAKEHOLDERS.md](./STAKEHOLDERS.md) | 7 stakeholders with roles, concerns, pain points, success metrics |
 | [SRD.md](./SRD.md) | 12 functional + 14 non-functional requirements |
 | [REFLECTION.md](./REFLECTION.md) | Reflection on balancing stakeholder needs |
 
-### Assignment 5 — Use Case Modeling & Test Cases
+### Assignment 5, Use Case Modeling & Test Cases
 | Document | Description |
 |---|---|
 | [USE_CASE_DIAGRAM.md](./USE_CASE_DIAGRAM.md) | UML use case diagram with 7 actors and 12 use cases |
