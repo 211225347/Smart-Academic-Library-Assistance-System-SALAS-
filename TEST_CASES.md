@@ -1,9 +1,9 @@
-# TEST_CASES.md — Test Case Development
+# TEST_CASES.md Test Case Development
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 5: Test Case Development  
-> Building on Assignments 3 & 4 — SALAS  
-> Version: 1.0 | Date: March 2026
+> Building on Assignments 3 & 4 SALAS  
+> Date: March 2026
 
 ---
 
@@ -34,7 +34,7 @@ This document defines test cases to validate the functional and non-functional r
 
 ## 3. Non-Functional Test Cases
 
-### NFR Test 1: Performance — Concurrent User Load Test
+### NFR Test 1: Performance, Concurrent User Load Test
 
 | Field | Detail |
 |---|---|
@@ -49,7 +49,7 @@ This document defines test cases to validate the functional and non-functional r
 
 ---
 
-### NFR Test 2: Security — Brute Force and JWT Validation
+### NFR Test 2: Security, Brute Force and JWT Validation
 
 | Field | Detail |
 |---|---|
