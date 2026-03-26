@@ -1,9 +1,9 @@
-# REFLECTION5.md — Challenges in Translating Requirements to Use Cases and Tests
+# REFLECTION5.md, Challenges in Translating Requirements to Use Cases and Tests
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 5: Reflection  
-> Building on Assignments 3, 4 & 5 — SALAS  
-> Version: 1.0 | Date: March 2026
+> Building on Assignments 3, 4 & 5 SALAS  
+> Date: March 2026
 
 ---
 
@@ -13,21 +13,21 @@ Translating the stakeholder concerns and system requirements from Assignment 4 i
 
 The first and most persistent challenge was deciding how detailed each use case should be. On one extreme, every button click could be its own use case. On the other extreme, "Student uses the library system" could be one giant use case that captures nothing useful. Finding the right level of abstraction required several iterations.
 
-For example, "Search Library Catalogue" (UC02) initially included authentication, filtering, viewing results, and borrowing — all in one flow. This was too broad to be useful for testing or implementation. Breaking it apart into UC02 (Search), UC03 (Borrow/Reserve), and connecting them with include/extend relationships produced a much cleaner model. However, drawing these lines required a deep understanding of which steps were truly independent actions and which were mandatory sub-steps — a distinction that is not always obvious from requirements alone.
+For example, "Search Library Catalogue" (UC02) initially included authentication, filtering, viewing results, and borrowing — all in one flow. This was too broad to be useful for testing or implementation. Breaking it apart into UC02 (Search), UC03 (Borrow/Reserve), and connecting them with include/extend relationships produced a much cleaner model. However, drawing these lines required a deep understanding of which steps were truly independent actions and which were mandatory sub-steps, a distinction that is not always obvious from requirements alone.
 
 The lesson learned is that use case granularity should be driven by *actor intent*: each use case should represent one complete, meaningful goal a user is trying to achieve. If you can describe the goal in one sentence from the actor's perspective, you have the right level.
 
 ## Challenge 2: Modelling the Recommendation Engine as an Actor
 
-A non-obvious challenge arose with the Recommendation Engine. Unlike the other actors (students, librarians, admins), the Recommendation Engine is not a human — it is an automated internal service. Standard UML use case diagrams typically show external actors, but the Recommendation Engine clearly initiates use case UC05 (Receive Personalized Recommendations) from the system's perspective.
+A non-obvious challenge arose with the Recommendation Engine. Unlike the other actors (students, librarians, admins), the Recommendation Engine is not a human, it is an automated internal service. Standard UML use case diagrams typically show external actors, but the Recommendation Engine clearly initiates use case UC05 (Receive Personalized Recommendations) from the system's perspective.
 
-The decision to include it as a system actor was justified by the fact that it operates independently on a schedule and produces outputs that affect what students see. Treating it as a secondary actor with a dashed boundary correctly communicates that it is an automated participant. This was a judgment call that required going back to the stakeholder analysis from Assignment 4, where the Data Science Team was identified as a distinct stakeholder with its own concerns — confirming that the recommendation pipeline deserved representation in the use case model.
+The decision to include it as a system actor was justified by the fact that it operates independently on a schedule and produces outputs that affect what students see. Treating it as a secondary actor with a dashed boundary correctly communicates that it is an automated participant. This was a judgment call that required going back to the stakeholder analysis from Assignment 4, where the Data Science Team was identified as a distinct stakeholder with its own concerns, confirming that the recommendation pipeline deserved representation in the use case model.
 
 ## Challenge 3: Writing Meaningful Alternative Flows
 
-Writing the basic flow of each use case was straightforward — it is essentially the happy path. The real difficulty was in alternative flows. The temptation is to write alternative flows only for obvious error cases (wrong password, book not found), but truly useful alternative flows cover edge cases that are only discovered by thinking adversarially about the system.
+Writing the basic flow of each use case was straightforward, it is essentially the happy path. The real difficulty was in alternative flows. The temptation is to write alternative flows only for obvious error cases (wrong password, book not found), but truly useful alternative flows cover edge cases that are only discovered by thinking adversarially about the system.
 
-For instance, the race condition in UC03 (Borrow a Book) — where the last copy of a book is taken between the moment a student clicks "Borrow" and the moment the server processes the request — was not captured in any of the Assignment 4 requirements. Modelling the use case forced this scenario to the surface. Without an alternative flow to handle it, the system would either show a confusing error or silently fail. Writing the use case specification effectively acted as a requirements gap analysis, revealing an implicit requirement that had been missed.
+For instance, the race condition in UC03 (Borrow a Book), where the last copy of a book is taken between the moment a student clicks "Borrow" and the moment the server processes the request, was not captured in any of the Assignment 4 requirements. Modelling the use case forced this scenario to the surface. Without an alternative flow to handle it, the system would either show a confusing error or silently fail. Writing the use case specification effectively acted as a requirements gap analysis, revealing an implicit requirement that had been missed.
 
 This experience reinforced that use case specifications are not just documentation of what has already been decided — they are a discovery tool that surfaces hidden requirements and ambiguities.
 
@@ -47,4 +47,4 @@ Managing this traceability manually across five documents is already challenging
 
 ## Conclusion
 
-The process of creating use case diagrams, specifications, and test cases for SALAS demonstrated that requirements engineering is not a linear process. Each artifact — stakeholder analysis, SRD, use case model, test cases — feeds back into the others, revealing gaps and ambiguities that were invisible at earlier stages. The most valuable outcome of this assignment was not the documents themselves, but the thinking that producing them forced.
+The process of creating use case diagrams, specifications, and test cases for SALAS demonstrated that requirements engineering is not a linear process. Each artifact, stakeholder analysis, SRD, use case model, test cases, feeds back into the others, revealing gaps and ambiguities that were invisible at earlier stages. The most valuable outcome of this assignment was not the documents themselves, but the thinking that producing them forced.
