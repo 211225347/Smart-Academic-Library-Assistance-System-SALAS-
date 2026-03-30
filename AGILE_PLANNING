@@ -1,0 +1,142 @@
+# AGILE_PLANNING.md — Agile Planning Document
+## Smart Academic Library Assistance System (SALAS)
+
+> Assignment 6: Agile User Stories, Backlog, and Sprint Planning
+> Building on Assignments 3–5 — SALAS
+> Version: 1.0 | Date: March 2026
+
+---
+
+## 1. User Stories
+
+> Format: *"As a [role], I want [action] so that [benefit]."*
+> All stories traced to functional requirements (Assignment 4) and use cases (Assignment 5).
+
+| Story ID | User Story | Linked FR / UC | Acceptance Criteria | Priority |
+|---|---|---|---|---|
+| US-001 | As a **student**, I want to search for books by title, author, or ISBN so that I can quickly find the resources I need for my studies. | FR-02 / UC02 | Search results returned in ≤ 2 seconds; availability status shown on each result; filters work without page reload. | High |
+| US-002 | As a **student**, I want to register and log in using my university email so that my account is linked to my institution. | FR-01 / UC01 | Registration blocked for non-university emails; JWT issued on login; account locked after 5 failed attempts. | High |
+| US-003 | As a **student**, I want to borrow or reserve a book online so that I don't have to visit the library in person to secure a resource. | FR-03 / UC03 | Loan record created with 14-day due date; inventory decremented; confirmation email sent within 60 seconds. | High |
+| US-004 | As a **student**, I want to view my personal dashboard so that I can see my active loans, due dates, and overdue notices in one place. | FR-04 / UC04 | Dashboard loads within 2 seconds; items due within 3 days highlighted in red; borrowing history shows last 12 months. | High |
+| US-005 | As a **student**, I want to receive personalized book recommendations so that I can discover resources relevant to my course without manually searching. | FR-05 / UC05 | Minimum 10 recommendations shown; updated every 24 hours; new students receive course-based defaults within 1 hour. | Medium |
+| US-006 | As a **librarian**, I want to add, edit, and delete resources from the catalogue so that the library inventory stays accurate and up to date. | FR-06 / UC06 | New resources indexed in Elasticsearch within 30 seconds; ISBN validated; deletion blocked if active loans exist. | High |
+| US-007 | As a **student**, I want to receive automated email reminders before my book is due so that I can return it on time and avoid fines. | FR-07 / UC07 | Emails sent 3 days before, on, and 1 day after due date; email includes title, due date, and dashboard link. | High |
+| US-008 | As a **university administrator**, I want to generate and export usage reports so that I can make data-driven decisions about resource procurement. | FR-08 / UC08 | Reports filterable by date, department, and resource type; PDF/CSV export generated within 10 seconds. | Medium |
+| US-009 | As an **external developer**, I want to access a versioned REST API with OpenAPI documentation so that I can integrate library features into the university portal. | FR-09 / UC09 | Swagger UI at `/api/v1/docs`; all endpoints return correct HTTP status codes; API sandbox available 24/7. | Medium |
+| US-010 | As an **IT administrator**, I want role-based access control enforced so that students, librarians, and admins can only access features relevant to their role. | FR-10 / UC10 | Students cannot access admin endpoints; unauthorized requests return HTTP 403; role changes are audit-logged. | High |
+| US-011 | As a **student**, I want to save resources to a personal reading list so that I can keep track of books I want to read in the future. | FR-11 / UC11 | Resource saved in 1 click; up to 10 collections supported; reading list persists across devices and sessions. | Low |
+| US-012 | As a **student with a disability**, I want the interface to be fully keyboard-navigable and screen-reader compatible so that I can use the library system independently. | FR-12 / UC02, UC04 | Lighthouse accessibility score ≥ 95; all interactive elements reachable by keyboard; ARIA live regions announced. | High |
+| US-013 | As a **system administrator**, I want all student data encrypted with AES-256 and transmitted over TLS so that security and POPIA compliance are maintained. | NFR-09 | Zero plaintext personal data in DB; SSL Labs Grade A; TLS enforced on all endpoints. | High |
+| US-014 | As a **librarian**, I want to bulk import resources from a CSV file so that I can add large acquisitions quickly without manual data entry. | FR-06 / UC06a | CSV of up to 1,000 rows processed; invalid rows flagged in error report; valid records indexed within 60 seconds. | Medium |
+
+---
+
+## 2. Product Backlog
+
+> Prioritized using MoSCoW. Effort estimated using Fibonacci story points (1, 2, 3, 5, 8, 13).
+
+| Story ID | User Story (Summary) | MoSCoW | Story Points | Dependencies | Justification |
+|---|---|---|---|---|---|
+| US-002 | Student registration and login | Must-have | 3 | None | All other features require authentication; foundational to the entire system. |
+| US-010 | Role-based access control | Must-have | 3 | US-002 | Security baseline; without RBAC, no safe multi-role access is possible. |
+| US-013 | AES-256 encryption + TLS | Must-have | 2 | US-002 | POPIA compliance is legally required before any personal data is processed. |
+| US-001 | Search library catalogue | Must-have | 5 | US-002 | Core value proposition of SALAS; directly addresses the #1 student pain point. |
+| US-003 | Borrow / reserve a book | Must-have | 5 | US-001, US-002 | Key student workflow; required for the system to replace manual library processes. |
+| US-004 | Student personal dashboard | Must-have | 5 | US-002, US-003 | Students need a unified view of loans and due dates; critical for engagement. |
+| US-006 | Librarian catalogue management | Must-have | 5 | US-010 | Librarians must be able to manage inventory; system has no data without this. |
+| US-007 | Automated overdue notifications | Must-have | 3 | US-003 | Directly reduces overdue rates; key success metric for librarian stakeholder. |
+| US-012 | Accessible interface (WCAG 2.1 AA) | Must-have | 3 | US-001, US-004 | Legal and ethical obligation; addresses accessibility stakeholder concerns. |
+| US-005 | Personalized recommendations | Should-have | 8 | US-001, US-003 | High student value but depends on sufficient borrowing history data. |
+| US-008 | Usage reports and analytics | Should-have | 5 | US-003, US-006 | Valuable for admin decisions but not required for core system operation. |
+| US-009 | REST API for external integration | Should-have | 5 | US-002, US-001 | Needed for university portal integration but not required for MVP launch. |
+| US-014 | Bulk CSV import for librarians | Should-have | 3 | US-006 | Speeds up large acquisitions; not critical until catalogue grows significantly. |
+| US-011 | Student reading list | Could-have | 2 | US-001, US-002 | Nice-to-have feature; low effort but low critical impact on core workflows. |
+
+### Prioritization Justification
+
+**Must-have stories** form the MVP: authentication, RBAC, encryption, search, borrowing, dashboard, catalogue management, notifications, and accessibility. These directly map to the highest-priority stakeholder success metrics identified in `STAKEHOLDERS.md` — students finding resources efficiently, librarians managing inventory accurately, and IT administrators maintaining security. Without these, SALAS cannot function as a library system.
+
+**Should-have stories** (recommendations, reporting, API, bulk import) deliver significant value but can be deferred to Sprint 2 and 3 without blocking the MVP. They align with medium-priority stakeholder concerns.
+
+**Could-have stories** (reading list) are low-effort enhancements that improve the student experience but are not required for the system to meet its core purpose.
+
+---
+
+## 3. Sprint 1 Plan
+
+### Sprint Goal
+> *"Deliver a working authentication system, role-based access control, and core book search functionality so that students can securely log in and search the library catalogue — forming the foundation of the SALAS MVP."*
+
+**Sprint Duration:** 2 weeks (Week 1–2 of development)
+**Sprint Velocity:** 18 story points
+**Selected Stories:** US-002, US-010, US-013, US-001
+
+| Story ID | Summary | Story Points |
+|---|---|---|
+| US-002 | Student registration and login | 3 |
+| US-010 | Role-based access control | 3 |
+| US-013 | AES-256 encryption + TLS | 2 |
+| US-001 | Search library catalogue | 5 |
+| **Total** | | **13** |
+
+> Sprint 1 is intentionally conservative (13 of 18 available points) to account for project setup, environment configuration, and CI/CD pipeline establishment in the first sprint.
+
+---
+
+### Sprint Backlog — Task Breakdown
+
+| Task ID | Story ID | Task Description | Assigned To | Estimated Hours | Status |
+|---|---|---|---|---|---|
+| T-001 | US-002 | Set up PostgreSQL User table schema (id, name, email, passwordHash, role, createdAt) | Dev Team | 2 | To Do |
+| T-002 | US-002 | Implement POST `/api/v1/auth/register` endpoint with email domain validation | Dev Team | 4 | To Do |
+| T-003 | US-002 | Implement POST `/api/v1/auth/login` endpoint with JWT + refresh token generation | Dev Team | 4 | To Do |
+| T-004 | US-002 | Implement account lockout after 5 failed login attempts (Redis counter) | Dev Team | 3 | To Do |
+| T-005 | US-002 | Build React registration and login forms with validation | Dev Team | 5 | To Do |
+| T-006 | US-002 | Write unit tests for auth endpoints (register, login, lockout) | Dev Team | 3 | To Do |
+| T-007 | US-010 | Implement JWT Auth Middleware to validate tokens on protected routes | Dev Team | 3 | To Do |
+| T-008 | US-010 | Define and enforce role permissions: STUDENT, LIBRARIAN, ADMIN | Dev Team | 3 | To Do |
+| T-009 | US-010 | Return HTTP 403 on unauthorized role access; log security events | Dev Team | 2 | To Do |
+| T-010 | US-010 | Write integration tests for RBAC (student accessing admin route, etc.) | Dev Team | 3 | To Do |
+| T-011 | US-013 | Configure TLS certificate on API server (Let's Encrypt / AWS ACM) | Dev Team | 2 | To Do |
+| T-012 | US-013 | Enforce AES-256 encryption for sensitive fields at rest (passwords via bcrypt, PII via column encryption) | Dev Team | 3 | To Do |
+| T-013 | US-013 | Verify SSL Labs Grade A rating on staging environment | Dev Team | 1 | To Do |
+| T-014 | US-001 | Set up Elasticsearch index with resource mapping (title, author, ISBN, genre, availability) | Dev Team | 4 | To Do |
+| T-015 | US-001 | Implement GET `/api/v1/search?q=&filters=` endpoint with Elasticsearch query | Dev Team | 6 | To Do |
+| T-016 | US-001 | Enrich search results with real-time availability from PostgreSQL | Dev Team | 3 | To Do |
+| T-017 | US-001 | Build React search bar and results page with filter controls | Dev Team | 6 | To Do |
+| T-018 | US-001 | Write performance test: search returns results in ≤ 2 seconds under load | Dev Team | 3 | To Do |
+| T-019 | US-001 | Seed Elasticsearch with 500 sample library records for testing | Dev Team | 2 | To Do |
+| **Total** | | | | **62 hours** | |
+
+---
+
+### Sprint 1 Definition of Done
+
+A user story is considered **Done** when:
+- [ ] All tasks for the story are completed
+- [ ] Unit and integration tests written and passing
+- [ ] Code reviewed and merged to `main` branch
+- [ ] Feature tested manually in staging environment
+- [ ] Acceptance criteria verified against the user story
+- [ ] No critical bugs open against the story
+
+---
+
+## 4. Traceability Summary
+
+| User Story | Assignment 4 FR | Assignment 5 UC | Sprint |
+|---|---|---|---|
+| US-001 | FR-02 | UC02 | Sprint 1 |
+| US-002 | FR-01 | UC01 | Sprint 1 |
+| US-003 | FR-03 | UC03 | Sprint 2 |
+| US-004 | FR-04 | UC04 | Sprint 2 |
+| US-005 | FR-05 | UC05 | Sprint 3 |
+| US-006 | FR-06 | UC06 | Sprint 2 |
+| US-007 | FR-07 | UC07 | Sprint 2 |
+| US-008 | FR-08 | UC08 | Sprint 3 |
+| US-009 | FR-09 | UC09 | Sprint 3 |
+| US-010 | FR-10 | UC10 | Sprint 1 |
+| US-011 | FR-11 | UC11 | Sprint 4 |
+| US-012 | FR-12 | UC02, UC04 | Sprint 2 |
+| US-013 | NFR-09 | — | Sprint 1 |
+| US-014 | FR-06 | UC06a | Sprint 3 |
