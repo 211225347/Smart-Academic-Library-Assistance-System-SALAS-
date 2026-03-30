@@ -1,5 +1,3 @@
-[README_A6_updated.md](https://github.com/user-attachments/files/26358096/README_A6_updated.md)
-[README_A6_updated.md](https://github.com/user-attachments/files/26358096/README_A6_updated.md)
 # 📚 Smart Academic Library Assistance System (SALAS)
 
 > An intelligent, AI-powered academic library platform for university students.
@@ -15,28 +13,28 @@ SALAS unifies the library experience with smart search, personalized recommendat
 | Document | Description |
 |---|---|
 | [SPECIFICATION.md](./SPECIFICATION.md) | System specification, domain, problem statement, requirements |
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | C4 diagrams (Context, Container, Component, Code) in Mermaid |
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | C4 diagrams in Mermaid |
 
 ### Assignment 4 — Stakeholder & System Requirements
 | Document | Description |
 |---|---|
 | [STAKEHOLDERS.md](./STAKEHOLDERS.md) | 7 stakeholders with roles, concerns, pain points, success metrics |
-| [SRD.md](./SRD.md) | 12 functional + 14 non-functional requirements with acceptance criteria |
+| [SRD.md](./SRD.md) | 12 functional + 14 non-functional requirements |
 | [REFLECTION.md](./REFLECTION.md) | Reflection on balancing stakeholder needs |
 
 ### Assignment 5 — Use Case Modeling & Test Cases
 | Document | Description |
 |---|---|
 | [USE_CASE_DIAGRAM.md](./USE_CASE_DIAGRAM.md) | UML use case diagram with 7 actors and 12 use cases |
-| [USE_CASE_SPECIFICATIONS.md](./USE_CASE_SPECIFICATIONS.md) | 8 detailed use case specifications with flows |
+| [USE_CASE_SPECIFICATIONS.md](./USE_CASE_SPECIFICATIONS.md) | 8 detailed use case specifications |
 | [TEST_CASES.md](./TEST_CASES.md) | 12 functional + 2 non-functional test cases |
-| [REFLECTION5.md](./REFLECTION5.md) | Reflection on translating requirements to use cases and tests |
+| [REFLECTION5.md](./REFLECTION5.md) | Reflection on translating requirements to use cases |
 
 ### Assignment 6 — Agile Planning
 | Document | Description |
 |---|---|
-| [AGILE_PLANNING.md](./AGILE_PLANNING.md) | 14 user stories, prioritized product backlog (MoSCoW), and Sprint 1 plan with task breakdown |
-| [REFLECTION6.md](./REFLECTION6.md) | Reflection on prioritization, estimation, and Agile alignment challenges |
+| [AGILE_PLANNING.md](./AGILE_PLANNING.md) | 14 user stories, MoSCoW backlog, Sprint 1 plan |
+| [REFLECTION6.md](./REFLECTION6.md) | Reflection on Agile prioritization and estimation |
 
 ---
 
