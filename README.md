@@ -1,4 +1,4 @@
-# 📚 Smart Academic Library Assistance System (SALAS)
+#Smart Academic Library Assistance System (SALAS)
 
 > An intelligent, AI-powered academic library platform for university students.
 
@@ -38,6 +38,6 @@ SALAS unifies the library experience with smart search, personalized recommendat
 
 ---
 
-## 👤 Author
+## Author
 **Phola Qwalana 211225347**
-Software Engineering — Assignments 3, 4, 5 & 6 | March 2026
+Software Engineering — Assignments 3, 4, 5 & 6 |5 April 2026
