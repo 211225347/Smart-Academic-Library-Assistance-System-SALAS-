@@ -7,7 +7,7 @@ SALAS unifies the library experience with smart search, personalized recommendat
 
 ---
 
-## 📄 Project Documents
+## Project Documents
 
 ### Assignment 3 — System Specification & Architecture
 | Document | Description |
