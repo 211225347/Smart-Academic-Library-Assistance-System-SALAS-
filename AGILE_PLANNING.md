@@ -3,7 +3,7 @@
 
 > Assignment 6: Agile User Stories, Backlog, and Sprint Planning
 > Building on Assignments 3–5 — SALAS
-> Version: 1.0 | Date: March 2026
+> Date:5 April 2026
 
 ---
 
@@ -13,7 +13,7 @@ This document translates the system requirements (Assignment 4: SRD.md) and use 
 
 ---
 
-## 1. User Story Creation (30 Marks) ✅
+## 1. User Story Creation 
 
 ### 1.1 User Stories Table
 **Format:** "As a [role], I want [action] so that [benefit]."
@@ -22,20 +22,20 @@ All stories linked to Assignment 4 (SRD.md) Functional Requirements and Assignme
 
 | Story ID | User Story | Linked FR/UC | Acceptance Criteria | Priority | INVEST |
 |---|---|---|---|---|---|
-| **US-001** | As a **student**, I want to search for books by title, author, or ISBN so that I can quickly find academic resources. | FR-02 / UC02 | ✓ Search returns results within ≤2 seconds ✓ Display real-time availability status ✓ Keyboard & screen reader accessible ✓ Filter by author, genre, year | High | ✅ Independent, Testable, Valuable |
-| **US-002** | As a **student**, I want to register using my university email and securely log in so that my account is linked to my institution. | FR-01 / UC01 | ✓ Registration blocks non-university emails ✓ JWT tokens expire after 24hrs ✓ Account lockout after 5 failed attempts ✓ Login response ≤ 1 second | High | ✅ Independent, Estimable, Testable |
-| **US-003** | As a **student**, I want to borrow or reserve available books online so that I don't have to visit the library in person. | FR-03 / UC03 | ✓ Borrowing confirmation within 60 seconds ✓ Inventory decremented immediately ✓ Hold expiry after 48 hours ✓ Auto-activate next reservation | High | ✅ Negotiable, Small, Valuable |
-| **US-004** | As a **student**, I want to view my personal dashboard so that I can see my active loans, due dates, and overdue notices in one place. | FR-04 / UC04 | ✓ Dashboard loads within 2 seconds ✓ Due items within 3 days highlighted in red ✓ 12-month borrowing history ✓ Fully responsive mobile/tablet/desktop | High | ✅ Independent, Testable, Small |
-| **US-005** | As a **student**, I want to receive personalized book recommendations so that I can discover relevant resources aligned with my courses. | FR-05 / UC05 | ✓ Minimum 10 recommendations shown ✓ Updated every 24 hours ✓ New students receive defaults within 1 hour ✓ Dismissal feeds back into model | Medium | ✅ Valuable, Estimable, Testable |
-| **US-006** | As a **librarian**, I want to add, edit, and delete books from the catalogue so that the inventory stays accurate and up-to-date. | FR-06 / UC06 | ✓ New resources indexed in Elasticsearch within 30 seconds ✓ ISBN validation enforced ✓ Deletion blocked if active loans exist ✓ CSV bulk import (up to 1,000 rows) | High | ✅ Independent, Negotiable, Testable |
-| **US-007** | As a **student**, I want to receive email reminders before my book is due so that I can return it on time and avoid fines. | FR-07 / UC07 | ✓ Emails sent 3 days before, on due date, 1 day after ✓ Include resource title and dashboard link ✓ Deliver within 5 minutes ✓ Configurable preferences | High | ✅ Small, Valuable, Testable |
-| **US-008** | As an **admin**, I want to generate and export usage reports so that I can make data-driven decisions about resource procurement. | FR-08 / UC08 | ✓ Reports filterable by date, department, resource type ✓ PDF/CSV exports within 10 seconds ✓ At least 4 standard reports ✓ RBAC protected | Medium | ✅ Valuable, Estimable, Testable |
-| **US-009** | As an **external developer**, I want access to a RESTful API with OpenAPI documentation so that I can integrate library features into the university portal. | FR-09 / UC09 | ✓ Swagger UI at `/api/v1/docs` ✓ All endpoints documented ✓ Sandbox environment 24/7 ✓ Rate limiting 100 req/min | Medium | ✅ Negotiable, Estimable, Testable |
-| **US-010** | As an **IT administrator**, I want role-based access control enforced so that users can only access features appropriate for their role. | FR-10 / UC10 | ✓ Students cannot access admin/catalogue endpoints ✓ HTTP 403 on unauthorized requests ✓ Role changes audit-logged ✓ Three roles: Student, Librarian, Admin | High | ✅ Independent, Testable, Valuable |
-| **US-011** | As a **student**, I want to save resources to reading lists so that I can keep track of books I want to read. | FR-11 / UC11 | ✓ Save in 1 click ✓ Create up to 10 collections ✓ Export as APA/Harvard bibliography ✓ Persist across sessions | Low | ✅ Small, Valuable, Testable |
-| **US-012** | As a **student with a disability**, I want the interface to be fully keyboard-navigable and screen-reader compatible so that I can use the library independently. | FR-12 / UC02, UC04 | ✓ Lighthouse accessibility score ≥95 ✓ All elements reachable via keyboard ✓ 4.5:1 color contrast ✓ ARIA live regions | High | ✅ Independent, Testable, Valuable |
-| **US-013** | As a **system administrator**, I want all student data encrypted with AES-256 and transmitted over TLS so that security and POPIA compliance are maintained. | NFR-09 | ✓ Zero plaintext personal data in DB ✓ SSL Labs Grade A ✓ TLS on all endpoints ✓ POPIA audit completed | High | ✅ Estimable, Testable, Independent |
-| **US-014** | As a **librarian**, I want to bulk import resources from CSV files so that I can add large acquisitions quickly without manual entry. | FR-06 / UC06a | ✓ Process up to 1,000 rows ✓ Invalid rows flagged in error report ✓ Valid records indexed within 60 seconds ✓ All changes logged | Medium | ✅ Negotiable, Valuable, Testable |
+| **US-001** | As a **student**, I want to search for books by title, author, or ISBN so that I can quickly find academic resources. | FR-02 / UC02 | Search returns results within ≤2 seconds Display real-time availability status Keyboard & screen reader accessible Filter by author, genre, year | High | Independent, Testable, Valuable |
+| **US-002** | As a **student**, I want to register using my university email and securely log in so that my account is linked to my institution. | FR-01 / UC01 | Registration blocks non-university emails JWT tokens expire after 24hrs Account lockout after 5 failed attempts Login response ≤ 1 second | High | Independent, Estimable, Testable |
+| **US-003** | As a **student**, I want to borrow or reserve available books online so that I don't have to visit the library in person. | FR-03 / UC03 | Borrowing confirmation within 60 seconds Inventory decremented immediately Hold expiry after 48 hours Auto-activate next reservation | High | Negotiable, Small, Valuable |
+| **US-004** | As a **student**, I want to view my personal dashboard so that I can see my active loans, due dates, and overdue notices in one place. | FR-04 / UC04 | Dashboard loads within 2 seconds Due items within 3 days highlighted in red 12-month borrowing history Fully responsive mobile/tablet/desktop | High | Independent, Testable, Small |
+| **US-005** | As a **student**, I want to receive personalized book recommendations so that I can discover relevant resources aligned with my courses. | FR-05 / UC05 | Minimum 10 recommendations shown Updated every 24 hours New students receive defaults within 1 hour Dismissal feeds back into model | Medium | Valuable, Estimable, Testable |
+| **US-006** | As a **librarian**, I want to add, edit, and delete books from the catalogue so that the inventory stays accurate and up-to-date. | FR-06 / UC06 | New resources indexed in Elasticsearch within 30 seconds ISBN validation enforced Deletion blocked if active loans exist CSV bulk import (up to 1,000 rows) | High | Independent, Negotiable, Testable |
+| **US-007** | As a **student**, I want to receive email reminders before my book is due so that I can return it on time and avoid fines. | FR-07 / UC07 | Emails sent 3 days before, on due date, 1 day after Include resource title and dashboard link Deliver within 5 minutes Configurable preferences | High | Small, Valuable, Testable |
+| **US-008** | As an **admin**, I want to generate and export usage reports so that I can make data-driven decisions about resource procurement. | FR-08 / UC08 | Reports filterable by date, department, resource type PDF/CSV exports within 10 seconds At least 4 standard reports RBAC protected | Medium | Valuable, Estimable, Testable |
+| **US-009** | As an **external developer**, I want access to a RESTful API with OpenAPI documentation so that I can integrate library features into the university portal. | FR-09 / UC09 | Swagger UI at `/api/v1/docs` All endpoints documented Sandbox environment 24/7 Rate limiting 100 req/min | Medium | Negotiable, Estimable, Testable |
+| **US-010** | As an **IT administrator**, I want role-based access control enforced so that users can only access features appropriate for their role. | FR-10 / UC10 | Students cannot access admin/catalogue endpoints HTTP 403 on unauthorized requests Role changes audit-logged Three roles: Student, Librarian, Admin | High | Independent, Testable, Valuable |
+| **US-011** | As a **student**, I want to save resources to reading lists so that I can keep track of books I want to read. | FR-11 / UC11 | Save in 1 click Create up to 10 collections Export as APA/Harvard bibliography Persist across sessions | Low | Small, Valuable, Testable |
+| **US-012** | As a **student with a disability**, I want the interface to be fully keyboard-navigable and screen-reader compatible so that I can use the library independently. | FR-12 / UC02, UC04 | Lighthouse accessibility score ≥95 All elements reachable via keyboard 4.5:1 color contrast ARIA live regions | High | Independent, Testable, Valuable |
+| **US-013** | As a **system administrator**, I want all student data encrypted with AES-256 and transmitted over TLS so that security and POPIA compliance are maintained. | NFR-09 | Zero plaintext personal data in DB SSL Labs Grade A TLS on all endpoints POPIA audit completed | High | Estimable, Testable, Independent |
+| **US-014** | As a **librarian**, I want to bulk import resources from CSV files so that I can add large acquisitions quickly without manual entry. | FR-06 / UC06a | Process up to 1,000 rows ✓ Invalid rows flagged in error report Valid records indexed within 60 seconds All changes logged | Medium | Negotiable, Valuable, Testable |
 
 ### 1.2 INVEST Criteria Compliance
 
@@ -48,7 +48,7 @@ All stories linked to Assignment 4 (SRD.md) Functional Requirements and Assignme
 
 ---
 
-## 2. Product Backlog Creation (30 Marks) ✅
+## 2. Product Backlog Creation 
 
 ### 2.1 Prioritized Backlog with MoSCoW & Story Points
 
@@ -81,7 +81,7 @@ All stories linked to Assignment 4 (SRD.md) Functional Requirements and Assignme
 
 ---
 
-## 3. Sprint 1 Plan (30 Marks) ✅
+## 3. Sprint 1 Plan 
 
 ### 3.1 Sprint Goal Statement
 
@@ -89,7 +89,7 @@ All stories linked to Assignment 4 (SRD.md) Functional Requirements and Assignme
 
 **Sprint Duration:** 2 weeks | **Sprint Velocity:** 18 story points | **Selected Stories:** 7 stories, 26 points
 
-### 3.2 Sprint Backlog — Task Breakdown (38 Tasks)
+### 3.2 Sprint Backlog — Task Breakdown 
 
 | Task ID | Story ID | Task Description | Est. Hours | Priority | Status |
 |---|---|---|---|---|---|
@@ -137,19 +137,19 @@ All stories linked to Assignment 4 (SRD.md) Functional Requirements and Assignme
 ### 3.3 Sprint 1 Definition of Done
 
 A user story is **Done** when:
-- ✅ All task code written, tested locally, and peer reviewed
-- ✅ Unit tests (≥80% coverage) + integration tests passing
-- ✅ Code reviewed and approved by ≥1 peer
-- ✅ Code merged to `main` branch via pull request
-- ✅ Feature tested in staging environment by QA
-- ✅ **All** acceptance criteria verified and met
-- ✅ No critical/high-severity bugs open
-- ✅ Documentation updated (API docs, README)
-- ✅ Technical debt logged for future sprints
+- All task code written, tested locally, and peer reviewed
+- Unit tests (≥80% coverage) + integration tests passing
+- Code reviewed and approved by ≥1 peer
+- Code merged to `main` branch via pull request
+- Feature tested in staging environment by QA
+- **All** acceptance criteria verified and met
+- No critical/high-severity bugs open
+- Documentation updated (API docs, README)
+- Technical debt logged for future sprints
 
 ---
 
-## 4. Traceability Summary (10 Marks) ✅
+## 4. Traceability Summary 
 
 ### 4.1 Requirements to User Stories Mapping
 
@@ -191,7 +191,7 @@ A user story is **Done** when:
 
 ---
 
-## 6. Reflection on Agile Prioritization & Estimation (700+ Words)
+## 6. Reflection on Agile Prioritization & Estimation 
 
 ### 6.1 Challenges in Prioritization
 
