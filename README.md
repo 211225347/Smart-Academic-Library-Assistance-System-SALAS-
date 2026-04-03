@@ -9,20 +9,20 @@ SALAS unifies the library experience with smart search, personalized recommendat
 
 ## Project Documents
 
-### Assignment 3 — System Specification & Architecture
+### Assignment 3 System Specification & Architecture
 | Document | Description |
 |---|---|
 | [SPECIFICATION.md](./SPECIFICATION.md) | System specification, domain, problem statement, requirements |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | C4 diagrams in Mermaid |
 
-### Assignment 4 — Stakeholder & System Requirements
+### Assignment 4 Stakeholder & System Requirements
 | Document | Description |
 |---|---|
 | [STAKEHOLDERS.md](./STAKEHOLDERS.md) | 7 stakeholders with roles, concerns, pain points, success metrics |
 | [SRD.md](./SRD.md) | 12 functional + 14 non-functional requirements |
 | [REFLECTION.md](./REFLECTION.md) | Reflection on balancing stakeholder needs |
 
-### Assignment 5 — Use Case Modeling & Test Cases
+### Assignment 5 Use Case Modeling & Test Cases
 | Document | Description |
 |---|---|
 | [USE_CASE_DIAGRAM.md](./USE_CASE_DIAGRAM.md) | UML use case diagram with 7 actors and 12 use cases |
@@ -30,7 +30,7 @@ SALAS unifies the library experience with smart search, personalized recommendat
 | [TEST_CASES.md](./TEST_CASES.md) | 12 functional + 2 non-functional test cases |
 | [REFLECTION5.md](./REFLECTION5.md) | Reflection on translating requirements to use cases |
 
-### Assignment 6 — Agile Planning
+### Assignment 6 Agile Planning
 | Document | Description |
 |---|---|
 | [AGILE_PLANNING.md](./AGILE_PLANNING.md) | 14 user stories, MoSCoW backlog, Sprint 1 plan |
@@ -40,4 +40,4 @@ SALAS unifies the library experience with smart search, personalized recommendat
 
 ## Author
 **Phola Qwalana 211225347**
-Software Engineering — Assignments 3, 4, 5 & 6 |5 April 2026
+Software Engineering Assignments 3, 4, 5 & 6 |5 April 2026
