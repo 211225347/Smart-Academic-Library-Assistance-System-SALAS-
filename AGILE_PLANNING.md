@@ -1,4 +1,4 @@
-# AGILE_PLANNING.md — Agile Planning Document
+# AGILE_PLANNING.md Agile Planning Document
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 6: Agile User Stories, Backlog, and Sprint Planning
