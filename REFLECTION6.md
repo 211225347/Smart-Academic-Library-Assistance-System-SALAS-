@@ -1,4 +1,4 @@
-# REFLECTION6.md — Reflection on Assignment 6: Agile Planning
+# REFLECTION6.md Reflection on Assignment 6: Agile Planning
 
 ## Assignment 6 Reflection: Agile User Stories, Backlog, and Sprint Planning
 ### Smart Academic Library Assistance System (SALAS)
