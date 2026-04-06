@@ -56,7 +56,8 @@ stories with dependencies — for example, US-003 (Borrow/Reserve) depends on US
 (Search) being complete, and US-005 (Recommendations) depends on sufficient
 borrowing data existing.
 
----
+---<img width="1918" height="1033" alt="Screenshot 2026-04-06 110314" src="https://github.com/user-attachments/assets/35abb4c7-2b16-4420-ad20-13bdc467ed60" />
+
 
 ## 3. How the Board Visualizes Workflow
 
