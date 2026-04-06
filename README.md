@@ -1,43 +1,43 @@
-#Smart Academic Library Assistance System (SALAS)
+[README_A7.md](https://github.com/user-attachments/files/26503636/README_A7.md)
+# Smart Academic Library Assistance System (SALAS)
 
-> An intelligent, AI-powered academic library platform for university students.
-
-## Overview
-SALAS unifies the library experience with smart search, personalized recommendations, borrowing management, and a student dashboard.
-
----
+An intelligent library platform for university students.
 
 ## Project Documents
 
-### Assignment 3 System Specification & Architecture
+### Assignment 3
 | Document | Description |
 |---|---|
-| [SPECIFICATION.md](./SPECIFICATION.md) | System specification, domain, problem statement, requirements |
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | C4 diagrams in Mermaid |
+| [SPECIFICATION.md](./SPECIFICATION.md) | System specification |
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | C4 architecture diagrams |
 
-### Assignment 4 Stakeholder & System Requirements
+### Assignment 4
 | Document | Description |
 |---|---|
-| [STAKEHOLDERS.md](./STAKEHOLDERS.md) | 7 stakeholders with roles, concerns, pain points, success metrics |
-| [SRD.md](./SRD.md) | 12 functional + 14 non-functional requirements |
-| [REFLECTION.md](./REFLECTION.md) | Reflection on balancing stakeholder needs |
+| [STAKEHOLDERS.md](./STAKEHOLDERS.md) | Stakeholder analysis |
+| [SRD.md](./SRD.md) | System requirements document |
+| [REFLECTION.md](./REFLECTION.md) | Reflection |
 
-### Assignment 5 Use Case Modeling & Test Cases
+### Assignment 5
 | Document | Description |
 |---|---|
-| [USE_CASE_DIAGRAM.md](./USE_CASE_DIAGRAM.md) | UML use case diagram with 7 actors and 12 use cases |
-| [USE_CASE_SPECIFICATIONS.md](./USE_CASE_SPECIFICATIONS.md) | 8 detailed use case specifications |
-| [TEST_CASES.md](./TEST_CASES.md) | 12 functional + 2 non-functional test cases |
-| [REFLECTION5.md](./REFLECTION5.md) | Reflection on translating requirements to use cases |
+| [USE_CASE_DIAGRAM.md](./USE_CASE_DIAGRAM.md) | Use case diagram |
+| [USE_CASE_SPECIFICATIONS.md](./USE_CASE_SPECIFICATIONS.md) | Use case specifications |
+| [TEST_CASES.md](./TEST_CASES.md) | Test cases |
+| [REFLECTION5.md](./REFLECTION5.md) | Reflection |
 
-### Assignment 6 Agile Planning
+### Assignment 6
 | Document | Description |
 |---|---|
-| [AGILE_PLANNING.md](./AGILE_PLANNING.md) | 14 user stories, MoSCoW backlog, Sprint 1 plan |
-| [REFLECTION6.md](./REFLECTION6.md) | Reflection on Agile prioritization and estimation |
+| [AGILE_PLANNING.md](./AGILE_PLANNING.md) | Agile planning document |
+| [REFLECTION6.md](./REFLECTION6.md) | Reflection |
 
----
+### Assignment 7
+| Document | Description |
+|---|---|
+| [template_analysis.md](./template_analysis.md) | GitHub template comparison and justification |
+| [kanban_explanation.md](./kanban_explanation.md) | Kanban board definition and workflow explanation |
+| [reflection7.md](./reflection7.md) | Reflection on Kanban implementation |
 
 ## Author
-**Phola Qwalana 211225347**
-Software Engineering Assignments 3, 4, 5 & 6 |5 April 2026
+**Phola Qwalana 211225347** | Software Engineering | April 2026
