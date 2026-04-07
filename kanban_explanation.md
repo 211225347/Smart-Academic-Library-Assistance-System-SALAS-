@@ -2,7 +2,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 7: Kanban Board Explanation
-> Building on Assignments 3–6 | Version 1.0 | April 2026
+> Building on Assignments 3–6 |12 April 2026
 
 ---
 
@@ -11,7 +11,7 @@
 A Kanban board is a visual project management tool that represents the stages of a
 workflow as columns, with each task shown as a card that moves from left to right
 as it progresses through those stages. The word "Kanban" comes from Japanese and
-means "visual signal" or "card" — the idea being that the board itself communicates
+means "visual signal" or "card", the idea being that the board itself communicates
 the state of all work at a glance, without needing a meeting or a status report.
 
 At its core, a Kanban board does three things: it makes work visible, it limits how
@@ -79,15 +79,15 @@ board makes these patterns visible without requiring anyone to ask for a status 
 
 WIP limits are set on the active workflow columns as follows:
 
-- **To Do:** Maximum 6 cards — ensures the sprint is realistically scoped
-- **In Progress:** Maximum 3 cards — enforces focus; no starting new work until existing work moves forward
-- **Testing:** Maximum 3 cards — prevents a testing backlog from building up
+- **To Do:** Maximum 6 cards ensures the sprint is realistically scoped
+- **In Progress:** Maximum 3 cards enforces focus; no starting new work until existing work moves forward
+- **Testing:** Maximum 3 cards prevents a testing backlog from building up
 
 These limits are enforced through team discipline (GitHub Projects does not natively
 enforce hard WIP limits, but the limits are documented and visible). When the In
 Progress column reaches 3 cards, no new cards should be moved in until one moves to
 Testing. This prevents the common Agile failure mode where work starts but never
-finishes — also known as "starting everything, completing nothing."
+finishes and also known as "starting everything, completing nothing."
 
 For Sprint 1, the four selected stories (US-001, US-002, US-010, US-013) fit
 comfortably within these limits, with a maximum of two stories in progress at any
