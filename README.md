@@ -5,16 +5,16 @@ This repository contains all project documentation for Assignments 3–7, coveri
 
 ---
 
-## 📚 Project Overview
+## Project Overview
 
 The Smart Academic Library Assistance System (SALAS) aims to modernize university library services through features such as natural‑language search, personalized recommendations, borrowing management, analytics dashboards, and API integration.  
 Development follows Agile methodologies and is documented across multiple structured assignments.
 
 ---
 
-## 📁 Project Documents
+## Project Documents
 
-### ✅ **Assignment 3 — System Specification & Architecture**
+### **Assignment 3 — System Specification & Architecture**
 | Document | Description |
 |---------|-------------|
 | ./SPECIFICATION.md | Full system specification, including domain analysis, functional & non‑functional requirements, and use cases |
@@ -22,7 +22,7 @@ Development follows Agile methodologies and is documented across multiple struct
 
 ---
 
-### ✅ **Assignment 4 — Stakeholders & System Requirements**
+### **Assignment 4 — Stakeholders & System Requirements**
 | Document | Description |
 |---------|-------------|
 | ./STAKEHOLDERS.md | Stakeholder roles, concerns, and success metrics |
@@ -31,7 +31,7 @@ Development follows Agile methodologies and is documented across multiple struct
 
 ---
 
-### ✅ **Assignment 5 — Use Cases & Testing**
+### **Assignment 5 — Use Cases & Testing**
 | Document | Description |
 |---------|-------------|
 | USE_CASE_DIAGRAM.md | UML use case diagram |
@@ -41,7 +41,7 @@ Development follows Agile methodologies and is documented across multiple struct
 
 ---
 
-### ✅ **Assignment 6 — Agile Planning**
+### **Assignment 6 — Agile Planning**
 | Document | Description |
 |---------|-------------|
 | ./AGILE_PLANNING.md | Backlog, user stories, sprint plan, story points, and prioritization |
@@ -49,7 +49,7 @@ Development follows Agile methodologies and is documented across multiple struct
 
 ---
 
-### ✅ **Assignment 7 — GitHub Projects & Kanban Implementation**
+### **Assignment 7 — GitHub Projects & Kanban Implementation**
 | Document | Description |
 |---------|-------------|
 | ./template_analysis.md | Comparison of GitHub project templates and justified selection of Automated Kanban |
@@ -66,13 +66,13 @@ Full explanation is in **kanban_explanation.md**.
 
 ---
 
-## 👤 Author  
+## Author  
 **Phola Qwalana (211225347)**  
 Software Engineering — April 2026  
 
 ---
 
-## ✅ Notes for Reviewers  
+## Notes for Reviewers  
 This repository is structured intentionally to align with the module’s progressive assignment requirements.  
 Each assignment builds on the previous one, demonstrating consistent traceability from:
 
