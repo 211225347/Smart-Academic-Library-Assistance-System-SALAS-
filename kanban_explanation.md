@@ -52,7 +52,7 @@ unresolved dependencies, unclear requirements, or external factors. Without a Bl
 column, blocked tasks either sit in In Progress (making the board misleading) or get
 moved back to To Do (losing context). A dedicated Blocked column makes impediments
 visible so they can be resolved quickly. For SALAS, this is particularly relevant for
-stories with dependencies — for example, US-003 (Borrow/Reserve) depends on US-001
+stories with dependencies, for example, US-003 (Borrow/Reserve) depends on US-001
 (Search) being complete, and US-005 (Recommendations) depends on sufficient
 borrowing data existing.
 
