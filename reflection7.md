@@ -2,7 +2,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 7: Reflection
-> Building on Assignments 3–6 | Version 1.0 | April 2026
+> Building on Assignments 3–6 |12 April 2026
 
 ---
 
@@ -16,18 +16,18 @@ template because it looks comprehensive, rather than because it fits the actual 
 is a trap that wastes more time in customization than it saves in structure.
 
 The Automated Kanban was the right choice not because it was the most sophisticated,
-but because it was the most appropriate — its automation matched exactly the
+but because it was the most appropriate, its automation matched exactly the
 PR-based development workflow I intended to use for SALAS, and its simplicity left
 room for meaningful customization rather than requiring me to undo structure that did
 not apply.
 
 The customization itself presented a different kind of challenge. Adding the Testing
-column was straightforward to justify — the Definition of Done in AGILE_PLANNING.md
+column was straightforward to justify, the Definition of Done in AGILE_PLANNING.md
 explicitly requires acceptance criteria verification before a story is closed, so
 Testing had to be a visible stage. The Blocked column was harder to justify to myself
 because it felt pessimistic: why plan for things going wrong before development has
-even started? But the dependencies between SALAS stories — particularly US-003
-depending on US-001, and US-005 depending on sufficient data from US-003 — make
+even started? But the dependencies between SALAS stories, particularly US-003
+depending on US-001, and US-005 depending on sufficient data from US-003, make
 blocking a real, predictable risk rather than a hypothetical one. A board that has
 no way to represent blocked work is a board that lies about the state of the project.
 
@@ -36,7 +36,7 @@ a temptation to add columns for "Code Review," "Deployed to Staging," and
 "Awaiting Feedback," all of which would be appropriate in a real production team.
 But for a solo academic project, those columns would have no cards in them for
 most of the sprint, making the board cluttered rather than clear. Kanban's power
-comes from simplicity — a board with eight columns where six are always empty is
+comes from simplicity, a board with eight columns where six are always empty is
 worse than a board with five columns that accurately reflects where the work is.
 
 ---
@@ -54,7 +54,7 @@ custom backgrounds, card covers, and power-ups that make boards more engaging.
 However, Trello is a standalone tool with no native connection to code. When managing
 a software project, linking a Trello card to a GitHub commit or pull request requires
 third-party integrations or manual updates. GitHub Projects eliminates this problem
-entirely — every card is a GitHub Issue, every Issue can be linked to a PR, and the
+entirely, every card is a GitHub Issue, every Issue can be linked to a PR, and the
 board updates automatically when code events happen. For SALAS, where every user
 story already exists as a GitHub Issue with labels and milestones, GitHub Projects
 is the natural choice. Using Trello would mean maintaining two systems in parallel,
@@ -69,7 +69,7 @@ and deep integration with CI/CD pipelines. For a large team managing hundreds of
 stories across multiple sprints, Jira's reporting capabilities are indispensable.
 
 However, Jira's power comes with significant complexity. Setting up a Jira project
-correctly — defining issue types, workflows, screens, and permission schemes — can
+correctly, defining issue types, workflows, screens, and permission schemes can
 take days and requires a dedicated project administrator. For SALAS, which has 14
 user stories and a single developer, this overhead is completely disproportionate
 to the size of the project. GitHub Projects provides 80% of what Jira offers for
@@ -80,7 +80,7 @@ SALAS workflow at this stage of development.
 The honest conclusion is that tool choice should be driven by team size, project
 complexity, and existing infrastructure. GitHub Projects is the right tool for SALAS
 now. If SALAS grew into a real product with a five-person development team, migrating
-to Jira would be a reasonable decision — but that migration should be triggered by
+to Jira would be a reasonable decision but that migration should be triggered by
 actual need, not by the assumption that more powerful tools are always better.
 
 ---
@@ -91,7 +91,7 @@ actual need, not by the assumption that more powerful tools are always better.
 workflow, not the one with the most columns or automation rules.
 
 **Make problems visible.** The Blocked column taught me that good project management
-tools do not hide problems — they surface them so they can be resolved quickly.
+tools do not hide problems they surface them so they can be resolved quickly.
 A board that always looks green is not a healthy project; it is a project with
 hidden problems.
 
