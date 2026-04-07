@@ -56,10 +56,10 @@ Development follows Agile methodologies and is documented across multiple struct
 | ./kanban_explanation.md | Explanation of SALAS Kanban board workflow, WIP limits, and Agile alignment |
 | ./reflection7.md | Reflection on template selection, customization challenges, and tool comparison |
 
-### 🧭 **Kanban Board Summary (Assignment 7)**  
+### **Kanban Board Summary (Assignment 7)**  
 A GitHub Project board was created using the **Automated Kanban** template and customized with:  
-- **Testing** column — to reflect acceptance‑criteria verification  
-- **Blocked** column — to make dependencies and impediments visible  
+- **Testing** column to reflect acceptance‑criteria verification  
+- **Blocked** column to make dependencies and impediments visible  
 All Sprint 1 user stories from Assignment 6 are linked as GitHub Issues with labels, milestones, and task assignments.
 
 Full explanation is in **kanban_explanation.md**.
@@ -68,7 +68,7 @@ Full explanation is in **kanban_explanation.md**.
 
 ## Author  
 **Phola Qwalana (211225347)**  
-Software Engineering — April 2026  
+Software Engineering 12 April 2026  
 
 ---
 
