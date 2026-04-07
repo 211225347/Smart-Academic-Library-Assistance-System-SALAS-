@@ -2,7 +2,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 7: GitHub Project Templates and Kanban Board Implementation
-> Building on Assignments 3–6 | Version 1.0 | April 2026
+> Building on Assignments 3–6 |1 April 2026
 
 ---
 
@@ -34,7 +34,7 @@ The **Automated Kanban** template was selected for the SALAS project for the fol
 
 **Automation reduces manual overhead.** As a solo developer managing all Scrum roles simultaneously, automation is critical. The Automated Kanban template automatically moves issues to "In Progress" when a linked pull request is opened, and to "Done" when the PR is merged or the issue is closed. This eliminates the risk of forgetting to update the board and keeps the workflow accurate with zero extra effort.
 
-**Alignment with sprint-based development.** SALAS follows a sprint structure defined in Assignment 6 with Sprint 1 focusing on authentication and search. The Automated Kanban maps directly to this — each user story (GitHub Issue) progresses from To Do → In Progress → Done as development proceeds, mirroring the sprint lifecycle.
+**Alignment with sprint-based development.** SALAS follows a sprint structure defined in Assignment 6 with Sprint 1 focusing on authentication and search. The Automated Kanban maps directly to this, each user story (GitHub Issue) progresses from To Do → In Progress → Done as development proceeds, mirroring the sprint lifecycle.
 
 **Issue and PR traceability.** All 14 user stories from Assignment 6 already exist as GitHub Issues with labels, milestones, and story points. The Automated Kanban integrates directly with these Issues, giving a live view of sprint progress without maintaining a separate tracking system.
 
