@@ -103,3 +103,5 @@ deciding what not to include is as important as deciding what to include.
 the template rather than fitting the template to the workflow. When I reversed this
 and started from the sprint plan in AGILE_PLANNING.md, the right customizations
 became obvious immediately.
+
+One challenge encountered was configuring GitHub Project automation rules, as some issue transitions did not update as expected. This was resolved by standardizing issue statuses and ensuring all issues were correctly linked to the Project, which improved workflow visibility and reduced manual adjustments.
