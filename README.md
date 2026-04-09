@@ -64,6 +64,17 @@ All Sprint 1 user stories from Assignment 6 are linked as GitHub Issues with lab
 
 Full explanation is in **kanban_explanation.md**.
 
+## Assignment 7 – Kanban Board Evidence
+
+### Kanban Board Overview
+![Kanban Board Overview](screenshots/kanban_board_overview.png)
+
+### Linked Issue Example
+![Kanban Issue Details](screenshots/kanban_issue_details.png)
+
+### Automation Demonstration
+![Kanban Automation](screenshots/kanban_automation.png)
+
 ---
 
 ## Author  
