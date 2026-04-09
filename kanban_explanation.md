@@ -139,3 +139,5 @@ Sprint 1:
 | US-011 Student reading list | #11 | could-have | Backlog | 2 |
 | US-012 Accessible interface | #12 | must-have | Backlog | 3 |
 | US-014 Bulk CSV import | #14 | should-have | Backlog | 3 |
+
+Work-in-progress (WIP) limits are applied informally by restricting the number of issues in the In Progress column to a maximum of three tasks at any time. This prevents bottlenecks, ensures focused development, and encourages timely task completion before new work is started.
