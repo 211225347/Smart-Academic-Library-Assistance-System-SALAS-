@@ -56,6 +56,10 @@ Development follows Agile methodologies and is documented across multiple struct
 | ./kanban_explanation.md | Explanation of SALAS Kanban board workflow, WIP limits, and Agile alignment |
 | ./reflection7.md | Reflection on template selection, customization challenges, and tool comparison |
 
+### Submission Note (Assignment 7)
+
+This submission demonstrates the implementation of a GitHub Project using the Automated Kanban template, customized to support the Agile workflow of the Smart Academic Library Assistance System (SALAS). The Kanban board includes custom columns such as *Testing* and *Blocked*, with all Sprint 1 user stories from Assignment 6 represented as linked GitHub Issues, complete with labels, assignments, and status progression. Screenshots of the Kanban board overview, linked issue details, and automation behavior are embedded in this README under the Assignment 7 evidence section to allow independent verification. All documentation and artifacts are traceable across assignments to ensure consistency with Agile best practices.
+
 ### **Kanban Board Summary (Assignment 7)**  
 A GitHub Project board was created using the **Automated Kanban** template and customized with:  
 - **Testing** column to reflect acceptance‑criteria verification  
