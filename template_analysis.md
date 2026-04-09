@@ -47,3 +47,9 @@ The **Automated Kanban** template was selected for the SALAS project for the fol
 - **Basic Kanban** was rejected because it has no automation, requiring every card to be moved manually. This introduces human error and is inefficient for a project already using GitHub Issues and PRs.
 - **Bug Triage** was rejected because it is designed for managing defect reports, not sprint planning. Its columns (Needs Triage, High Priority, Low Priority) do not map to SALAS's development workflow.
 - **Team Planning** was rejected because it requires significant customization to match a sprint model and does not offer automation. Its five-column structure adds complexity without adding value for a solo project.
+
+## Template Rejection Rationale
+
+- **Basic Kanban** was not selected because it lacks automation features, requiring manual movement of issues, which is less efficient for Agile sprint workflows.
+- **Bug Triage** focuses on defect management rather than feature delivery and sprint execution, making it unsuitable for early-stage development.
+- **Team Planning** is optimized for long-term roadmap tracking rather than continuous flow, which does not align with the iterative development model of SALAS.
