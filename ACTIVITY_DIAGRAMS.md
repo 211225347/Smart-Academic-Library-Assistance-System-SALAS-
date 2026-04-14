@@ -2,7 +2,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 8: Object State Modeling and Activity Workflow Modeling
-> Building on Assignments 3–7 | Version 1.0 | April 2026
+> Building on Assignments 3–7 |19 April 2026
 
 ---
 
@@ -82,7 +82,7 @@ flowchart TD
 
 **Swimlane roles:** Student, Search Service (Elasticsearch), Database (PostgreSQL)
 
-**Workflow summary:** This covers FR-02 (Search). The parallel enrichment step — combining Elasticsearch relevance scoring with real-time availability from PostgreSQL — is a key architectural pattern ensuring results are both relevant and accurate.
+**Workflow summary:** This covers FR-02 (Search). The parallel enrichment step, combining Elasticsearch relevance scoring with real-time availability from PostgreSQL , is a key architectural pattern ensuring results are both relevant and accurate.
 
 **Stakeholder concern addressed:** Students' top pain point is finding resources quickly. The 2-second response time requirement (NFR-12) is enforced at the display step.
 
@@ -222,7 +222,7 @@ flowchart TD
 
 **Swimlane roles:** Student, API Gateway, Multiple Backend Services
 
-**Workflow summary:** This covers FR-04 (Student Dashboard). The parallel fetch step is critical — all four data sources are queried simultaneously rather than sequentially, enabling the 2-second load time (NFR-13). The skeleton loading pattern ensures the dashboard is usable even if one service is slow.
+**Workflow summary:** This covers FR-04 (Student Dashboard). The parallel fetch step is critical , all four data sources are queried simultaneously rather than sequentially, enabling the 2-second load time (NFR-13). The skeleton loading pattern ensures the dashboard is usable even if one service is slow.
 
 **Stakeholder concern addressed:** Students need a fast, unified view of their library activity. The parallel architecture directly addresses NFR-13 (Dashboard Load Time ≤ 2 seconds).
 
@@ -381,7 +381,7 @@ flowchart TD
 
 **Swimlane roles:** Administrator, Librarian, System API, Reporting Database, Email Service
 
-**Workflow summary:** This covers FR-08 (Usage Reporting and Analytics). The RBAC check at the start enforces FR-10 — admin-only reports return HTTP 403 for librarians. The large-report queue handles the alternative flow from UC08 where exports exceeding 12 months are processed as background jobs.
+**Workflow summary:** This covers FR-08 (Usage Reporting and Analytics). The RBAC check at the start enforces FR-10,  admin-only reports return HTTP 403 for librarians. The large-report queue handles the alternative flow from UC08 where exports exceeding 12 months are processed as background jobs.
 
 **Stakeholder concern addressed:** University administrators need data-driven procurement insights. The export functionality with background queuing ensures even large, complex reports are always deliverable.
 
