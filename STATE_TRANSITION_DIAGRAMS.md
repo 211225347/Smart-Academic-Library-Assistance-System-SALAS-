@@ -1,3 +1,4 @@
+[STATE_TRANSITION_DIAGRAMS.md](https://github.com/user-attachments/files/26707030/STATE_TRANSITION_DIAGRAMS.md)
 # STATE_TRANSITION_DIAGRAMS.md — Object State Modeling
 ## Smart Academic Library Assistance System (SALAS)
 
@@ -39,7 +40,7 @@ stateDiagram-v2
 **Key Transitions:**
 - A book starts as Available when added to the catalogue by a librarian (FR-06)
 - It moves to Reserved when a student places an online reservation (FR-03)
-- Reserved books that are not collected within 48 hours automatically revert to Available, this guard condition prevents inventory from being locked indefinitely
+- Reserved books that are not collected within 48 hours automatically revert to Available — this guard condition prevents inventory from being locked indefinitely
 - A Borrowed book becomes Overdue when the due date passes without a return, triggering the notification workflow (FR-07)
 - A Lost book exits the lifecycle entirely and is removed from the catalogue
 
@@ -70,18 +71,20 @@ stateDiagram-v2
     Overdue --> Escalated : Fine exceeds R100 (FR-03 guard condition)
 
     Escalated --> Returned : Student pays fine and returns book
-    Returned --> [*] : Loan record archived
+    Returned --> Archived : Loan record archived
+
+    Archived --> [*]
 ```
 
 ### Explanation
 
-**Key States:** Active, DueSoon, Renewed, Overdue, Escalated, Returned
+**Key States:** Active, DueSoon, Renewed, Overdue, Escalated, Returned, Archived
 
 **Key Transitions:**
 - A Loan is created Active when a student borrows a book
 - The system automatically transitions the loan to DueSoon 3 days before the due date, triggering an email notification (FR-07)
 - The guard condition on the Overdue → Escalated transition enforces FR-03: borrowing is blocked when fines exceed R100
-- The Returned state archives the loan, incrementing the available copy count
+- The Returned state transitions to Archived — an explicit UML terminal state — which records that the loan is complete and increments the available copy count
 
 **FR Mapping:**
 - FR-03: Controls the Active, Overdue, and Escalated states with fine-based guard conditions
@@ -176,18 +179,22 @@ stateDiagram-v2
     Retrying --> Failed : Retry fails
     Failed --> PermanentFailure : 3 retries exhausted (FR-07)
 
-    Delivered --> [*] : Delivery logged and archived
-    PermanentFailure --> [*] : Failure logged, in-app fallback triggered
+    Delivered --> Archived : Delivery logged and archived
+    PermanentFailure --> FallbackDelivered : In-app fallback notification triggered
+
+    Archived --> [*]
+    FallbackDelivered --> [*]
 ```
 
 ### Explanation
 
-**Key States:** Scheduled, Sending, Delivered, Failed, Retrying, PermanentFailure
+**Key States:** Scheduled, Sending, Delivered, Failed, Retrying, PermanentFailure, Archived, FallbackDelivered
 
 **Key Transitions:**
 - Notifications are Scheduled when a trigger condition is met (3 days before due date, on due date, 1 day after)
 - Failed deliveries are automatically Retried up to 3 times (FR-07 acceptance criteria)
-- After 3 failed retries, the system falls back to in-app notification
+- After 3 failed retries, the system moves to PermanentFailure and triggers an in-app fallback, ending in FallbackDelivered
+- Successfully delivered notifications end in Archived — an explicit terminal state confirming the record is logged and the lifecycle is complete
 
 **FR Mapping:**
 - FR-07: Defines all notification trigger conditions and the 3-retry guard condition
@@ -207,20 +214,23 @@ stateDiagram-v2
     FallbackMode --> Ready : Course-based defaults assigned within 1 hour
 
     Ready --> Displayed : Student opens dashboard (FR-04)
-    Displayed --> Dismissed : Student clicks "Not Interested" (FR-05)
+    Displayed --> Dismissed : Student clicks Not Interested (FR-05)
     Displayed --> Actioned : Student clicks through to borrow resource
 
-    Dismissed --> [*] : Feedback recorded for next batch run
-    Actioned --> [*] : Positive signal recorded for next batch run
+    Dismissed --> FeedbackRecorded : Negative signal logged for next batch run
+    Actioned --> FeedbackRecorded : Positive signal logged for next batch run
+
+    FeedbackRecorded --> [*]
 ```
 
 ### Explanation
 
-**Key States:** Pending, Generating, Ready, FallbackMode, Displayed, Dismissed, Actioned
+**Key States:** Pending, Generating, Ready, FallbackMode, Displayed, Dismissed, Actioned, FeedbackRecorded
 
 **Key Transitions:**
 - The FallbackMode state handles the cold-start problem for new students with no borrowing history (FR-05 acceptance criteria)
-- Dismissed and Actioned states both feed back into the recommendation model, improving future results
+- Both Dismissed and Actioned transitions converge on the explicit FeedbackRecorded terminal state, which confirms the student's interaction signal has been logged before the lifecycle ends
+- FeedbackRecorded is the UML-compliant named final state, making it clear the object has completed its purpose rather than simply disappearing
 
 **FR Mapping:**
 - FR-05: Governs the entire recommendation lifecycle including cold-start handling
