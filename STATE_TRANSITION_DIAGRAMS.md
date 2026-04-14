@@ -2,7 +2,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 8: Object State Modeling and Activity Workflow Modeling
-> Building on Assignments 3–7 | Version 1.0 | April 2026
+> Building on Assignments 3–7 |19 April 2026
 
 ---
 
@@ -39,7 +39,7 @@ stateDiagram-v2
 **Key Transitions:**
 - A book starts as Available when added to the catalogue by a librarian (FR-06)
 - It moves to Reserved when a student places an online reservation (FR-03)
-- Reserved books that are not collected within 48 hours automatically revert to Available — this guard condition prevents inventory from being locked indefinitely
+- Reserved books that are not collected within 48 hours automatically revert to Available, this guard condition prevents inventory from being locked indefinitely
 - A Borrowed book becomes Overdue when the due date passes without a return, triggering the notification workflow (FR-07)
 - A Lost book exits the lifecycle entirely and is removed from the catalogue
 
