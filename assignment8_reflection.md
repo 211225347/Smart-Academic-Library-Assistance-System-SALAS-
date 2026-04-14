@@ -36,15 +36,15 @@ each action node to a specific function or API call.
 
 The assignment required traceability between the diagrams and the user stories from
 Assignment 6. This alignment was not always natural. User stories are written from
-a user perspective — "As a student, I want to borrow a book" — while state and
-activity diagrams are written from a system perspective — "the Loan object
+a user perspective, "As a student, I want to borrow a book", while state and
+activity diagrams are written from a system perspective,  "the Loan object
 transitions from Active to Overdue when the due date passes."
 
 Bridging this gap required going back to the acceptance criteria in AGILE_PLANNING.md
 rather than the user story titles. The acceptance criteria are written in testable,
 system-level language ("inventory count is decremented immediately upon borrowing")
 that maps cleanly onto diagram transitions and action nodes. This reinforced the
-value of writing precise acceptance criteria in Assignment 6 — they are not just
+value of writing precise acceptance criteria in Assignment 6 they are not just
 for testers, they are the link between user intent and system behaviour.
 
 The most difficult alignment was for US-013 (AES-256 encryption and TLS). This is
@@ -64,7 +64,7 @@ each other rather than overlapping.
 
 **State transition diagrams** answer the question: "What can this object be, and
 what causes it to change?" They are object-centric. The Book diagram does not care
-who borrowed the book or what steps were involved — it only cares that the book is
+who borrowed the book or what steps were involved, it only cares that the book is
 now in a Borrowed state and what that means for what can happen next. State diagrams
 are most useful for objects that have a meaningful lifecycle: things that are created,
 modified, and destroyed, or that have different rules depending on their current
@@ -74,7 +74,7 @@ permitted.
 
 **Activity diagrams** answer the question: "What steps happen to complete this
 process, and in what order?" They are process-centric. The Borrow a Book activity
-diagram does not care about the long-term state of the Loan object — it only cares
+diagram does not care about the long-term state of the Loan object, it only cares
 about the sequence of steps from the student clicking "Borrow" to the confirmation
 email being sent. Activity diagrams are most useful for workflows that involve
 decisions, parallel actions, and multiple actors. In SALAS, the overdue notification
