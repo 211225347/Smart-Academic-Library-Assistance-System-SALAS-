@@ -100,7 +100,7 @@ visible. Diagramming is a form of requirements validation.
 **Parallel actions are harder to diagram than to describe.** The dashboard load
 workflow looks simple in prose ("load all data simultaneously") but required careful
 diagramming to show that the four parallel fetches must all complete before the
-dashboard renders — except in the degraded mode where partial data is shown. Getting
+dashboard renders, except in the degraded mode where partial data is shown. Getting
 this right in the diagram before implementation prevents a common bug where the
 dashboard blocks on the slowest service.
 
