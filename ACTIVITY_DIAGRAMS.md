@@ -1,8 +1,9 @@
+[ACTIVITY_DIAGRAMS.md](https://github.com/user-attachments/files/26781208/ACTIVITY_DIAGRAMS.md)
 # ACTIVITY_DIAGRAMS.md — Activity Workflow Modeling
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 8: Object State Modeling and Activity Workflow Modeling
-> Building on Assignments 3–7 |19 April 2026
+> Building on Assignments 3–7 | Version 1.0 | April 2026
 
 ---
 
@@ -12,26 +13,26 @@
 flowchart TD
     A([Start]) --> B[Student enters email, name and password]
     B --> C{Valid university\nemail domain?}
-    C -- No --> D[Show error: use university email]
-    D --> B
-    C -- Yes --> E{Password meets\nstrength requirements?}
-    E -- No --> F[Show password requirements]
-    F --> B
-    E -- Yes --> G[System creates Unverified account]
-    G --> H[System sends verification email]
+    C -- Yes --> D{Password meets\nstrength requirements?}
+    C -- No --> E[Show error: use university email]
+    E --> B
+    D -- Yes --> F[System creates Unverified account]
+    D -- No --> G[Show password requirements]
+    G --> B
+    F --> H[System sends verification email]
     H --> I[Student clicks verification link]
     I --> J{Link expired?\n7 days}
-    J -- Yes --> K[Show error: link expired]
-    K --> L[Resend verification email]
-    L --> I
-    J -- No --> M[Account activated]
-    M --> N[Student redirected to dashboard]
+    J -- No --> K[Account activated]
+    J -- Yes --> L[Show error: link expired]
+    L --> M[Resend verification email]
+    M --> I
+    K --> N[Student redirected to dashboard]
     N --> Z([End])
 
     style A fill:#2d6a4f,color:#fff
     style Z fill:#2d6a4f,color:#fff
     style C fill:#e9c46a,color:#000
-    style E fill:#e9c46a,color:#000
+    style D fill:#e9c46a,color:#000
     style J fill:#e9c46a,color:#000
 ```
 
@@ -39,11 +40,16 @@ flowchart TD
 
 **Swimlane roles:** Student, System, Email Service
 
-**Workflow summary:** This activity covers FR-01 (Student Registration). The two decision nodes enforce password strength and university email domain validation. The email verification loop handles the case where a student's verification link expires before use.
+**Workflow summary:** This activity covers FR-01. Two decision nodes enforce password strength and university email domain validation. The email verification loop handles link expiry with an automatic resend path.
 
-**Stakeholder concern addressed:** Students need a secure, institution-linked account. The domain validation guard ensures only enrolled students can access the system.
+**Stakeholder Value**
+This workflow ensures only enrolled university students can create accounts, protecting the system from unauthorised access while providing a smooth self-service onboarding experience. IT administrators benefit from the built-in lockout and verification controls that enforce security policy without manual intervention.
 
-**US traceability:** US-002 (Student registration and login) | Sprint 1
+**Related Functional Requirements**
+- FR-01: User registration and authentication
+- NFR-10: Brute-force and authentication security
+
+**Sprint Traceability:** US-002 (Student registration and login) | Sprint 1
 
 ---
 
@@ -53,22 +59,22 @@ flowchart TD
 flowchart TD
     A([Start]) --> B[Student enters search query]
     B --> C[System sends query to Elasticsearch]
-    C --> D{Results\nfound?}
-    D -- No --> E[Display: No results found]
-    E --> F[Suggest related resources]
-    F --> G[Student refines query]
-    G --> B
-    D -- Yes --> H[Enrich results with real-time\navailability from PostgreSQL]
-    H --> I[Display ranked results within 2 seconds]
+    C --> D{Results found?}
+    D -- Yes --> E[Enrich results with real-time\navailability from PostgreSQL]
+    D -- No --> F[Display: No results found]
+    F --> G[Suggest related resources]
+    G --> H[Student refines query]
+    H --> B
+    E --> I[Display ranked results within 2 seconds]
     I --> J{Student applies\nfilters?}
     J -- Yes --> K[Apply filters: author, genre,\nyear, availability]
     K --> L[Refresh results without page reload]
     L --> M[Student views filtered results]
     J -- No --> M
     M --> N{Student selects\na resource?}
-    N -- No --> O[Student refines or exits search]
+    N -- Yes --> O[Open resource detail page]
+    N -- No --> P[Student refines or exits search]
     O --> Z([End])
-    N -- Yes --> P[Open resource detail page]
     P --> Z
 
     style A fill:#2d6a4f,color:#fff
@@ -82,11 +88,16 @@ flowchart TD
 
 **Swimlane roles:** Student, Search Service (Elasticsearch), Database (PostgreSQL)
 
-**Workflow summary:** This covers FR-02 (Search). The parallel enrichment step, combining Elasticsearch relevance scoring with real-time availability from PostgreSQL , is a key architectural pattern ensuring results are both relevant and accurate.
+**Workflow summary:** This covers FR-02. Elasticsearch returns ranked results which are enriched with live availability data from PostgreSQL. Filters are applied without a page reload, meeting the usability acceptance criteria.
 
-**Stakeholder concern addressed:** Students' top pain point is finding resources quickly. The 2-second response time requirement (NFR-12) is enforced at the display step.
+**Stakeholder Value**
+This workflow directly addresses the primary student pain point: finding resources quickly. The 2-second response requirement (NFR-12) is enforced at the display step. Librarians benefit from accurate real-time availability being surfaced automatically, reducing enquiries at the desk.
 
-**US traceability:** US-001 (Search library catalogue) | Sprint 1
+**Related Functional Requirements**
+- FR-02: Natural language and filtered resource search
+- NFR-12: Search response time under 2 seconds
+
+**Sprint Traceability:** US-001 (Search library catalogue) | Sprint 1
 
 ---
 
@@ -98,23 +109,24 @@ flowchart TD
     B --> C{Student\nauthenticated?}
     C -- No --> D[Redirect to login page]
     D --> Z([End])
-    C -- Yes --> E{Check borrow\neligibility}
-    E -- Ineligible\nfines or overdues --> F[Show error: resolve fines or returns first]
+    C -- Yes --> E{Borrow eligibility\ncheck passed?}
+    E -- No --> F[Show error: resolve fines or returns first]
     F --> Z
-    E -- Eligible --> G{Book\navailable?}
+    E -- Yes --> G{Book available?}
     G -- Yes --> H[Student clicks Borrow]
     H --> I[System decrements available copy count]
     I --> J[Create Loan record with 14-day due date]
     J --> K[Send confirmation email within 60 seconds]
     K --> L[Show success: book borrowed]
     G -- No --> M[Student clicks Reserve]
-    M --> N{Other reservations\nexist?}
+    M --> N{Other reservations\nin queue?}
     N -- Yes --> O[Add student to reservation queue]
     N -- No --> P[Create Reservation record]
-    O --> Q[Send queue position confirmation email]
+    O --> Q[Send queue confirmation email]
     P --> R[Send reservation confirmation email]
     Q --> S[Start 48-hour hold timer]
     R --> S
+    L --> Z
     S --> Z
 
     style A fill:#2d6a4f,color:#fff
@@ -129,11 +141,16 @@ flowchart TD
 
 **Swimlane roles:** Student, System API, Database, Notification Service
 
-**Workflow summary:** This covers FR-03 (Borrowing and Reservation). The eligibility check enforces the guard condition from FR-03: borrowing is blocked if the student has 3+ overdue items or fines exceeding R100. The parallel flows for borrowing vs reserving show how the system handles both scenarios from a single entry point.
+**Workflow summary:** This covers FR-03. The eligibility check blocks borrowing when fines exceed R100 or overdue items exceed 3. Parallel flows handle borrowing vs reserving from a single entry point. This workflow directly supports the Sprint 2 user story focused on real-time availability checks and transaction processing.
 
-**Stakeholder concern addressed:** Students want to reserve resources without visiting the library. Librarians need inventory accuracy. Both are addressed by the immediate inventory decrement and confirmation email steps.
+**Stakeholder Value**
+Students benefit from a fully online borrow and reserve process, eliminating the need for in-person visits. Librarians benefit from real-time inventory accuracy — the immediate decrement of available copies prevents double-booking. The automated confirmation email reduces front-desk enquiries and supports scalability.
 
-**US traceability:** US-003 (Borrow/reserve a book) | Sprint 2
+**Related Functional Requirements**
+- FR-03: Book borrowing and reservation
+- FR-07: Automated confirmation notifications
+
+**Sprint Traceability:** US-003 (Borrow/reserve a book) | Sprint 2
 
 ---
 
@@ -145,10 +162,10 @@ flowchart TD
     B --> C{Book found\nin system?}
     C -- No --> D[Show error: ISBN not recognised]
     D --> Z([End])
-    C -- Yes --> E{Book checked out\nto a student?}
-    E -- No --> F[Show error: book not currently on loan]
+    C -- Yes --> E{Book currently\non loan?}
+    E -- No --> F[Show error: book not on loan]
     F --> Z
-    E -- Yes --> G{Book\noverdue?}
+    E -- Yes --> G{Book overdue?}
     G -- Yes --> H[Calculate fine amount]
     H --> I[Record fine on student account]
     I --> J[Notify student of fine via email]
@@ -157,8 +174,8 @@ flowchart TD
     K --> L[Increment available copy count]
     L --> M{Reservations\nin queue?}
     M -- Yes --> N[Activate next reservation]
-    N --> O[Notify next student: book is ready]
-    M -- No --> P[Book status set to Available]
+    N --> O[Notify next student: book ready]
+    M -- No --> P[Set book status to Available]
     O --> P
     P --> Q[Update Elasticsearch availability index]
     Q --> Z
@@ -175,11 +192,16 @@ flowchart TD
 
 **Swimlane roles:** Librarian, System API, Database, Notification Service
 
-**Workflow summary:** This covers the return lifecycle from UC12 (Return Borrowed Book). The decision at the overdue check automatically calculates and records fines. The queue check ensures reservations are activated immediately upon return, minimising wait time for the next student.
+**Workflow summary:** This covers UC12. The overdue check automatically calculates and records fines. The queue check activates the next reservation immediately upon return, minimising wait times.
 
-**Stakeholder concern addressed:** Librarians need accurate, real-time inventory. The immediate Elasticsearch update (last step) ensures search results reflect the returned book within 30 seconds.
+**Stakeholder Value**
+Librarians benefit from a fast, accurate return process that handles fines and queue activation automatically, reducing manual work. Students on the reservation queue benefit from immediate notification when a book becomes available. The Elasticsearch update ensures search results reflect the returned book within 30 seconds, supporting real-time accuracy for all users.
 
-**US traceability:** UC12 (Return Borrowed Book) | Sprint 2
+**Related Functional Requirements**
+- FR-03: Borrowing and reservation lifecycle
+- FR-07: Automated overdue fine notification
+
+**Sprint Traceability:** UC12 (Return Borrowed Book) | Sprint 2
 
 ---
 
@@ -188,24 +210,20 @@ flowchart TD
 ```mermaid
 flowchart TD
     A([Start]) --> B[Student logs in successfully]
-    B --> C[System initiates parallel data fetch]
-
+    B --> C[Initiate parallel data fetch]
     C --> D[Fetch active loans\nand due dates]
-    C --> E[Fetch overdue\nnotices]
+    C --> E[Fetch overdue notices]
     C --> F[Fetch recommendations\nfrom cache]
-    C --> G[Fetch reading\nlist items]
-
-    D --> H{All data\nloaded within 2s?}
+    C --> G[Fetch reading list items]
+    D --> H{All sections\nloaded within 2s?}
     E --> H
     F --> H
     G --> H
-
     H -- Yes --> I[Render complete dashboard]
     H -- No --> J[Render available sections\nShow skeleton for slow sections]
     J --> K[Retry failed sections in background]
     K --> L[Update dashboard when data arrives]
     L --> I
-
     I --> M{Items due\nwithin 3 days?}
     M -- Yes --> N[Highlight due items in red]
     M -- No --> O[Display dashboard normally]
@@ -222,11 +240,16 @@ flowchart TD
 
 **Swimlane roles:** Student, API Gateway, Multiple Backend Services
 
-**Workflow summary:** This covers FR-04 (Student Dashboard). The parallel fetch step is critical , all four data sources are queried simultaneously rather than sequentially, enabling the 2-second load time (NFR-13). The skeleton loading pattern ensures the dashboard is usable even if one service is slow.
+**Workflow summary:** This covers FR-04. All four data sources are fetched in parallel to achieve the 2-second load requirement (NFR-13). The skeleton loading pattern ensures the dashboard remains usable even if one service is slow.
 
-**Stakeholder concern addressed:** Students need a fast, unified view of their library activity. The parallel architecture directly addresses NFR-13 (Dashboard Load Time ≤ 2 seconds).
+**Stakeholder Value**
+Students benefit from a fast, unified view of all their library activity in a single screen. The parallel fetch architecture directly addresses the NFR-13 performance requirement. IT administrators benefit from the graceful degradation pattern — a slow recommendation service will not block the entire dashboard, maintaining perceived reliability during peak usage periods.
 
-**US traceability:** US-004 (Student personal dashboard) | Sprint 2
+**Related Functional Requirements**
+- FR-04: Student personal dashboard
+- NFR-13: Dashboard load time under 2 seconds
+
+**Sprint Traceability:** US-004 (Student personal dashboard) | Sprint 2
 
 ---
 
@@ -237,29 +260,26 @@ flowchart TD
     A([Start]) --> B[Notification scheduler runs every hour]
     B --> C[Query all active loans from database]
     C --> D{Loans due\nin exactly 3 days?}
-    D -- Yes --> E[Queue Due Soon email for each student]
+    D -- Yes --> E[Queue Due Soon email]
     D -- No --> F{Loans due\ntoday?}
     F -- Yes --> G[Queue Due Today email]
     F -- No --> H{Loans 1 day\noverdue?}
     H -- Yes --> I[Queue Overdue email]
     H -- No --> J[No action required]
-
     E --> K[Send emails via SendGrid]
     G --> K
     I --> K
-
     K --> L{Delivery\nsuccessful?}
     L -- Yes --> M[Log delivery confirmation]
     L -- No --> N{Retry count\nless than 3?}
     N -- Yes --> O[Increment retry counter]
     O --> K
     N -- No --> P[Log permanent failure]
-    P --> Q[Trigger in-app notification as fallback]
-
-    M --> R{Is it\n08:00?}
+    P --> Q[Trigger in-app notification fallback]
+    M --> R{Is it 08:00?}
     Q --> R
     J --> R
-    R -- Yes --> S[Generate librarian daily digest email]
+    R -- Yes --> S[Generate librarian daily digest]
     S --> T[Send digest to all librarians]
     R -- No --> Z([End])
     T --> Z
@@ -276,13 +296,17 @@ flowchart TD
 
 ### Explanation
 
-**Swimlane roles:** Notification Scheduler, Database, Email Service (SendGrid), Librarian
+**Swimlane roles:** Notification Scheduler, Database, Email Service, Librarian
 
-**Workflow summary:** This covers FR-07 (Automated Overdue Notifications). The three-retry loop with exponential backoff ensures reliable delivery. The 08:00 guard condition triggers the librarian digest exactly once per day.
+**Workflow summary:** This covers FR-07. Three trigger conditions are checked in a single scheduler run. The 3-retry loop with exponential backoff ensures reliable delivery. The 08:00 guard triggers the librarian digest exactly once per day.
 
-**Stakeholder concern addressed:** Librarians want automated overdue tracking. Students want timely reminders. The parallel checking of three trigger conditions (3 days, due today, 1 day overdue) handles all cases in a single scheduler run.
+**Stakeholder Value**
+Students benefit from timely, automated reminders that reduce overdue fines without requiring manual follow-up. Librarians benefit from a consolidated daily digest that gives full overdue visibility without needing to query the system manually. The retry and fallback logic ensures notification reliability even when the email service experiences downtime, supporting the IT administrator's uptime requirements.
 
-**US traceability:** US-007 (Automated overdue notifications) | Sprint 2
+**Related Functional Requirements**
+- FR-07: Automated overdue notifications and retry logic
+
+**Sprint Traceability:** US-007 (Automated overdue notifications) | Sprint 2
 
 ---
 
@@ -291,34 +315,30 @@ flowchart TD
 ```mermaid
 flowchart TD
     A([Start]) --> B[Librarian navigates to Catalogue Management]
-    B --> C{Action\nselected?}
+    B --> C{Action selected?}
     C -- Add New --> D[Librarian fills resource form]
-    D --> E{ISBN\nvalid?}
+    D --> E{ISBN valid?}
     E -- No --> F[Show ISBN validation error]
     F --> D
     E -- Yes --> G[Save resource to PostgreSQL]
-    G --> H[Trigger Elasticsearch indexing job]
+    G --> H[Trigger Elasticsearch indexing]
     H --> I[Resource searchable within 30 seconds]
     I --> J[Write audit log entry]
-
     C -- Edit --> K[Librarian modifies resource fields]
-    K --> L[Save updated record to PostgreSQL]
-    L --> M[Re-index resource in Elasticsearch]
+    K --> L[Save updated record]
+    L --> M[Re-index in Elasticsearch]
     M --> J
-
-    C -- Delete --> N{Active loans\nexist?}
-    N -- Yes --> O[Block deletion: show active loans count]
+    C -- Delete --> N{Active loans exist?}
+    N -- Yes --> O[Block deletion: show loan count]
     O --> Z([End])
-    N -- No --> P[Delete resource from PostgreSQL]
+    N -- No --> P[Delete from PostgreSQL]
     P --> Q[Remove from Elasticsearch index]
     Q --> J
-
-    C -- Bulk Import --> R[Librarian uploads CSV file]
-    R --> S[Validate each row: required fields and ISBN]
-    S --> T[Import valid rows to PostgreSQL]
+    C -- Bulk Import --> R[Librarian uploads CSV]
+    R --> S[Validate each row]
+    S --> T[Import valid rows]
     T --> U[Flag invalid rows in error report]
     U --> H
-
     J --> Z
 
     style A fill:#2d6a4f,color:#fff
@@ -332,11 +352,16 @@ flowchart TD
 
 **Swimlane roles:** Librarian, System API, PostgreSQL, Elasticsearch
 
-**Workflow summary:** This covers FR-06 (Library Catalogue Management). Four parallel action paths (Add, Edit, Delete, Bulk Import) branch from a single entry point. The deletion guard condition (active loans check) is a critical safety mechanism that prevents data integrity issues.
+**Workflow summary:** This covers FR-06. Four action paths branch from a single entry. The deletion guard prevents data integrity issues. All changes are audit-logged.
 
-**Stakeholder concern addressed:** Librarians need fast, accurate catalogue management. The Elasticsearch re-indexing step ensures search results stay current within 30 seconds of any change (FR-06 acceptance criteria).
+**Stakeholder Value**
+Librarians benefit from a fast, multi-action catalogue tool that handles validation, indexing, and audit logging automatically. The bulk import path addresses the pain point of large acquisitions. University administrators benefit from the audit log, which supports compliance and accountability. The Elasticsearch re-indexing ensures students always see accurate catalogue data within 30 seconds of any change.
 
-**US traceability:** US-006 (Librarian catalogue management), US-014 (Bulk CSV import) | Sprint 2 and Sprint 3
+**Related Functional Requirements**
+- FR-06: Library catalogue management
+- FR-02: Search relies on the Searchable state produced by this workflow
+
+**Sprint Traceability:** US-006 (Librarian catalogue management), US-014 (Bulk CSV import) | Sprint 2 and Sprint 3
 
 ---
 
@@ -345,26 +370,26 @@ flowchart TD
 ```mermaid
 flowchart TD
     A([Start]) --> B[Admin or Librarian selects report type]
-    B --> C[Apply filters: date range, department, resource type]
-    C --> D{User has\npermission for this report?}
+    B --> C[Apply filters: date range, department, type]
+    C --> D{User has\npermission?}
     D -- No --> E[Return HTTP 403: Access Denied]
     E --> Z([End])
     D -- Yes --> F[Query reporting database]
-    F --> G{Query\nsuccessful?}
-    G -- No --> H[Show error: unable to generate report]
+    F --> G{Query successful?}
+    G -- No --> H[Show error: unable to generate]
     H --> Z
-    G -- Yes --> I[Render report as chart and summary table]
+    G -- Yes --> I[Render report as chart and table]
     I --> J[Display report on screen]
     J --> K{Admin requests\nexport?}
     K -- No --> Z
-    K -- Yes --> L[Admin selects format: PDF or CSV]
+    K -- Yes --> L[Admin selects PDF or CSV]
     L --> M{Report covers\nmore than 12 months?}
     M -- No --> N[Generate export file]
     N --> O{File ready\nwithin 10 seconds?}
     O -- Yes --> P[Trigger browser download]
-    O -- No --> Q[Queue export as background job]
-    Q --> R[Email download link to admin when ready]
+    O -- No --> Q[Queue as background job]
     M -- Yes --> Q
+    Q --> R[Email download link when ready]
     P --> Z
     R --> Z
 
@@ -381,8 +406,13 @@ flowchart TD
 
 **Swimlane roles:** Administrator, Librarian, System API, Reporting Database, Email Service
 
-**Workflow summary:** This covers FR-08 (Usage Reporting and Analytics). The RBAC check at the start enforces FR-10,  admin-only reports return HTTP 403 for librarians. The large-report queue handles the alternative flow from UC08 where exports exceeding 12 months are processed as background jobs.
+**Workflow summary:** This covers FR-08. The RBAC check enforces FR-10 at entry. The background queue handles large reports exceeding the 10-second SLA. All decision branches are explicitly labelled Yes/No.
 
-**Stakeholder concern addressed:** University administrators need data-driven procurement insights. The export functionality with background queuing ensures even large, complex reports are always deliverable.
+**Stakeholder Value**
+University administrators benefit from data-driven procurement insights through filterable, exportable reports. The RBAC check ensures sensitive system-wide reports are restricted to authorised roles, satisfying IT administrator security requirements. The background export queue ensures even large historical reports are always deliverable, supporting the administrator's need for complete data access without system timeouts.
 
-**US traceability:** US-008 (Usage reports and analytics) | Sprint 3
+**Related Functional Requirements**
+- FR-08: Usage reporting and analytics
+- FR-10: Role-based access control enforced at the permission check
+
+**Sprint Traceability:** US-008 (Usage reports and analytics) | Sprint 3
