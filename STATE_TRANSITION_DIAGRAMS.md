@@ -40,7 +40,7 @@ stateDiagram-v2
 **Key Transitions:**
 - A book starts as Available when added to the catalogue by a librarian (FR-06)
 - It moves to Reserved when a student places an online reservation (FR-03)
-- Reserved books that are not collected within 48 hours automatically revert to Available — this guard condition prevents inventory from being locked indefinitely
+- Reserved books that are not collected within 48 hours automatically revert to Available, this guard condition prevents inventory from being locked indefinitely
 - A Borrowed book becomes Overdue when the due date passes without a return, triggering the notification workflow (FR-07)
 - A Lost book exits the lifecycle entirely and is removed from the catalogue
 
@@ -84,7 +84,7 @@ stateDiagram-v2
 - A Loan is created Active when a student borrows a book
 - The system automatically transitions the loan to DueSoon 3 days before the due date, triggering an email notification (FR-07)
 - The guard condition on the Overdue → Escalated transition enforces FR-03: borrowing is blocked when fines exceed R100
-- The Returned state transitions to Archived — an explicit UML terminal state — which records that the loan is complete and increments the available copy count
+- The Returned state transitions to Archived, an explicit UML terminal state, which records that the loan is complete and increments the available copy count
 
 **FR Mapping:**
 - FR-03: Controls the Active, Overdue, and Escalated states with fine-based guard conditions
@@ -120,7 +120,7 @@ stateDiagram-v2
 
 **Key Transitions:**
 - Registration creates an Unverified account; email verification moves it to Active (FR-01)
-- 5 consecutive failed logins trigger a Locked state for 15 minutes — a guard condition enforcing brute-force protection (NFR-10)
+- 5 consecutive failed logins trigger a Locked state for 15 minutes, a guard condition enforcing brute-force protection (NFR-10)
 - Deactivated accounts trigger POPIA-compliant data erasure within 30 days (NFR-11)
 
 **FR Mapping:**
@@ -194,7 +194,7 @@ stateDiagram-v2
 - Notifications are Scheduled when a trigger condition is met (3 days before due date, on due date, 1 day after)
 - Failed deliveries are automatically Retried up to 3 times (FR-07 acceptance criteria)
 - After 3 failed retries, the system moves to PermanentFailure and triggers an in-app fallback, ending in FallbackDelivered
-- Successfully delivered notifications end in Archived — an explicit terminal state confirming the record is logged and the lifecycle is complete
+- Successfully delivered notifications end in Archived, an explicit terminal state confirming the record is logged and the lifecycle is complete
 
 **FR Mapping:**
 - FR-07: Defines all notification trigger conditions and the 3-retry guard condition
