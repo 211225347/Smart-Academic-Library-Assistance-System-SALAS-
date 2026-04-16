@@ -3,7 +3,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 8: Object State Modeling and Activity Workflow Modeling
-> Building on Assignments 3–7 | Version 1.0 | April 2026
+> Building on Assignments 3–7 |19 April 2026
 
 ---
 
@@ -243,7 +243,7 @@ flowchart TD
 **Workflow summary:** This covers FR-04. All four data sources are fetched in parallel to achieve the 2-second load requirement (NFR-13). The skeleton loading pattern ensures the dashboard remains usable even if one service is slow.
 
 **Stakeholder Value**
-Students benefit from a fast, unified view of all their library activity in a single screen. The parallel fetch architecture directly addresses the NFR-13 performance requirement. IT administrators benefit from the graceful degradation pattern — a slow recommendation service will not block the entire dashboard, maintaining perceived reliability during peak usage periods.
+Students benefit from a fast, unified view of all their library activity in a single screen. The parallel fetch architecture directly addresses the NFR-13 performance requirement. IT administrators benefit from the graceful degradation pattern, a slow recommendation service will not block the entire dashboard, maintaining perceived reliability during peak usage periods.
 
 **Related Functional Requirements**
 - FR-04: Student personal dashboard
