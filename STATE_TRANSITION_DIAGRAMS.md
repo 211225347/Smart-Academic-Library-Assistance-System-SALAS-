@@ -3,7 +3,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 8: Object State Modeling and Activity Workflow Modeling
-> Building on Assignments 3–7 | Version 1.0 | April 2026
+> Building on Assignments 3–7 |19 April 2026
 
 ---
 
@@ -126,7 +126,7 @@ stateDiagram-v2
 **Key Transitions:**
 - `registerAccount` creates an Unverified account; `verifyEmail [linkValid]` activates it
 - `lockAccount [failedAttempts >= 5]` enforces brute-force protection (NFR-10)
-- `verificationTimeout [linkExpiredAfter7Days]` moves unverified accounts to Expired — an explicit terminal state
+- `verificationTimeout [linkExpiredAfter7Days]` moves unverified accounts to Expired, an explicit terminal state
 - `erasePersonalData [within30Days]` in DataErased enforces POPIA compliance (NFR-11)
 
 **Functional Requirements Mapping**
