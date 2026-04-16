@@ -1,8 +1,9 @@
+[assignment8_reflection.md](https://github.com/user-attachments/files/26781262/assignment8_reflection.md)
 # assignment8_reflection.md — Reflection on State and Activity Modeling
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 8: Reflection
-> Building on Assignments 3–7 |19 April 2026
+> Building on Assignments 3–7 | Version 1.0 | April 2026
 
 ---
 
@@ -36,15 +37,15 @@ each action node to a specific function or API call.
 
 The assignment required traceability between the diagrams and the user stories from
 Assignment 6. This alignment was not always natural. User stories are written from
-a user perspective, "As a student, I want to borrow a book", while state and
-activity diagrams are written from a system perspective,  "the Loan object
+a user perspective — "As a student, I want to borrow a book" — while state and
+activity diagrams are written from a system perspective — "the Loan object
 transitions from Active to Overdue when the due date passes."
 
 Bridging this gap required going back to the acceptance criteria in AGILE_PLANNING.md
 rather than the user story titles. The acceptance criteria are written in testable,
 system-level language ("inventory count is decremented immediately upon borrowing")
 that maps cleanly onto diagram transitions and action nodes. This reinforced the
-value of writing precise acceptance criteria in Assignment 6 they are not just
+value of writing precise acceptance criteria in Assignment 6 — they are not just
 for testers, they are the link between user intent and system behaviour.
 
 The most difficult alignment was for US-013 (AES-256 encryption and TLS). This is
@@ -64,7 +65,7 @@ each other rather than overlapping.
 
 **State transition diagrams** answer the question: "What can this object be, and
 what causes it to change?" They are object-centric. The Book diagram does not care
-who borrowed the book or what steps were involved, it only cares that the book is
+who borrowed the book or what steps were involved — it only cares that the book is
 now in a Borrowed state and what that means for what can happen next. State diagrams
 are most useful for objects that have a meaningful lifecycle: things that are created,
 modified, and destroyed, or that have different rules depending on their current
@@ -74,7 +75,7 @@ permitted.
 
 **Activity diagrams** answer the question: "What steps happen to complete this
 process, and in what order?" They are process-centric. The Borrow a Book activity
-diagram does not care about the long-term state of the Loan object, it only cares
+diagram does not care about the long-term state of the Loan object — it only cares
 about the sequence of steps from the student clicking "Borrow" to the confirmation
 email being sent. Activity diagrams are most useful for workflows that involve
 decisions, parallel actions, and multiple actors. In SALAS, the overdue notification
@@ -100,7 +101,7 @@ visible. Diagramming is a form of requirements validation.
 **Parallel actions are harder to diagram than to describe.** The dashboard load
 workflow looks simple in prose ("load all data simultaneously") but required careful
 diagramming to show that the four parallel fetches must all complete before the
-dashboard renders, except in the degraded mode where partial data is shown. Getting
+dashboard renders — except in the degraded mode where partial data is shown. Getting
 this right in the diagram before implementation prevents a common bug where the
 dashboard blocks on the slowest service.
 
@@ -111,3 +112,9 @@ exceed R100" guard on borrowing eligibility, and the "3 retries exhausted" guard
 notification failure are all directly implementable as database queries or counter
 checks. Writing them as guards in the diagram makes them impossible to overlook
 during implementation.
+
+---
+
+## Agile Connection
+
+The diagrams produced in this assignment map directly to the Sprint 2 user stories defined in AGILE_PLANNING.md. For example, the Borrow Book activity diagram directly supports Sprint 2 user stories focused on real-time availability checks and transaction processing (US-003), while the Student Dashboard Load diagram supports US-004 and its 2-second performance acceptance criteria. State diagrams for the Loan and Reservation objects provide the implementation contract for the same stories — developers can read both the activity diagram (what steps to implement) and the state diagram (what constraints apply at each step) to fully understand a user story before writing a single line of code.
