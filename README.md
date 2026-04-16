@@ -39,7 +39,7 @@ An intelligent library platform for university students.
 | [kanban_explanation.md](./kanban_explanation.md) | Kanban board definition and workflow explanation |
 | [reflection7.md](./reflection7.md) | Reflection on Kanban implementation |
 
-### Assignment 8 — Object State and Activity Modeling
+### Assignment 8 Object State and Activity Modeling
 | Document | Description |
 |---|---|
 | [STATE_TRANSITION_DIAGRAMS.md](./STATE_TRANSITION_DIAGRAMS.md) | 8 UML state transition diagrams with event labels, guard conditions, and FR mapping |
@@ -50,4 +50,4 @@ These diagrams model object lifecycles and workflows based on the functional req
 defined in Assignment 4 and the user stories and sprint planning from Assignment 6.
 
 ## Author
-**Phola Qwalana 211225347** | Software Engineering | April 2026
+**Phola Qwalana 211225347** | Software Engineering |19 April 2026
