@@ -1,9 +1,9 @@
-[STATE_TRANSITION_DIAGRAMS.md](https://github.com/user-attachments/files/26707030/STATE_TRANSITION_DIAGRAMS.md)
+[STATE_TRANSITION_DIAGRAMS.md](https://github.com/user-attachments/files/26781291/STATE_TRANSITION_DIAGRAMS.md)
 # STATE_TRANSITION_DIAGRAMS.md — Object State Modeling
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 8: Object State Modeling and Activity Workflow Modeling
-> Building on Assignments 3–7 |19 April 2026
+> Building on Assignments 3–7 | Version 1.0 | April 2026
 
 ---
 
@@ -11,43 +11,45 @@
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Available : Librarian adds resource (FR-06)
+    [*] --> Available : addResource
 
-    Available --> Reserved : Student places reservation (FR-03)
-    Available --> Borrowed : Student borrows book (FR-03)
-    Available --> UnderMaintenance : Librarian flags for repair
+    Available --> Reserved : reserveBook
+    Available --> Borrowed : checkoutBook
+    Available --> UnderMaintenance : flagForRepair
 
-    Reserved --> Borrowed : Student collects at desk (FR-03)
-    Reserved --> Available : Reservation expires after 48 hours (FR-03)
-    Reserved --> Available : Student cancels reservation
+    Reserved --> Borrowed : checkoutBook [userAuthenticated && withinHoldPeriod]
+    Reserved --> Available : cancelReservation
+    Reserved --> Available : reservationTimeout [holdPeriodExpired]
 
-    Borrowed --> Overdue : Due date passes without return (FR-07)
-    Borrowed --> Available : Student returns book (UC03)
+    Borrowed --> Overdue : dueDatePassed [notReturned]
+    Borrowed --> Available : returnBook
 
-    Overdue --> Available : Student returns overdue book
-    Overdue --> Lost : Librarian marks as lost
+    Overdue --> Available : returnBook
+    Overdue --> Lost : markAsLost
 
-    UnderMaintenance --> Available : Librarian marks repair complete
-    Lost --> [*] : Resource permanently removed from catalogue
+    UnderMaintenance --> Available : markRepairComplete
+    Lost --> Deleted : removeFromCatalogue
 
-    Available --> [*] : Librarian deletes resource (no active loans) (FR-06)
+    Available --> Deleted : deleteResource [noActiveLoans]
+    Deleted --> [*]
 ```
 
 ### Explanation
 
-**Key States:** Available, Reserved, Borrowed, Overdue, UnderMaintenance, Lost
+**Key States:** Available, Reserved, Borrowed, Overdue, UnderMaintenance, Lost, Deleted
 
 **Key Transitions:**
-- A book starts as Available when added to the catalogue by a librarian (FR-06)
-- It moves to Reserved when a student places an online reservation (FR-03)
-- Reserved books that are not collected within 48 hours automatically revert to Available, this guard condition prevents inventory from being locked indefinitely
-- A Borrowed book becomes Overdue when the due date passes without a return, triggering the notification workflow (FR-07)
-- A Lost book exits the lifecycle entirely and is removed from the catalogue
+- A book starts as Available when a librarian adds it via `addResource` (FR-06)
+- `reserveBook` moves it to Reserved; `checkoutBook` moves it directly to Borrowed
+- The guard `[userAuthenticated && withinHoldPeriod]` on Reserved → Borrowed ensures only eligible students can collect a reserved book
+- `dueDatePassed [notReturned]` triggers the Overdue state, which activates FR-07 notifications
+- The guard `[noActiveLoans]` on Available → Deleted enforces the FR-06 deletion rule
+- `Deleted` is the explicit UML terminal state before `[*]`
 
-**FR Mapping:**
-- FR-03 (Borrowing and Reservation) governs the Available → Reserved → Borrowed transitions
-- FR-06 (Catalogue Management) governs the creation and deletion of the resource
-- FR-07 (Overdue Notifications) is triggered by the Borrowed → Overdue transition
+**Functional Requirements Mapping**
+- FR-03: Governs reserveBook, checkoutBook, and returnBook transitions
+- FR-06: Governs addResource, deleteResource, and the noActiveLoans guard
+- FR-07: Triggered by the dueDatePassed transition into Overdue
 
 ---
 
@@ -55,23 +57,23 @@ stateDiagram-v2
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Active : Student borrows book (FR-03)
+    [*] --> Active : createLoan
 
-    Active --> DueSoon : 3 days before due date (FR-07)
-    Active --> Renewed : Student renews loan before due date
-    Active --> Returned : Student returns book on time
+    Active --> DueSoon : scheduleReminder [daysUntilDue == 3]
+    Active --> Renewed : renewLoan [renewalAllowed]
+    Active --> Returned : returnBook
 
-    DueSoon --> Overdue : Due date passes (FR-07)
-    DueSoon --> Returned : Student returns before due date
+    DueSoon --> Overdue : dueDatePassed [notReturned]
+    DueSoon --> Returned : returnBook
 
-    Renewed --> Active : Renewal confirmed (new due date set)
-    Renewed --> DueSoon : New due date is within 3 days
+    Renewed --> Active : confirmRenewal
+    Renewed --> DueSoon : confirmRenewal [newDueDateWithin3Days]
 
-    Overdue --> Returned : Student returns overdue book
-    Overdue --> Escalated : Fine exceeds R100 (FR-03 guard condition)
+    Overdue --> Returned : returnBook
+    Overdue --> Escalated : escalateFine [fineExceedsR100]
 
-    Escalated --> Returned : Student pays fine and returns book
-    Returned --> Archived : Loan record archived
+    Escalated --> Returned : payFineAndReturn [paymentSuccessful]
+    Returned --> Archived : archiveLoan
 
     Archived --> [*]
 ```
@@ -81,14 +83,15 @@ stateDiagram-v2
 **Key States:** Active, DueSoon, Renewed, Overdue, Escalated, Returned, Archived
 
 **Key Transitions:**
-- A Loan is created Active when a student borrows a book
-- The system automatically transitions the loan to DueSoon 3 days before the due date, triggering an email notification (FR-07)
-- The guard condition on the Overdue → Escalated transition enforces FR-03: borrowing is blocked when fines exceed R100
-- The Returned state transitions to Archived, an explicit UML terminal state, which records that the loan is complete and increments the available copy count
+- `createLoan` initialises the loan as Active when a student borrows a book
+- `scheduleReminder [daysUntilDue == 3]` triggers the DueSoon state and FR-07 email
+- `escalateFine [fineExceedsR100]` enforces the FR-03 guard: borrowing blocked when fines exceed R100
+- `payFineAndReturn [paymentSuccessful]` includes a payment guard before the loan can close
+- `Archived` is the explicit terminal state confirming the loan record is stored and the lifecycle is complete
 
-**FR Mapping:**
-- FR-03: Controls the Active, Overdue, and Escalated states with fine-based guard conditions
-- FR-07: Triggers transitions to DueSoon and Overdue states via the notification scheduler
+**Functional Requirements Mapping**
+- FR-03: Controls Active, Overdue, Escalated states and the fineExceedsR100 guard
+- FR-07: Triggers the scheduleReminder and dueDatePassed transitions
 
 ---
 
@@ -96,37 +99,40 @@ stateDiagram-v2
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Unverified : Student registers (FR-01)
+    [*] --> Unverified : registerAccount
 
-    Unverified --> Active : Student verifies email (FR-01)
-    Unverified --> [*] : Verification link expires (7 days)
+    Unverified --> Active : verifyEmail [linkValid]
+    Unverified --> Expired : verificationTimeout [linkExpiredAfter7Days]
 
-    Active --> Locked : 5 consecutive failed logins (FR-01 / NFR-10)
-    Active --> Suspended : Librarian suspends account
-    Active --> Deactivated : Student requests account deletion (NFR-11)
+    Active --> Locked : lockAccount [failedAttempts >= 5]
+    Active --> Suspended : suspendAccount
+    Active --> Deactivated : requestDeletion
 
-    Locked --> Active : 15 minute lockout expires (NFR-10)
-    Locked --> Active : Admin manually unlocks account
+    Locked --> Active : unlockAccount [lockoutPeriodExpired]
+    Locked --> Active : adminUnlock
 
-    Suspended --> Active : Admin reinstates account
-    Suspended --> Deactivated : Admin permanently deactivates
+    Suspended --> Active : reinstateAccount
+    Suspended --> Deactivated : permanentDeactivation
 
-    Deactivated --> [*] : Personal data erased within 30 days (NFR-11 / POPIA)
+    Deactivated --> DataErased : erasePersonalData [within30Days]
+    Expired --> [*]
+    DataErased --> [*]
 ```
 
 ### Explanation
 
-**Key States:** Unverified, Active, Locked, Suspended, Deactivated
+**Key States:** Unverified, Active, Locked, Suspended, Deactivated, DataErased, Expired
 
 **Key Transitions:**
-- Registration creates an Unverified account; email verification moves it to Active (FR-01)
-- 5 consecutive failed logins trigger a Locked state for 15 minutes, a guard condition enforcing brute-force protection (NFR-10)
-- Deactivated accounts trigger POPIA-compliant data erasure within 30 days (NFR-11)
+- `registerAccount` creates an Unverified account; `verifyEmail [linkValid]` activates it
+- `lockAccount [failedAttempts >= 5]` enforces brute-force protection (NFR-10)
+- `verificationTimeout [linkExpiredAfter7Days]` moves unverified accounts to Expired — an explicit terminal state
+- `erasePersonalData [within30Days]` in DataErased enforces POPIA compliance (NFR-11)
 
-**FR Mapping:**
-- FR-01 (Authentication): Governs Unverified → Active and Active → Locked transitions
-- NFR-10 (Auth Security): Defines the lockout guard condition
-- NFR-11 (POPIA): Governs the Deactivated → erasure lifecycle
+**Functional Requirements Mapping**
+- FR-01: Governs registerAccount, verifyEmail, and lockAccount transitions
+- NFR-10: Defines the failedAttempts >= 5 guard condition
+- NFR-11: Governs the erasePersonalData transition and 30-day guard
 
 ---
 
@@ -134,33 +140,36 @@ stateDiagram-v2
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Pending : Student submits reservation (FR-03)
+    [*] --> Pending : submitReservation
 
-    Pending --> Confirmed : Book is available and reserved (FR-03)
-    Pending --> Queued : Book already reserved by another student
+    Pending --> Confirmed : confirmReservation [bookAvailable]
+    Pending --> Queued : joinQueue [bookUnavailable]
 
-    Confirmed --> Collected : Student collects book within 48 hours
-    Confirmed --> Expired : 48 hours pass without collection (FR-03)
+    Confirmed --> Collected : collectBook [withinHoldPeriod]
+    Confirmed --> Expired : reservationTimeout [holdPeriodExceeded]
 
-    Queued --> Confirmed : Earlier reservation expires or is cancelled
-    Queued --> Cancelled : Student cancels while in queue
+    Queued --> Confirmed : confirmReservation [previousReservationExpired]
+    Queued --> Cancelled : cancelReservation
 
-    Expired --> [*] : Next queued reservation activated automatically
-    Collected --> [*] : Reservation fulfilled, Loan object created
-    Cancelled --> [*] : Reservation removed from queue
+    Expired --> NextActivated : activateNextReservation
+    Collected --> Fulfilled : createLoan
+    Cancelled --> [*]
+    NextActivated --> [*]
+    Fulfilled --> [*]
 ```
 
 ### Explanation
 
-**Key States:** Pending, Confirmed, Queued, Collected, Expired, Cancelled
+**Key States:** Pending, Confirmed, Queued, Collected, Expired, Cancelled, Fulfilled, NextActivated
 
 **Key Transitions:**
-- A reservation moves from Pending to Confirmed if a copy is available, or to Queued if all copies are reserved
-- The guard condition on Confirmed → Expired enforces the 48-hour hold window from FR-03
-- When a Confirmed reservation expires, the system automatically activates the next Queued reservation
+- `confirmReservation [bookAvailable]` and `joinQueue [bookUnavailable]` branch based on availability
+- `collectBook [withinHoldPeriod]` enforces the 48-hour hold window guard from FR-03
+- `reservationTimeout [holdPeriodExceeded]` moves to Expired, triggering `activateNextReservation`
+- `Fulfilled`, `Cancelled`, and `NextActivated` are explicit terminal states
 
-**FR Mapping:**
-- FR-03: Governs the entire reservation lifecycle including the 48-hour expiry guard
+**Functional Requirements Mapping**
+- FR-03: Governs the entire reservation lifecycle and all guard conditions
 
 ---
 
@@ -168,19 +177,19 @@ stateDiagram-v2
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Scheduled : Notification trigger condition met (FR-07)
+    [*] --> Scheduled : scheduleNotification [triggerConditionMet]
 
-    Scheduled --> Sending : Scheduler dispatches to email service
-    Sending --> Delivered : Email service confirms delivery
-    Sending --> Failed : Email service returns delivery error
+    Scheduled --> Sending : dispatchToEmailService
+    Sending --> Delivered : confirmDelivery [emailServiceSuccess]
+    Sending --> Failed : deliveryFailed [emailServiceError]
 
-    Failed --> Retrying : System retries (attempt 1 of 3) (FR-07)
-    Retrying --> Delivered : Retry succeeds
-    Retrying --> Failed : Retry fails
-    Failed --> PermanentFailure : 3 retries exhausted (FR-07)
+    Failed --> Retrying : retryDelivery [retryCount < 3]
+    Retrying --> Delivered : confirmDelivery
+    Retrying --> Failed : deliveryFailed
+    Failed --> PermanentFailure : exhaustRetries [retryCount >= 3]
 
-    Delivered --> Archived : Delivery logged and archived
-    PermanentFailure --> FallbackDelivered : In-app fallback notification triggered
+    Delivered --> Archived : archiveNotification
+    PermanentFailure --> FallbackDelivered : triggerInAppFallback
 
     Archived --> [*]
     FallbackDelivered --> [*]
@@ -191,13 +200,12 @@ stateDiagram-v2
 **Key States:** Scheduled, Sending, Delivered, Failed, Retrying, PermanentFailure, Archived, FallbackDelivered
 
 **Key Transitions:**
-- Notifications are Scheduled when a trigger condition is met (3 days before due date, on due date, 1 day after)
-- Failed deliveries are automatically Retried up to 3 times (FR-07 acceptance criteria)
-- After 3 failed retries, the system moves to PermanentFailure and triggers an in-app fallback, ending in FallbackDelivered
-- Successfully delivered notifications end in Archived, an explicit terminal state confirming the record is logged and the lifecycle is complete
+- `scheduleNotification [triggerConditionMet]` fires when due date conditions are met (FR-07)
+- `retryDelivery [retryCount < 3]` and `exhaustRetries [retryCount >= 3]` are explicit guard conditions enforcing the 3-retry rule
+- `Archived` (success path) and `FallbackDelivered` (failure path) are both explicit UML terminal states
 
-**FR Mapping:**
-- FR-07: Defines all notification trigger conditions and the 3-retry guard condition
+**Functional Requirements Mapping**
+- FR-07: Defines all trigger conditions, the 3-retry guard, and the in-app fallback
 
 ---
 
@@ -205,20 +213,20 @@ stateDiagram-v2
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Pending : Batch job begins processing student profile (FR-05)
+    [*] --> Pending : triggerBatchJob
 
-    Pending --> Generating : Collaborative filtering algorithm runs
-    Generating --> Ready : Recommendations computed and stored (FR-05)
-    Generating --> FallbackMode : Insufficient history (cold start) (FR-05)
+    Pending --> Generating : generateRecommendations
+    Generating --> Ready : recommendationsReady [historyAvailable]
+    Generating --> FallbackMode : applyDefaults [insufficientHistory]
 
-    FallbackMode --> Ready : Course-based defaults assigned within 1 hour
+    FallbackMode --> Ready : courseDefaultsAssigned [within1Hour]
 
-    Ready --> Displayed : Student opens dashboard (FR-04)
-    Displayed --> Dismissed : Student clicks Not Interested (FR-05)
-    Displayed --> Actioned : Student clicks through to borrow resource
+    Ready --> Displayed : loadDashboard
+    Displayed --> Dismissed : dismissRecommendation
+    Displayed --> Actioned : clickThroughToBorrow
 
-    Dismissed --> FeedbackRecorded : Negative signal logged for next batch run
-    Actioned --> FeedbackRecorded : Positive signal logged for next batch run
+    Dismissed --> FeedbackRecorded : recordNegativeSignal
+    Actioned --> FeedbackRecorded : recordPositiveSignal
 
     FeedbackRecorded --> [*]
 ```
@@ -228,13 +236,14 @@ stateDiagram-v2
 **Key States:** Pending, Generating, Ready, FallbackMode, Displayed, Dismissed, Actioned, FeedbackRecorded
 
 **Key Transitions:**
-- The FallbackMode state handles the cold-start problem for new students with no borrowing history (FR-05 acceptance criteria)
-- Both Dismissed and Actioned transitions converge on the explicit FeedbackRecorded terminal state, which confirms the student's interaction signal has been logged before the lifecycle ends
-- FeedbackRecorded is the UML-compliant named final state, making it clear the object has completed its purpose rather than simply disappearing
+- `generateRecommendations` runs the collaborative filtering algorithm
+- `recommendationsReady [historyAvailable]` and `applyDefaults [insufficientHistory]` branch on the cold-start guard
+- `courseDefaultsAssigned [within1Hour]` enforces the FR-05 1-hour SLA for new students
+- Both Dismissed and Actioned converge on `FeedbackRecorded` — the explicit terminal state
 
-**FR Mapping:**
-- FR-05: Governs the entire recommendation lifecycle including cold-start handling
-- FR-04: The Displayed state is triggered when the student's dashboard loads
+**Functional Requirements Mapping**
+- FR-05: Governs the full recommendation lifecycle and cold-start guard
+- FR-04: The Displayed state is triggered when the student dashboard loads
 
 ---
 
@@ -242,36 +251,41 @@ stateDiagram-v2
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Draft : Librarian begins adding resource (FR-06)
+    [*] --> Draft : beginCatalogueEntry
 
-    Draft --> Active : Librarian submits valid entry with ISBN (FR-06)
-    Draft --> [*] : Librarian discards draft
+    Draft --> Active : submitEntry [isbnValid]
+    Draft --> Discarded : discardDraft
 
-    Active --> Indexing : Elasticsearch indexing job triggered
-    Indexing --> Searchable : Indexed within 30 seconds (FR-06)
-    Indexing --> IndexFailed : Elasticsearch indexing error
+    Active --> Indexing : triggerIndexing
+    Indexing --> Searchable : indexingComplete [within30Seconds]
+    Indexing --> IndexFailed : indexingError
 
-    IndexFailed --> Indexing : Automatic retry
+    IndexFailed --> Indexing : retryIndexing
 
-    Searchable --> Updating : Librarian edits resource details (FR-06)
-    Updating --> Searchable : Update indexed successfully
+    Searchable --> Updating : editResource
+    Updating --> Searchable : reindexComplete
 
-    Searchable --> PendingDeletion : Librarian requests deletion (FR-06)
-    PendingDeletion --> Searchable : Active loans exist — deletion blocked (FR-06 guard)
-    PendingDeletion --> [*] : No active loans — resource deleted and de-indexed
+    Searchable --> PendingDeletion : requestDeletion
+    PendingDeletion --> Searchable : blockDeletion [activeLoansExist]
+    PendingDeletion --> Deleted : confirmDeletion [noActiveLoans]
+
+    Discarded --> [*]
+    Deleted --> [*]
 ```
 
 ### Explanation
 
-**Key States:** Draft, Active, Indexing, Searchable, IndexFailed, Updating, PendingDeletion
+**Key States:** Draft, Active, Indexing, Searchable, IndexFailed, Updating, PendingDeletion, Deleted, Discarded
 
 **Key Transitions:**
-- The guard condition on PendingDeletion → Searchable enforces FR-06: deletion is blocked if active loans exist
-- The Indexing state ensures resources appear in search results within 30 seconds of being added
+- `submitEntry [isbnValid]` enforces ISBN-10/13 validation before the entry becomes Active
+- `indexingComplete [within30Seconds]` enforces the FR-06 30-second indexing SLA
+- `blockDeletion [activeLoansExist]` and `confirmDeletion [noActiveLoans]` are explicit guard conditions protecting data integrity
+- `Deleted` and `Discarded` are explicit terminal states
 
-**FR Mapping:**
-- FR-06: Governs the full catalogue entry lifecycle including the deletion guard condition
-- FR-02: The Searchable state enables student search functionality
+**Functional Requirements Mapping**
+- FR-06: Governs the full catalogue lifecycle, isbnValid guard, and deletion guards
+- FR-02: The Searchable state enables student search via Elasticsearch
 
 ---
 
@@ -279,31 +293,38 @@ stateDiagram-v2
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Requested : Admin or Librarian requests report (FR-08)
+    [*] --> Requested : requestReport [hasPermission]
 
-    Requested --> Generating : System queries reporting database
-    Generating --> Ready : Report data compiled successfully (FR-08)
-    Generating --> Failed : Database query timeout or error
+    Requested --> Generating : queryDatabase
+    Generating --> Ready : dataCompiled [querySuccessful]
+    Generating --> QueryFailed : queryError
 
-    Failed --> Requested : Admin retries report generation
-    Ready --> Displayed : Report rendered on screen
+    QueryFailed --> Requested : retryRequest
 
-    Displayed --> Exporting : Admin clicks Export PDF or CSV (FR-08)
-    Exporting --> Exported : File generated within 10 seconds (FR-08)
-    Exporting --> QueuedExport : Report too large, export queued
+    Ready --> Displayed : renderReport
+    Displayed --> Exporting : requestExport
+    Displayed --> Closed : closeReport
 
-    QueuedExport --> Exported : Background job completes, download link emailed
-    Exported --> [*] : File downloaded and archived
-    Displayed --> [*] : Admin closes report without exporting
+    Exporting --> Exported : generateFile [within10Seconds]
+    Exporting --> QueuedExport : queueExport [reportTooLarge]
+
+    QueuedExport --> Exported : backgroundJobComplete
+    Exported --> Downloaded : downloadFile
+
+    Downloaded --> [*]
+    Closed --> [*]
 ```
 
 ### Explanation
 
-**Key States:** Requested, Generating, Ready, Displayed, Exporting, Exported, QueuedExport
+**Key States:** Requested, Generating, Ready, Displayed, Exporting, Exported, QueuedExport, Downloaded, Closed
 
 **Key Transitions:**
-- The QueuedExport state handles large reports (more than 12 months of data) that exceed the 10-second generation limit (FR-08 alternative flow)
-- The guard on Exporting → Exported enforces the 10-second export SLA
+- `requestReport [hasPermission]` enforces RBAC at the entry point — FR-10 ensures admin-only reports reject librarians
+- `generateFile [within10Seconds]` enforces the FR-08 10-second export SLA
+- `queueExport [reportTooLarge]` handles the alternative flow for large reports
+- `Downloaded` and `Closed` are both explicit terminal states covering the two exit paths
 
-**FR Mapping:**
-- FR-08: Governs the full report lifecycle including generation, display, and export
+**Functional Requirements Mapping**
+- FR-08: Governs report generation, display, export, and the 10-second SLA guard
+- FR-10: Enforces the hasPermission guard at the entry point
