@@ -239,7 +239,7 @@ stateDiagram-v2
 - `generateRecommendations` runs the collaborative filtering algorithm
 - `recommendationsReady [historyAvailable]` and `applyDefaults [insufficientHistory]` branch on the cold-start guard
 - `courseDefaultsAssigned [within1Hour]` enforces the FR-05 1-hour SLA for new students
-- Both Dismissed and Actioned converge on `FeedbackRecorded` — the explicit terminal state
+- Both Dismissed and Actioned converge on `FeedbackRecorded` the explicit terminal state
 
 **Functional Requirements Mapping**
 - FR-05: Governs the full recommendation lifecycle and cold-start guard
@@ -320,7 +320,7 @@ stateDiagram-v2
 **Key States:** Requested, Generating, Ready, Displayed, Exporting, Exported, QueuedExport, Downloaded, Closed
 
 **Key Transitions:**
-- `requestReport [hasPermission]` enforces RBAC at the entry point — FR-10 ensures admin-only reports reject librarians
+- `requestReport [hasPermission]` enforces RBAC at the entry point, FR-10 ensures admin-only reports reject librarians
 - `generateFile [within10Seconds]` enforces the FR-08 10-second export SLA
 - `queueExport [reportTooLarge]` handles the alternative flow for large reports
 - `Downloaded` and `Closed` are both explicit terminal states covering the two exit paths
