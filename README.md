@@ -1,4 +1,4 @@
-[README_A8.md](https://github.com/user-attachments/files/26781341/README_A8.md)
+[README_A9.md](https://github.com/user-attachments/files/26936900/README_A9.md)
 # Smart Academic Library Assistance System (SALAS)
 
 An intelligent library platform for university students.
@@ -39,15 +39,19 @@ An intelligent library platform for university students.
 | [kanban_explanation.md](./kanban_explanation.md) | Kanban board definition and workflow explanation |
 | [reflection7.md](./reflection7.md) | Reflection on Kanban implementation |
 
-### Assignment 8 Object State and Activity Modeling
+### Assignment 8 — Object State and Activity Modeling
 | Document | Description |
 |---|---|
-| [STATE_TRANSITION_DIAGRAMS.md](./STATE_TRANSITION_DIAGRAMS.md) | 8 UML state transition diagrams with event labels, guard conditions, and FR mapping |
-| [ACTIVITY_DIAGRAMS.md](./ACTIVITY_DIAGRAMS.md) | 8 UML activity workflow diagrams with stakeholder value and FR mapping |
-| [assignment8_reflection.md](./assignment8_reflection.md) | Reflection on state and activity modeling |
+| [STATE_TRANSITION_DIAGRAMS.md](./STATE_TRANSITION_DIAGRAMS.md) | 8 UML state transition diagrams |
+| [ACTIVITY_DIAGRAMS.md](./ACTIVITY_DIAGRAMS.md) | 8 UML activity workflow diagrams |
+| [assignment8_reflection.md](./assignment8_reflection.md) | Reflection on dynamic modeling |
 
-These diagrams model object lifecycles and workflows based on the functional requirements
-defined in Assignment 4 and the user stories and sprint planning from Assignment 6.
+### Assignment 9 — Domain Modeling and Class Diagram
+| Document | Description |
+|---|---|
+| [DOMAIN_MODEL.md](./DOMAIN_MODEL.md) | 10 domain entities with attributes, methods, relationships, and 10 business rules |
+| [CLASS_DIAGRAM.md](./CLASS_DIAGRAM.md) | Full Mermaid.js class diagram with inheritance, composition, aggregation, associations, and multiplicity |
+| [assignment9_reflection.md](./assignment9_reflection.md) | Reflection on OO design, trade-offs, and alignment with prior assignments |
 
 ## Author
-**Phola Qwalana 211225347** | Software Engineering |19 April 2026
+**Phola Qwalana 211225347** | Software Engineering | April 2026
