@@ -2,7 +2,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 9: Domain Modeling and Class Diagram Development
-> Building on Assignments 3–8 | Version 1.0 | April 2026
+> Building on Assignments 3–8 | 26 April 2026
 
 ---
 
@@ -213,7 +213,7 @@ User is defined as the base class with common authentication attributes and meth
 Student and Librarian extend User and add role-specific attributes and methods. This
 avoids duplication of `userId`, `email`, `passwordHash`, and `login()` across two
 separate classes. The `role` attribute on User also enables the RBAC system from
-FR-10 — the API middleware checks `user.role` to enforce permissions without needing
+FR-10, the API middleware checks `user.role` to enforce permissions without needing
 to query two separate tables.
 
 This maps directly to UC10 (Manage Roles and Permissions) from the use case diagram
@@ -222,14 +222,14 @@ in Assignment 5 and to the User Account state diagram in Assignment 8.
 ### 2.2 Composition: Student owns ReadingList
 
 ReadingList uses a composition relationship with Student (filled diamond) because a
-ReadingList cannot exist independently — it is meaningfully part of the Student
+ReadingList cannot exist independently, it is meaningfully part of the Student
 object. If a Student account is deactivated and deleted (BR-07), the ReadingList is
 deleted with it. This enforces the POPIA data erasure requirement from NFR-11.
 
 ### 2.3 Aggregation: Catalogue contains Resource
 
 Catalogue uses aggregation (hollow diamond) with Resource because Resources have
-independent existence — a Resource exists in the system even if it is temporarily
+independent existence, a Resource exists in the system even if it is temporarily
 removed from the active Catalogue (e.g., under maintenance). This models the
 UnderMaintenance state from the Resource state diagram in Assignment 8.
 
