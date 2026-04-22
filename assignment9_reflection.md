@@ -2,7 +2,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 9: Reflection
-> Building on Assignments 3–8 | Version 1.0 | April 2026
+> Building on Assignments 3–8 |26 April 2026
 
 ---
 
@@ -15,7 +15,7 @@ does it), and it is tempting to slide too far in either direction.
 
 The most concrete example of this tension was the Resource class. An early draft of
 the domain model had separate classes for Book, Journal, EBook, and ResearchPaper,
-each with slightly different attributes. This felt true to the real world — a journal
+each with slightly different attributes. This felt true to the real world, a journal
 article has a volume and issue number that a book does not. However, when I mapped
 these classes against the functional requirements in Assignment 4, every single
 requirement referred generically to "resources" without distinguishing between types.
@@ -27,7 +27,7 @@ would have made the class diagram significantly more complex without adding any 
 to the system. I consolidated everything into a single Resource class with a `type`
 attribute. This is a deliberate trade-off: simplicity over completeness. If future
 requirements distinguish between resource types, inheritance can be introduced at
-that point — a principle aligned with Agile's "build what you need now" approach.
+that point, a principle aligned with Agile's "build what you need now" approach.
 
 ---
 
@@ -43,7 +43,7 @@ the ReadingList has independent existence and could theoretically outlive the St
 
 The business rule that drove the decision was BR-07 and NFR-11: POPIA requires all
 personal data to be erased within 30 days of account deactivation. A reading list is
-personal data — it reveals a student's academic interests and reading patterns. If
+personal data, it reveals a student's academic interests and reading patterns. If
 ReadingList were an independent association, a deletion routine would need to
 explicitly find and delete it. Composition makes this automatic and impossible to
 forget during implementation.
@@ -69,10 +69,10 @@ possible.
 
 The activity diagrams from Assignment 8 map onto the methods. The "Return a Book"
 activity diagram has action nodes for "Calculate fine amount," "Record fine on
-student account," and "Increment available copy count" — these become
+student account," and "Increment available copy count", these become
 `Fine.calculateAmount()`, `Fine.payFine()`, and the `availableCopies` attribute on
 Resource respectively. Writing the class diagram after the activity diagrams meant
-that every method had a clear behavioural specification already — the activity diagram
+that every method had a clear behavioural specification already, the activity diagram
 told me what the method needed to do before I named it.
 
 The use cases from Assignment 5 map onto the class methods most directly. UC03
@@ -88,7 +88,7 @@ basic flow becomes a method call in the class diagram.
 decisions section, Fine became its own class because it has an independent lifecycle
 and its own business logic. The trade-off is a slightly more complex class diagram
 with an extra relationship. The benefit is cleaner separation of concerns and the
-ability to query, report on, and manage fines independently of loans — which the
+ability to query, report on, and manage fines independently of loans, which the
 administrator's reporting requirements (FR-08) demand.
 
 **Notification as a standalone class vs embedded in Loan.** Notification could have
@@ -103,7 +103,7 @@ a database query. Making it a first-class domain entity with `searchByKeyword()`
 `applyFilters()`, and `indexResource()` methods makes the Elasticsearch integration
 an explicit architectural concern rather than an implementation detail. The trade-off
 is one more class; the benefit is that the class diagram accurately represents how
-the search service interacts with resources — which matters for Assignment 8's
+the search service interacts with resources, which matters for Assignment 8's
 activity diagram on catalogue management.
 
 ---
@@ -111,15 +111,15 @@ activity diagram on catalogue management.
 ## Lessons Learned About Object-Oriented Design
 
 **Relationships are harder than classes.** Every class in the diagram was easy to
-identify from the requirements. The relationships — particularly deciding between
-aggregation and composition, or choosing the correct multiplicity — required
+identify from the requirements. The relationships, particularly deciding between
+aggregation and composition, or choosing the correct multiplicity, required
 understanding the business rules, not just the requirements text. Domain modeling
 taught me that UML relationship types are not cosmetic choices; they encode business
 logic.
 
 **Business rules are the hidden requirements.** The ten business rules documented in
 DOMAIN_MODEL.md are not explicitly stated in any single functional requirement in
-Assignment 4. They emerge from combining requirements — BR-02 (borrowing blocked at
+Assignment 4. They emerge from combining requirements, BR-02 (borrowing blocked at
 R100) comes from FR-03's acceptance criteria; BR-10 (fine calculation formula) is
 implied but never stated. Domain modeling forces these implicit rules to the surface
 where they can be validated and agreed upon before implementation begins.
@@ -132,7 +132,7 @@ before writing code — a wrong relationship in the class diagram is far cheaper
 on paper than in a running system with thousands of records.
 
 **Agile and domain modeling complement each other.** Agile methodology might seem
-to conflict with upfront domain modeling — "working software over comprehensive
+to conflict with upfront domain modeling, "working software over comprehensive
 documentation." But the domain model and class diagram are not documentation for its
 own sake; they are design tools that enable faster, more confident implementation
 of Sprint 2 and Sprint 3 user stories. US-003 (Borrow/Reserve a book) can only be
