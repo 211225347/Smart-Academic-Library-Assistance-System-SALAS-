@@ -37,8 +37,8 @@ The relationship between Student and ReadingList was one of the hardest modeling
 decisions in the assignment. Both composition and association are technically valid,
 and the choice has downstream consequences for data persistence and deletion behaviour.
 
-Composition (filled diamond) means the ReadingList cannot exist without the Student
-— if the Student is deleted, the ReadingList is deleted with it. Association means
+Composition (filled diamond) means the ReadingList cannot exist without the Student, 
+if the Student is deleted, the ReadingList is deleted with it. Association means
 the ReadingList has independent existence and could theoretically outlive the Student.
 
 The business rule that drove the decision was BR-07 and NFR-11: POPIA requires all
@@ -128,7 +128,7 @@ where they can be validated and agreed upon before implementation begins.
 every developer on the team must implement. Method signatures, attribute types, and
 relationship multiplicities become binding agreements. This experience gave me a new
 appreciation for why enterprise software teams invest heavily in domain modeling
-before writing code — a wrong relationship in the class diagram is far cheaper to fix
+before writing code, a wrong relationship in the class diagram is far cheaper to fix
 on paper than in a running system with thousands of records.
 
 **Agile and domain modeling complement each other.** Agile methodology might seem
