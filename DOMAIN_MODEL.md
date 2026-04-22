@@ -2,7 +2,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 9: Domain Modeling and Class Diagram Development
-> Building on Assignments 3–8 | Version 1.0 | April 2026
+> Building on Assignments 3–8 |26 April 2026
 
 ---
 
