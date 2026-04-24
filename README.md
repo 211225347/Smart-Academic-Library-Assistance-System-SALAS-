@@ -1,96 +1,69 @@
-[README_A10.md](https://github.com/user-attachments/files/26971690/README_A10.md)
+[README_A11.md](https://github.com/user-attachments/files/27050327/README_A11.md)
 # Smart Academic Library Assistance System (SALAS)
 
 An intelligent library platform for university students.
 
 ## Project Documents
 
-### Assignment 3
-| Document | Description |
+### Assignment 3 — 9 (Previous)
+| Assignment | Documents |
 |---|---|
-| [SPECIFICATION.md](./SPECIFICATION.md) | System specification |
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | C4 architecture diagrams |
-
-### Assignment 4
-| Document | Description |
-|---|---|
-| [STAKEHOLDERS.md](./STAKEHOLDERS.md) | Stakeholder analysis |
-| [SRD.md](./SRD.md) | System requirements document |
-| [REFLECTION.md](./REFLECTION.md) | Reflection |
-
-### Assignment 5
-| Document | Description |
-|---|---|
-| [USE_CASE_DIAGRAM.md](./USE_CASE_DIAGRAM.md) | Use case diagram |
-| [USE_CASE_SPECIFICATIONS.md](./USE_CASE_SPECIFICATIONS.md) | Use case specifications |
-| [TEST_CASES.md](./TEST_CASES.md) | Test cases |
-| [REFLECTION5.md](./REFLECTION5.md) | Reflection |
-
-### Assignment 6
-| Document | Description |
-|---|---|
-| [AGILE_PLANNING.md](./AGILE_PLANNING.md) | Agile planning document |
-| [REFLECTION6.md](./REFLECTION6.md) | Reflection |
-
-### Assignment 7
-| Document | Description |
-|---|---|
-| [template_analysis.md](./template_analysis.md) | GitHub template comparison |
-| [kanban_explanation.md](./kanban_explanation.md) | Kanban board explanation |
-| [reflection7.md](./reflection7.md) | Reflection |
-
-### Assignment 8 — Dynamic Modeling
-| Document | Description |
-|---|---|
-| [STATE_TRANSITION_DIAGRAMS.md](./STATE_TRANSITION_DIAGRAMS.md) | 8 UML state transition diagrams |
-| [ACTIVITY_DIAGRAMS.md](./ACTIVITY_DIAGRAMS.md) | 8 UML activity workflow diagrams |
-| [assignment8_reflection.md](./assignment8_reflection.md) | Reflection |
-
-### Assignment 9 — Domain Modeling
-| Document | Description |
-|---|---|
-| [DOMAIN_MODEL.md](./DOMAIN_MODEL.md) | Domain entities, attributes, business rules |
-| [CLASS_DIAGRAM.md](./CLASS_DIAGRAM.md) | Mermaid.js class diagram |
-| [assignment9_reflection.md](./assignment9_reflection.md) | Reflection |
+| A3 | [SPECIFICATION.md](./SPECIFICATION.md), [ARCHITECTURE.md](./ARCHITECTURE.md) |
+| A4 | [STAKEHOLDERS.md](./STAKEHOLDERS.md), [SRD.md](./SRD.md), [REFLECTION.md](./REFLECTION.md) |
+| A5 | [USE_CASE_DIAGRAM.md](./USE_CASE_DIAGRAM.md), [USE_CASE_SPECIFICATIONS.md](./USE_CASE_SPECIFICATIONS.md), [TEST_CASES.md](./TEST_CASES.md), [REFLECTION5.md](./REFLECTION5.md) |
+| A6 | [AGILE_PLANNING.md](./AGILE_PLANNING.md), [REFLECTION6.md](./REFLECTION6.md) |
+| A7 | [template_analysis.md](./template_analysis.md), [kanban_explanation.md](./kanban_explanation.md), [reflection7.md](./reflection7.md) |
+| A8 | [STATE_TRANSITION_DIAGRAMS.md](./STATE_TRANSITION_DIAGRAMS.md), [ACTIVITY_DIAGRAMS.md](./ACTIVITY_DIAGRAMS.md), [assignment8_reflection.md](./assignment8_reflection.md) |
+| A9 | [DOMAIN_MODEL.md](./DOMAIN_MODEL.md), [CLASS_DIAGRAM.md](./CLASS_DIAGRAM.md), [assignment9_reflection.md](./assignment9_reflection.md) |
 
 ### Assignment 10 — Implementation and Creational Patterns
-| Document | Description |
+| File | Description |
 |---|---|
-| [src/models.py](./src/models.py) | All 12 domain classes implemented in Python |
-| [creational_patterns/simple_factory.py](./creational_patterns/simple_factory.py) | Simple Factory — UserFactory for Student/Librarian creation |
-| [creational_patterns/factory_method.py](./creational_patterns/factory_method.py) | Factory Method — NotificationCreator subclasses |
-| [creational_patterns/abstract_factory.py](./creational_patterns/abstract_factory.py) | Abstract Factory — CSV and PDF report export families |
-| [creational_patterns/builder.py](./creational_patterns/builder.py) | Builder — ResourceBuilder with chained optional configuration |
-| [creational_patterns/prototype.py](./creational_patterns/prototype.py) | Prototype — ResourceCache with deep-clone templates |
-| [creational_patterns/singleton.py](./creational_patterns/singleton.py) | Singleton — Thread-safe DatabaseConnection |
-| [tests/test_all.py](./tests/test_all.py) | 108 unit tests — 84% coverage |
-| [CHANGELOG.md](./CHANGELOG.md) | Version history and bug tracking |
-| [assignment10_reflection.md](./assignment10_reflection.md) | Reflection on implementation and patterns |
+| [src/models.py](./src/models.py) | 12 domain classes in Python |
+| [creational_patterns/simple_factory.py](./creational_patterns/simple_factory.py) | Simple Factory |
+| [creational_patterns/factory_method.py](./creational_patterns/factory_method.py) | Factory Method |
+| [creational_patterns/abstract_factory.py](./creational_patterns/abstract_factory.py) | Abstract Factory |
+| [creational_patterns/builder.py](./creational_patterns/builder.py) | Builder |
+| [creational_patterns/prototype.py](./creational_patterns/prototype.py) | Prototype |
+| [creational_patterns/singleton.py](./creational_patterns/singleton.py) | Singleton |
+| [tests/test_all.py](./tests/test_all.py) | 108 unit tests |
 
-## Language Choice
-**Python 3.12** was chosen for the following reasons:
-- Clean, readable syntax that maps directly to UML class diagrams
-- First-class support for OOP: inheritance, composition, encapsulation
-- `pytest` provides an expressive, zero-boilerplate testing framework
-- `pytest-cov` generates coverage reports with minimal configuration
-- No compilation step — fast iteration during development
+### Assignment 11 — Repository Layer
+| File | Description |
+|---|---|
+| [repositories/interfaces.py](./repositories/interfaces.py) | Generic `Repository[T,ID]` + 8 entity-specific interfaces |
+| [repositories/inmemory/inmemory_repositories.py](./repositories/inmemory/inmemory_repositories.py) | HashMap-based implementations of all 8 repositories |
+| [repositories/filesystem/filesystem_repositories.py](./repositories/filesystem/filesystem_repositories.py) | Filesystem JSON implementation + Database stub (future-proofing) |
+| [factories/repository_factory.py](./factories/repository_factory.py) | RepositoryFactory — switches between MEMORY/FILESYSTEM/DATABASE backends |
+| [tests/test_repositories.py](./tests/test_repositories.py) | 87 repository unit tests |
+| [CHANGELOG.md](./CHANGELOG.md) | Version history and issue tracking |
 
-## Creational Pattern Justifications
-| Pattern | Applied To | Reason |
-|---|---|---|
-| Simple Factory | `UserFactory` | Centralises Student/Librarian creation from role string (FR-01) |
-| Factory Method | `NotificationCreator` | Each event type (DueSoon, Overdue) needs a dedicated creator (FR-07) |
-| Abstract Factory | `ReportExportFactory` | CSV and PDF exports require consistent formatter+renderer families (FR-08) |
-| Builder | `ResourceBuilder` | Resources have 8+ fields; Builder makes optional config readable (FR-06) |
-| Prototype | `ResourceCache` | Bulk import clones pre-configured templates instead of rebuilding (US-014) |
-| Singleton | `DatabaseConnection` | Only one connection pool must exist across 1,000 concurrent users (NFR-07) |
+## Repository Design Decisions
+**Generic Interface:** `Repository[T, ID]` uses Python Generics to avoid code
+duplication — all 8 entity repos share the same `save/find_by_id/find_all/delete`
+contract.
+
+**Factory over DI:** `RepositoryFactory` was chosen over a DI framework because it
+provides explicit, readable backend configuration for a solo project. Switching
+backends requires only changing one string: `get_resource_repo("DATABASE")`.
+
+**In-Memory First:** All business logic is tested against in-memory repos — no
+database required for unit tests. This directly satisfies NFR-07 (fast test cycles).
+
+**Future-Proofing:** `FileSystemResourceRepository` (functional JSON) and
+`DatabaseResourceRepository` (stub) show that swapping backends never changes
+the service layer — it only changes the factory call.
 
 ## Running Tests
 ```bash
 pip install pytest pytest-cov
-pytest tests/test_all.py -v
-pytest tests/test_all.py --cov=src --cov=creational_patterns --cov-report=term-missing
+pytest tests/ -v
+pytest tests/ --cov=src --cov=repositories --cov=factories --cov-report=term-missing
 ```
+**Result: 195 tests passing — 87% coverage**
+
+## Language
+**Python 3.12** — clean OOP, ABC for interfaces, dict as HashMap, pytest for tests.
 
 ## Author
 **Phola Qwalana 211225347** | Software Engineering | April 2026
