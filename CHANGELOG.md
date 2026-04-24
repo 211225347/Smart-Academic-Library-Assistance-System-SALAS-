@@ -1,4 +1,3 @@
-[CHANGELOG.md](https://github.com/user-attachments/files/27050312/CHANGELOG.md)
 # CHANGELOG.md — Smart Academic Library Assistance System (SALAS)
 
 > Assignment 10: From Class Diagrams to Code with All Creational Patterns
