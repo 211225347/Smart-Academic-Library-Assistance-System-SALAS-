@@ -1,11 +1,11 @@
 # CHANGELOG.md — Smart Academic Library Assistance System (SALAS)
 
 > Assignment 10: From Class Diagrams to Code with All Creational Patterns
-> Version: 1.0.0 | April 2026
+|03 May 2026
 
 ---
 
-## [1.0.0] — April 2026 — Initial Implementation
+## 03 May 2026 — Initial Implementation
 
 ### Added — Class Implementations (`/src`)
 
