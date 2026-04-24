@@ -1,11 +1,12 @@
+[CHANGELOG.md](https://github.com/user-attachments/files/27050312/CHANGELOG.md)
 # CHANGELOG.md — Smart Academic Library Assistance System (SALAS)
 
 > Assignment 10: From Class Diagrams to Code with All Creational Patterns
-|03 May 2026
+> Version: 1.0.0 | April 2026
 
 ---
 
-## 03 May 2026 — Initial Implementation
+## [1.0.0] — April 2026 — Initial Implementation
 
 ### Added — Class Implementations (`/src`)
 
@@ -95,7 +96,7 @@
 
 ---
 
-## Upcoming — Sprint 2 Implementation
+## Upcoming — [1.1.0] — Sprint 2 Implementation
 
 ### Planned
 - Implement REST API endpoints for FR-01, FR-02, FR-03 (US-002, US-001, US-003)
@@ -103,3 +104,51 @@
 - Add Elasticsearch client for Resource indexing (FR-02)
 - Implement JWT authentication middleware (NFR-10)
 - Add integration tests for borrow/return workflow
+
+---
+
+## [1.1.0] — April 2026 — Repository Layer (Assignment 11)
+
+### Added — Repository Interfaces (`/repositories`)
+- `repositories/interfaces.py` — Generic `Repository[T, ID]` base interface
+  with CRUD + `count()` + `exists()`. Entity-specific interfaces:
+  `UserRepository`, `ResourceRepository`, `LoanRepository`,
+  `ReservationRepository`, `FineRepository`, `NotificationRepository`,
+  `RecommendationRepository`, `ReportRepository` — each adds domain-specific
+  query methods beyond basic CRUD.
+
+### Added — In-Memory Implementations (`/repositories/inmemory`)
+- `inmemory_repositories.py` — HashMap (dict) implementations of all 8
+  repository interfaces. `InMemoryRepository` base class provides shared
+  CRUD. All query methods use in-memory filtering with no external deps.
+
+### Added — Future Storage Stubs (`/repositories/filesystem`)
+- `filesystem_repositories.py` — `FileSystemResourceRepository` serializes
+  to JSON (functional). `DatabaseResourceRepository` stub with
+  `NotImplementedError` and Sprint 5 TODOs.
+
+### Added — Repository Factory (`/factories`)
+- `repository_factory.py` — `RepositoryFactory` with static methods per
+  entity type. `get_all("MEMORY")` returns all 8 repos. Environment-variable
+  friendly: `RepositoryFactory.get_resource_repo(os.environ.get("SALAS_STORAGE", "MEMORY"))`.
+
+### Tests
+- `tests/test_repositories.py` — 87 new tests covering all 8 repos
+  (CRUD + domain queries) and RepositoryFactory (all backends, edge cases,
+  filesystem integration test).
+
+### Test Coverage (Combined Assignments 10 + 11)
+| Module | Coverage |
+|---|---|
+| `src/models.py` | 93% |
+| `repositories/inmemory/` | 98% |
+| `factories/repository_factory.py` | 86% |
+| `repositories/interfaces.py` | 71% (ABCs — expected) |
+| **TOTAL (195 tests)** | **87%** |
+
+### GitHub Issues Closed
+- #20 Design generic Repository interface
+- #21 Implement all 8 in-memory repositories
+- #22 Create RepositoryFactory with MEMORY/FILESYSTEM/DATABASE backends
+- #23 Write 87 repository unit tests
+- #24 Add filesystem stub for future-proofing
