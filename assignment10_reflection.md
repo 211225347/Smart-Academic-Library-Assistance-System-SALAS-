@@ -37,12 +37,12 @@ Each of the six patterns solves a different object-creation problem, and
 the challenge was identifying which problem existed in SALAS rather than
 forcing patterns onto the system where they did not fit.
 
-The **Simple Factory** for UserFactory was the most natural fit — the
+The **Simple Factory** for UserFactory was the most natural fit, the
 system needs to create either a Student or Librarian based on a role
 string that arrives from an API request. One central place to make that
 decision is exactly what Simple Factory provides.
 
-The **Singleton** for DatabaseConnection was also clear — only one
+The **Singleton** for DatabaseConnection was also clear, only one
 connection pool should ever exist. But implementing it correctly in
 Python was harder than expected. The standard pattern of calling
 `cls.__new__(cls)` and then `cls.__init__()` created a problem: the
