@@ -95,7 +95,7 @@
 
 ---
 
-## Upcoming — [1.1.0] — Sprint 2 Implementation
+## Upcoming — Sprint 2 Implementation
 
 ### Planned
 - Implement REST API endpoints for FR-01, FR-02, FR-03 (US-002, US-001, US-003)
