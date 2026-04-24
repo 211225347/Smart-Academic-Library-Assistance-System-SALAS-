@@ -2,7 +2,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 10: From Class Diagrams to Code with All Creational Patterns
-> Building on Assignments 3–9 | Version 1.0 | April 2026
+> Building on Assignments 3–9 |03 May 2026
 
 ---
 
@@ -11,7 +11,7 @@
 The most immediate challenge when moving from the class diagram in
 Assignment 9 to actual Python code was confronting the gap between
 UML notation and language-specific implementation details. UML is
-language-agnostic — it shows that Student "owns" ReadingList via
+language-agnostic, it shows that Student "owns" ReadingList via
 composition, but it does not tell you whether ReadingList should be
 instantiated in Student's `__init__`, passed as a constructor argument,
 or lazily created on first access.
@@ -130,7 +130,7 @@ test file tells them what the system does more accurately than any
 written specification.
 
 **The distance between design and code is where bugs live.** Every
-ambiguity left in the class diagram — every implicit relationship, every
-unstated business rule — became a potential bug in implementation. The
+ambiguity left in the class diagram, every implicit relationship, every
+unstated business rule, became a potential bug in implementation. The
 domain model and class diagram from Assignment 9 were excellent starting
 points, but the code forced every deferred decision to be made explicit.
