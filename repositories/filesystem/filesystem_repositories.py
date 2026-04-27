@@ -210,3 +210,20 @@ class DatabaseResourceRepository(ResourceRepository):
 
     def search(self, keyword: str) -> List[Resource]:
         raise NotImplementedError("Scheduled for Sprint 5.")
+
+class FileSystemUserRepository:
+    def __init__(self, file_path: str):
+        self.file_path = file_path
+
+    def save(self, user):
+        raise NotImplementedError("Filesystem storage not implemented yet")
+
+    def find_by_id(self, user_id: str):
+        raise NotImplementedError("Filesystem storage not implemented yet")
+
+    def find_all(self):
+        raise NotImplementedError("Filesystem storage not implemented yet")
+
+    def delete(self, user_id: str):
+        raise NotImplementedError("Filesystem storage not implemented yet")
+
