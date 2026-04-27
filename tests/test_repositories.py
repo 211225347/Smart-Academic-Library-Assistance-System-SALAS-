@@ -645,3 +645,12 @@ class TestRepositoryFactory:
         repo1 = RepositoryFactory.get_user_repo("MEMORY")
         repo2 = RepositoryFactory.get_user_repo("MEMORY")
         assert repo1 is not repo2
+
+def test_delete_user():
+    repo = InMemoryUserRepository()
+    user = User(user_id="1", name="Test")
+    repo.save(user)
+
+    repo.delete("1")
+    assert repo.find_by_id("1") is None
+``
