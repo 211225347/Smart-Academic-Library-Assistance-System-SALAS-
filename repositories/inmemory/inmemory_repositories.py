@@ -389,3 +389,24 @@ class InMemoryReportRepository(InMemoryRepository, ReportRepository):
             r for r in self._storage.values()
             if r.status == "READY"
         ]
+
+from repositories.interfaces import UserRepository
+from models import User
+
+
+class InMemoryUserRepository(UserRepository):
+    def __init__(self):
+        self._storage = {}
+
+    def save(self, user: User) -> None:
+        self._storage[user.user_id] = user
+
+    def find_by_id(self, user_id: str):
+        return self._storage.get(user_id)
+
+    def find_all(self):
+        return list(self._storage.values())
+
+    def delete(self, user_id: str) -> None:
+        if user_id in self._storage:
+            del self._storage[user_id]
