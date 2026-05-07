@@ -2,12 +2,11 @@
 repositories/inmemory/inmemory_repositories.py
 In-memory HashMap implementations of all repository interfaces.
 
-Uses Python dict as the HashMap storage backend.
-All implementations are fully interchangeable with future storage backends
-(filesystem, database) because they implement the same interfaces.
+Each class implements the entity-specific interface which extends
+Repository[T, ID] from base_repository.py.
 
-Design: Each repository stores entities keyed by their ID string.
-All query methods perform in-memory filtering — no external dependencies.
+Extra helper methods (count, exists, clear) are only on the concrete
+classes — NOT on the base interface — to avoid strict-marking issues.
 """
 
 import sys
@@ -15,13 +14,13 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 
 from typing import Optional, List, Dict
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 from src.models import (
-    User, Student, Librarian, Resource, Loan, Reservation,
-    Fine, Recommendation, Notification, Report,
-    LoanStatus, ResourceStatus, ReservationStatus, NotificationStatus,
-    AccountStatus
+    User, Resource, Loan, Reservation, Fine,
+    Recommendation, Notification, Report,
+    LoanStatus, ReservationStatus, NotificationStatus,
+    AccountStatus, FineStatus
 )
 from repositories.interfaces import (
     UserRepository, ResourceRepository, LoanRepository,
@@ -30,69 +29,30 @@ from repositories.interfaces import (
 )
 
 
-# ─────────────────────────────────────────────
-# Base In-Memory Repository
-# ─────────────────────────────────────────────
-
-class InMemoryRepository:
+class InMemoryUserRepository(UserRepository):
     """
-    Base class providing HashMap storage and generic CRUD for all
-    in-memory repository implementations.
-    """
-
-    def __init__(self):
-        self._storage: Dict[str, object] = {}
-
-    def save(self, entity) -> None:
-        entity_id = self._get_id(entity)
-        self._storage[entity_id] = entity
-
-    def find_by_id(self, entity_id: str):
-        return self._storage.get(entity_id, None)
-
-    def find_all(self) -> list:
-        return list(self._storage.values())
-
-    def delete(self, entity_id: str) -> bool:
-        if entity_id in self._storage:
-            del self._storage[entity_id]
-            return True
-        return False
-
-    def count(self) -> int:
-        return len(self._storage)
-
-    def exists(self, entity_id: str) -> bool:
-        return entity_id in self._storage
-
-    def _get_id(self, entity) -> str:
-        """Extract ID from entity using common attribute naming conventions."""
-        for attr in ("user_id", "resource_id", "loan_id", "reservation_id",
-                     "fine_id", "notification_id", "recommendation_id",
-                     "report_id", "list_id"):
-            if hasattr(entity, attr):
-                return getattr(entity, attr)
-        raise AttributeError(
-            f"Cannot determine ID for entity of type {type(entity).__name__}"
-        )
-
-    def clear(self) -> None:
-        """Clears all stored entities — used in tests for isolation."""
-        self._storage.clear()
-
-
-# ─────────────────────────────────────────────
-# User Repository
-# ─────────────────────────────────────────────
-
-class InMemoryUserRepository(InMemoryRepository, UserRepository):
-    """
-    In-memory implementation of UserRepository.
+    In-memory HashMap implementation of UserRepository.
     Maps to FR-01 (Authentication) and FR-10 (RBAC).
     """
 
+    def __init__(self):
+        self._storage: Dict[str, User] = {}
+
+    def save(self, user: User) -> None:
+        self._storage[user.user_id] = user
+
+    def find_by_id(self, user_id: str) -> Optional[User]:
+        return self._storage.get(user_id)
+
+    def find_all(self) -> List[User]:
+        return list(self._storage.values())
+
+    def delete(self, user_id: str) -> None:
+        self._storage.pop(user_id, None)
+
+    # ── Domain-specific queries ───────────────────────────────────────────
+
     def find_by_email(self, email: str) -> Optional[User]:
-        """Find a user by email address (case-insensitive)."""
         email_lower = email.lower()
         for user in self._storage.values():
             if user.email.lower() == email_lower:
@@ -100,49 +60,60 @@ class InMemoryUserRepository(InMemoryRepository, UserRepository):
         return None
 
     def find_by_role(self, role: str) -> List[User]:
-        """Return all users with the given role string."""
         role_upper = role.upper()
-        return [
-            u for u in self._storage.values()
-            if u.role.value == role_upper
-        ]
+        return [u for u in self._storage.values()
+                if u.role.value == role_upper]
 
     def find_active_users(self) -> List[User]:
-        """Return all users with ACTIVE account status."""
-        return [
-            u for u in self._storage.values()
-            if u.account_status == AccountStatus.ACTIVE
-        ]
+        return [u for u in self._storage.values()
+                if u.account_status == AccountStatus.ACTIVE]
+
+    # ── Concrete-only helpers (NOT on interface) ──────────────────────────
+
+    def count(self) -> int:
+        return len(self._storage)
+
+    def exists(self, user_id: str) -> bool:
+        return user_id in self._storage
+
+    def clear(self) -> None:
+        self._storage.clear()
 
 
-# ─────────────────────────────────────────────
-# Resource Repository
-# ─────────────────────────────────────────────
-
-class InMemoryResourceRepository(InMemoryRepository, ResourceRepository):
+class InMemoryResourceRepository(ResourceRepository):
     """
-    In-memory implementation of ResourceRepository.
+    In-memory HashMap implementation of ResourceRepository.
     Maps to FR-02 (Search) and FR-06 (Catalogue Management).
     """
 
+    def __init__(self):
+        self._storage: Dict[str, Resource] = {}
+
+    def save(self, resource: Resource) -> None:
+        self._storage[resource.resource_id] = resource
+
+    def find_by_id(self, resource_id: str) -> Optional[Resource]:
+        return self._storage.get(resource_id)
+
+    def find_all(self) -> List[Resource]:
+        return list(self._storage.values())
+
+    def delete(self, resource_id: str) -> None:
+        self._storage.pop(resource_id, None)
+
+    # ── Domain-specific queries ───────────────────────────────────────────
+
     def find_by_title(self, title: str) -> List[Resource]:
-        """Case-insensitive partial title match."""
         kw = title.lower()
-        return [
-            r for r in self._storage.values()
-            if kw in r.title.lower()
-        ]
+        return [r for r in self._storage.values()
+                if kw in r.title.lower()]
 
     def find_by_author(self, author: str) -> List[Resource]:
-        """Case-insensitive partial author match."""
         kw = author.lower()
-        return [
-            r for r in self._storage.values()
-            if kw in r.author.lower()
-        ]
+        return [r for r in self._storage.values()
+                if kw in r.author.lower()]
 
     def find_by_isbn(self, isbn: str) -> Optional[Resource]:
-        """Exact ISBN match (strips hyphens and spaces)."""
         clean = isbn.replace("-", "").replace(" ", "")
         for r in self._storage.values():
             if r.isbn.replace("-", "").replace(" ", "") == clean:
@@ -150,28 +121,17 @@ class InMemoryResourceRepository(InMemoryRepository, ResourceRepository):
         return None
 
     def find_available(self) -> List[Resource]:
-        """Return resources with at least one available copy."""
-        return [
-            r for r in self._storage.values()
-            if r.available_copies > 0
-        ]
+        return [r for r in self._storage.values()
+                if r.available_copies > 0]
 
     def find_by_genre(self, genre: str) -> List[Resource]:
-        """Case-insensitive exact genre match."""
-        g = genre.lower()
-        return [
-            r for r in self._storage.values()
-            if r._genre.lower() == g
-        ]
+        return [r for r in self._storage.values()
+                if r._genre.lower() == genre.lower()]
 
     def search(self, keyword: str) -> List[Resource]:
-        """
-        Full-text search across title, author, and ISBN.
-        Simulates Elasticsearch keyword search for in-memory testing.
-        """
         kw = keyword.lower()
-        results = []
         seen = set()
+        results = []
         for r in self._storage.values():
             if (kw in r.title.lower()
                     or kw in r.author.lower()
@@ -181,131 +141,169 @@ class InMemoryResourceRepository(InMemoryRepository, ResourceRepository):
                     seen.add(r.resource_id)
         return results
 
+    # ── Concrete-only helpers ─────────────────────────────────────────────
 
-# ─────────────────────────────────────────────
-# Loan Repository
-# ─────────────────────────────────────────────
+    def count(self) -> int:
+        return len(self._storage)
 
-class InMemoryLoanRepository(InMemoryRepository, LoanRepository):
+    def exists(self, resource_id: str) -> bool:
+        return resource_id in self._storage
+
+    def clear(self) -> None:
+        self._storage.clear()
+
+
+class InMemoryLoanRepository(LoanRepository):
     """
-    In-memory implementation of LoanRepository.
-    Maps to FR-03 (Borrowing), FR-04 (Dashboard), FR-07 (Notifications).
+    In-memory HashMap implementation of LoanRepository.
+    Maps to FR-03, FR-04, FR-07.
     """
+
+    def __init__(self):
+        self._storage: Dict[str, Loan] = {}
+
+    def save(self, loan: Loan) -> None:
+        self._storage[loan.loan_id] = loan
+
+    def find_by_id(self, loan_id: str) -> Optional[Loan]:
+        return self._storage.get(loan_id)
+
+    def find_all(self) -> List[Loan]:
+        return list(self._storage.values())
+
+    def delete(self, loan_id: str) -> None:
+        self._storage.pop(loan_id, None)
+
+    # ── Domain-specific queries ───────────────────────────────────────────
 
     def find_by_student(self, student_id: str) -> List[Loan]:
-        """Return all loans (any status) for a given student."""
-        return [
-            loan for loan in self._storage.values()
-            if loan._student.user_id == student_id
-        ]
+        return [l for l in self._storage.values()
+                if l._student.user_id == student_id]
 
     def find_active_by_student(self, student_id: str) -> List[Loan]:
-        """Return only non-returned loans for a student."""
-        active_statuses = {
-            LoanStatus.ACTIVE, LoanStatus.DUE_SOON, LoanStatus.OVERDUE
-        }
-        return [
-            loan for loan in self._storage.values()
-            if (loan._student.user_id == student_id
-                and loan.status in active_statuses)
-        ]
+        active = {LoanStatus.ACTIVE, LoanStatus.DUE_SOON, LoanStatus.OVERDUE}
+        return [l for l in self._storage.values()
+                if l._student.user_id == student_id
+                and l.status in active]
 
     def find_overdue(self) -> List[Loan]:
-        """Return all loans past their due date and not returned."""
-        return [
-            loan for loan in self._storage.values()
-            if loan.is_overdue()
-        ]
+        return [l for l in self._storage.values() if l.is_overdue()]
 
     def find_due_within_days(self, days: int) -> List[Loan]:
-        """Return active loans due within the specified number of days."""
         cutoff = date.today() + timedelta(days=days)
-        return [
-            loan for loan in self._storage.values()
-            if (loan.status in {LoanStatus.ACTIVE, LoanStatus.DUE_SOON}
-                and loan.due_date <= cutoff
-                and loan.due_date >= date.today())
-        ]
+        return [l for l in self._storage.values()
+                if (l.status in {LoanStatus.ACTIVE, LoanStatus.DUE_SOON}
+                    and l.due_date <= cutoff
+                    and l.due_date >= date.today())]
 
     def find_by_resource(self, resource_id: str) -> List[Loan]:
-        """Return all active loans for a specific resource."""
-        return [
-            loan for loan in self._storage.values()
-            if (loan.resource.resource_id == resource_id
-                and loan.status != LoanStatus.RETURNED
-                and loan.status != LoanStatus.ARCHIVED)
-        ]
+        return [l for l in self._storage.values()
+                if (l.resource.resource_id == resource_id
+                    and l.status not in {
+                        LoanStatus.RETURNED, LoanStatus.ARCHIVED})]
+
+    # ── Concrete-only helpers ─────────────────────────────────────────────
+
+    def count(self) -> int:
+        return len(self._storage)
+
+    def exists(self, loan_id: str) -> bool:
+        return loan_id in self._storage
+
+    def clear(self) -> None:
+        self._storage.clear()
 
 
-# ─────────────────────────────────────────────
-# Reservation Repository
-# ─────────────────────────────────────────────
-
-class InMemoryReservationRepository(InMemoryRepository, ReservationRepository):
+class InMemoryReservationRepository(ReservationRepository):
     """
-    In-memory implementation of ReservationRepository.
-    Maps to FR-03 (Reservation Management).
+    In-memory HashMap implementation of ReservationRepository.
+    Maps to FR-03.
     """
+
+    def __init__(self):
+        self._storage: Dict[str, Reservation] = {}
+
+    def save(self, reservation: Reservation) -> None:
+        self._storage[reservation.reservation_id] = reservation
+
+    def find_by_id(self, reservation_id: str) -> Optional[Reservation]:
+        return self._storage.get(reservation_id)
+
+    def find_all(self) -> List[Reservation]:
+        return list(self._storage.values())
+
+    def delete(self, reservation_id: str) -> None:
+        self._storage.pop(reservation_id, None)
+
+    # ── Domain-specific queries ───────────────────────────────────────────
 
     def find_by_student(self, student_id: str) -> List[Reservation]:
-        return [
-            r for r in self._storage.values()
-            if r._student.user_id == student_id
-        ]
+        return [r for r in self._storage.values()
+                if r._student.user_id == student_id]
 
     def find_active_by_resource(self, resource_id: str) -> List[Reservation]:
-        """Return non-expired, non-cancelled reservations for a resource."""
         active = {ReservationStatus.PENDING, ReservationStatus.CONFIRMED,
                   ReservationStatus.QUEUED}
-        return [
-            r for r in self._storage.values()
-            if (r._resource.resource_id == resource_id
-                and r.status in active)
-        ]
+        return [r for r in self._storage.values()
+                if r._resource.resource_id == resource_id
+                and r.status in active]
 
     def find_expired(self) -> List[Reservation]:
-        """Return all expired reservations."""
-        return [
-            r for r in self._storage.values()
-            if r.is_expired()
-            and r.status not in {
-                ReservationStatus.CANCELLED, ReservationStatus.COLLECTED
-            }
-        ]
+        return [r for r in self._storage.values()
+                if r.is_expired()
+                and r.status not in {
+                    ReservationStatus.CANCELLED,
+                    ReservationStatus.COLLECTED}]
 
     def find_queue_for_resource(self, resource_id: str) -> List[Reservation]:
-        """Return QUEUED reservations sorted by queue position."""
-        queued = [
-            r for r in self._storage.values()
-            if (r._resource.resource_id == resource_id
-                and r.status == ReservationStatus.QUEUED)
-        ]
+        queued = [r for r in self._storage.values()
+                  if r._resource.resource_id == resource_id
+                  and r.status == ReservationStatus.QUEUED]
         return sorted(queued, key=lambda r: r._queue_position)
 
+    # ── Concrete-only helpers ─────────────────────────────────────────────
 
-# ─────────────────────────────────────────────
-# Fine Repository
-# ─────────────────────────────────────────────
+    def count(self) -> int:
+        return len(self._storage)
 
-class InMemoryFineRepository(InMemoryRepository, FineRepository):
+    def exists(self, reservation_id: str) -> bool:
+        return reservation_id in self._storage
+
+    def clear(self) -> None:
+        self._storage.clear()
+
+
+class InMemoryFineRepository(FineRepository):
     """
-    In-memory implementation of FineRepository.
+    In-memory HashMap implementation of FineRepository.
     Maps to FR-03 (borrowing eligibility).
     """
 
+    def __init__(self):
+        self._storage: Dict[str, Fine] = {}
+
+    def save(self, fine: Fine) -> None:
+        self._storage[fine.fine_id] = fine
+
+    def find_by_id(self, fine_id: str) -> Optional[Fine]:
+        return self._storage.get(fine_id)
+
+    def find_all(self) -> List[Fine]:
+        return list(self._storage.values())
+
+    def delete(self, fine_id: str) -> None:
+        self._storage.pop(fine_id, None)
+
+    # ── Domain-specific queries ───────────────────────────────────────────
+
     def find_by_student(self, student_id: str) -> List[Fine]:
-        return [
-            f for f in self._storage.values()
-            if f._loan._student.user_id == student_id
-        ]
+        return [f for f in self._storage.values()
+                if f._loan._student.user_id == student_id]
 
     def find_pending_by_student(self, student_id: str) -> List[Fine]:
-        from src.models import FineStatus
-        return [
-            f for f in self._storage.values()
-            if (f._loan._student.user_id == student_id
-                and f.status == FineStatus.PENDING)
-        ]
+        return [f for f in self._storage.values()
+                if f._loan._student.user_id == student_id
+                and f.status == FineStatus.PENDING]
 
     def find_by_loan(self, loan_id: str) -> Optional[Fine]:
         for f in self._storage.values():
@@ -313,100 +311,147 @@ class InMemoryFineRepository(InMemoryRepository, FineRepository):
                 return f
         return None
 
+    # ── Concrete-only helpers ─────────────────────────────────────────────
 
-# ─────────────────────────────────────────────
-# Notification Repository
-# ─────────────────────────────────────────────
+    def count(self) -> int:
+        return len(self._storage)
 
-class InMemoryNotificationRepository(InMemoryRepository, NotificationRepository):
+    def exists(self, fine_id: str) -> bool:
+        return fine_id in self._storage
+
+    def clear(self) -> None:
+        self._storage.clear()
+
+
+class InMemoryNotificationRepository(NotificationRepository):
     """
-    In-memory implementation of NotificationRepository.
-    Maps to FR-07 (Automated Notifications).
-    """
-
-    def find_by_user(self, user_id: str) -> List[Notification]:
-        return [
-            n for n in self._storage.values()
-            if n._user.user_id == user_id
-        ]
-
-    def find_scheduled(self) -> List[Notification]:
-        return [
-            n for n in self._storage.values()
-            if n.status == NotificationStatus.SCHEDULED
-        ]
-
-    def find_failed(self) -> List[Notification]:
-        return [
-            n for n in self._storage.values()
-            if n.status == NotificationStatus.FAILED
-        ]
-
-
-# ─────────────────────────────────────────────
-# Recommendation Repository
-# ─────────────────────────────────────────────
-
-class InMemoryRecommendationRepository(
-        InMemoryRepository, RecommendationRepository):
-    """
-    In-memory implementation of RecommendationRepository.
-    Maps to FR-05 (Personalized Recommendations).
+    In-memory HashMap implementation of NotificationRepository.
+    Maps to FR-07.
     """
 
-    def find_by_student(self, student_id: str) -> List[Recommendation]:
-        return [
-            r for r in self._storage.values()
-            if r._student.user_id == student_id
-        ]
-
-    def find_ready_by_student(self, student_id: str) -> List[Recommendation]:
-        return [
-            r for r in self._storage.values()
-            if (r._student.user_id == student_id
-                and r._status == "READY")
-        ]
-
-
-# ─────────────────────────────────────────────
-# Report Repository
-# ─────────────────────────────────────────────
-
-class InMemoryReportRepository(InMemoryRepository, ReportRepository):
-    """
-    In-memory implementation of ReportRepository.
-    Maps to FR-08 (Usage Reporting).
-    """
-
-    def find_by_type(self, report_type: str) -> List[Report]:
-        return [
-            r for r in self._storage.values()
-            if r.report_type == report_type
-        ]
-
-    def find_ready(self) -> List[Report]:
-        return [
-            r for r in self._storage.values()
-            if r.status == "READY"
-        ]
-
-from repositories.interfaces import UserRepository
-from models import User
-
-
-class InMemoryUserRepository(UserRepository):
     def __init__(self):
-        self._storage = {}
+        self._storage: Dict[str, Notification] = {}
 
-    def save(self, user: User) -> None:
-        self._storage[user.user_id] = user
+    def save(self, notification: Notification) -> None:
+        self._storage[notification.notification_id] = notification
 
-    def find_by_id(self, user_id: str):
-        return self._storage.get(user_id)
+    def find_by_id(self, notification_id: str) -> Optional[Notification]:
+        return self._storage.get(notification_id)
 
-    def find_all(self):
+    def find_all(self) -> List[Notification]:
         return list(self._storage.values())
 
-    def delete(self, user_id: str) -> None:
-        if user_id in self._storage:
-            del self._storage[user_id]
+    def delete(self, notification_id: str) -> None:
+        self._storage.pop(notification_id, None)
+
+    # ── Domain-specific queries ───────────────────────────────────────────
+
+    def find_by_user(self, user_id: str) -> List[Notification]:
+        return [n for n in self._storage.values()
+                if n._user.user_id == user_id]
+
+    def find_scheduled(self) -> List[Notification]:
+        return [n for n in self._storage.values()
+                if n.status == NotificationStatus.SCHEDULED]
+
+    def find_failed(self) -> List[Notification]:
+        return [n for n in self._storage.values()
+                if n.status == NotificationStatus.FAILED]
+
+    # ── Concrete-only helpers ─────────────────────────────────────────────
+
+    def count(self) -> int:
+        return len(self._storage)
+
+    def exists(self, notification_id: str) -> bool:
+        return notification_id in self._storage
+
+    def clear(self) -> None:
+        self._storage.clear()
+
+
+class InMemoryRecommendationRepository(RecommendationRepository):
+    """
+    In-memory HashMap implementation of RecommendationRepository.
+    Maps to FR-05.
+    """
+
+    def __init__(self):
+        self._storage: Dict[str, Recommendation] = {}
+
+    def save(self, recommendation: Recommendation) -> None:
+        self._storage[recommendation.recommendation_id] = recommendation
+
+    def find_by_id(self, recommendation_id: str) -> Optional[Recommendation]:
+        return self._storage.get(recommendation_id)
+
+    def find_all(self) -> List[Recommendation]:
+        return list(self._storage.values())
+
+    def delete(self, recommendation_id: str) -> None:
+        self._storage.pop(recommendation_id, None)
+
+    # ── Domain-specific queries ───────────────────────────────────────────
+
+    def find_by_student(self, student_id: str) -> List[Recommendation]:
+        return [r for r in self._storage.values()
+                if r._student.user_id == student_id]
+
+    def find_ready_by_student(self, student_id: str) -> List[Recommendation]:
+        return [r for r in self._storage.values()
+                if r._student.user_id == student_id
+                and r._status == "READY"]
+
+    # ── Concrete-only helpers ─────────────────────────────────────────────
+
+    def count(self) -> int:
+        return len(self._storage)
+
+    def exists(self, recommendation_id: str) -> bool:
+        return recommendation_id in self._storage
+
+    def clear(self) -> None:
+        self._storage.clear()
+
+
+class InMemoryReportRepository(ReportRepository):
+    """
+    In-memory HashMap implementation of ReportRepository.
+    Maps to FR-08.
+    """
+
+    def __init__(self):
+        self._storage: Dict[str, Report] = {}
+
+    def save(self, report: Report) -> None:
+        self._storage[report.report_id] = report
+
+    def find_by_id(self, report_id: str) -> Optional[Report]:
+        return self._storage.get(report_id)
+
+    def find_all(self) -> List[Report]:
+        return list(self._storage.values())
+
+    def delete(self, report_id: str) -> None:
+        self._storage.pop(report_id, None)
+
+    # ── Domain-specific queries ───────────────────────────────────────────
+
+    def find_by_type(self, report_type: str) -> List[Report]:
+        return [r for r in self._storage.values()
+                if r.report_type == report_type]
+
+    def find_ready(self) -> List[Report]:
+        return [r for r in self._storage.values()
+                if r.status == "READY"]
+
+    # ── Concrete-only helpers ─────────────────────────────────────────────
+
+    def count(self) -> int:
+        return len(self._storage)
+
+    def exists(self, report_id: str) -> bool:
+        return report_id in self._storage
+
+    def clear(self) -> None:
+        self._storage.clear()
