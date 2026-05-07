@@ -2,7 +2,7 @@
 ## Smart Academic Library Assistance System (SALAS)
 
 > Assignment 11: Updated Class Diagram showing Repository interfaces and implementations
-> Building on Assignment 9 Class Diagram | Version 2.0 | April 2026
+> Building on Assignment 9 Class Diagram |May 2026
 
 ---
 
