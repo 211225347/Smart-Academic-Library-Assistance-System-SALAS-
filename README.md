@@ -65,5 +65,14 @@ pytest tests/ --cov=src --cov=repositories --cov=factories --cov-report=term-mis
 ## Language
 **Python 3.12** — clean OOP, ABC for interfaces, dict as HashMap, pytest for tests.
 
+### Assignment 11 – Repository Pattern
+A generic `Repository[T, ID]` interface was introduced to encapsulate
+standard CRUD operations and avoid duplication across entity repositories.
+Entity-specific repositories extend this interface to preserve type safety
+while maintaining a consistent persistence contract.
+
+A Factory Pattern is used to abstract storage backends, allowing seamless
+switching between in-memory, filesystem, and future database implementations
+without impacting business logic.
 ## Author
 **Phola Qwalana 211225347** | Software Engineering | April 2026
