@@ -1,68 +1,74 @@
+[README_A12.md](https://github.com/user-attachments/files/27609350/README_A12.md)
 # Smart Academic Library Assistance System (SALAS)
 
 An intelligent library platform for university students.
 
 ## Project Documents
 
-### Assignment 3 — 9 (Previous)
-| Assignment | Documents |
-|---|---|
-| A3 | [SPECIFICATION.md](./SPECIFICATION.md), [ARCHITECTURE.md](./ARCHITECTURE.md) |
-| A4 | [STAKEHOLDERS.md](./STAKEHOLDERS.md), [SRD.md](./SRD.md), [REFLECTION.md](./REFLECTION.md) |
-| A5 | [USE_CASE_DIAGRAM.md](./USE_CASE_DIAGRAM.md), [USE_CASE_SPECIFICATIONS.md](./USE_CASE_SPECIFICATIONS.md), [TEST_CASES.md](./TEST_CASES.md), [REFLECTION5.md](./REFLECTION5.md) |
-| A6 | [AGILE_PLANNING.md](./AGILE_PLANNING.md), [REFLECTION6.md](./REFLECTION6.md) |
-| A7 | [template_analysis.md](./template_analysis.md), [kanban_explanation.md](./kanban_explanation.md), [reflection7.md](./reflection7.md) |
-| A8 | [STATE_TRANSITION_DIAGRAMS.md](./STATE_TRANSITION_DIAGRAMS.md), [ACTIVITY_DIAGRAMS.md](./ACTIVITY_DIAGRAMS.md), [assignment8_reflection.md](./assignment8_reflection.md) |
-| A9 | [DOMAIN_MODEL.md](./DOMAIN_MODEL.md), [CLASS_DIAGRAM.md](./CLASS_DIAGRAM.md), [assignment9_reflection.md](./assignment9_reflection.md) |
+### Assignments 3–11
+See previous README sections for all prior assignment documents.
 
-### Assignment 10 — Implementation and Creational Patterns
+### Assignment 12 — Service Layer and REST API
 | File | Description |
 |---|---|
-| [src/models.py](./src/models.py) | 12 domain classes in Python |
-| [creational_patterns/simple_factory.py](./creational_patterns/simple_factory.py) | Simple Factory |
-| [creational_patterns/factory_method.py](./creational_patterns/factory_method.py) | Factory Method |
-| [creational_patterns/abstract_factory.py](./creational_patterns/abstract_factory.py) | Abstract Factory |
-| [creational_patterns/builder.py](./creational_patterns/builder.py) | Builder |
-| [creational_patterns/prototype.py](./creational_patterns/prototype.py) | Prototype |
-| [creational_patterns/singleton.py](./creational_patterns/singleton.py) | Singleton |
-| [tests/test_all.py](./tests/test_all.py) | 108 unit tests |
+| [services/user_service.py](./services/user_service.py) | UserService — registration, login, RBAC, profile management |
+| [services/resource_service.py](./services/resource_service.py) | ResourceService — catalogue CRUD, search, ISBN validation, availability |
+| [services/loan_service.py](./services/loan_service.py) | LoanService — checkout, return, renewal, fine calculation |
+| [api/main.py](./api/main.py) | FastAPI REST API — 19 endpoints for Users, Resources, Loans |
+| [docs/openapi.md](./docs/openapi.md) | API documentation — endpoints, schemas, error codes |
+| [tests/services/test_services.py](./tests/services/test_services.py) | 55 service unit tests |
+| [tests/api/test_api.py](./tests/api/test_api.py) | 39 API integration tests |
+| [CHANGELOG.md](./CHANGELOG.md) | Version history |
 
-### Assignment 11 — Repository Layer
-| File | Description |
-|---|---|
-| [repositories/interfaces.py](./repositories/interfaces.py) | Generic `Repository[T,ID]` + 8 entity-specific interfaces |
-| [repositories/inmemory/inmemory_repositories.py](./repositories/inmemory/inmemory_repositories.py) | HashMap-based implementations of all 8 repositories |
-| [repositories/filesystem/filesystem_repositories.py](./repositories/filesystem/filesystem_repositories.py) | Filesystem JSON implementation + Database stub (future-proofing) |
-| [factories/repository_factory.py](./factories/repository_factory.py) | RepositoryFactory — switches between MEMORY/FILESYSTEM/DATABASE backends |
-| [tests/test_repositories.py](./tests/test_repositories.py) | 87 repository unit tests |
-| [CHANGELOG.md](./CHANGELOG.md) | Version history and issue tracking |
+## API Endpoints (19 total)
 
-## Repository Design Decisions
-**Generic Interface:** `Repository[T, ID]` uses Python Generics to avoid code
-duplication — all 8 entity repos share the same `save/find_by_id/find_all/delete`
-contract.
+### Users
+- `POST /api/users/register/student` — Register student
+- `POST /api/users/register/librarian` — Register librarian
+- `POST /api/users/login` — Login
+- `GET /api/users` — Get all users
+- `GET /api/users/{id}` — Get user
+- `PUT /api/users/{id}` — Update profile
+- `DELETE /api/users/{id}` — Delete user
 
-**Factory over DI:** `RepositoryFactory` was chosen over a DI framework because it
-provides explicit, readable backend configuration for a solo project. Switching
-backends requires only changing one string: `get_resource_repo("DATABASE")`.
+### Resources
+- `GET /api/resources` — Search/filter catalogue
+- `POST /api/resources` — Add resource
+- `GET /api/resources/{id}` — Get resource
+- `GET /api/resources/{id}/availability` — Check availability
+- `PUT /api/resources/{id}` — Update resource
+- `DELETE /api/resources/{id}` — Delete resource
 
-**In-Memory First:** All business logic is tested against in-memory repos — no
-database required for unit tests. This directly satisfies NFR-07 (fast test cycles).
+### Loans
+- `GET /api/loans` — All loans
+- `GET /api/loans/{id}` — Get loan
+- `POST /api/loans/checkout` — Checkout
+- `POST /api/loans/{id}/return` — Return
+- `POST /api/loans/{id}/renew` — Renew
+- `GET /api/loans/{id}/fine` — Fine details
+- `GET /api/students/{id}/loans` — Student loans
+- `GET /api/loans/overdue/all` — All overdue
 
-**Future-Proofing:** `FileSystemResourceRepository` (functional JSON) and
-`DatabaseResourceRepository` (stub) show that swapping backends never changes
-the service layer — it only changes the factory call.
+## Running the API
+```bash
+pip install fastapi uvicorn pytest httpx
+uvicorn api.main:app --reload --port 8000
+# Swagger UI: http://localhost:8000/docs
+# OpenAPI JSON: http://localhost:8000/openapi.json
+```
 
 ## Running Tests
 ```bash
-pip install pytest pytest-cov
 pytest tests/ -v
-pytest tests/ --cov=src --cov=repositories --cov=factories --cov-report=term-missing
+# Result: 289 tests passing
 ```
-**Result: 195 tests passing — 87% coverage**
 
-## Language
-**Python 3.12** — clean OOP, ABC for interfaces, dict as HashMap, pytest for tests.
+## Architecture
+```
+Request → FastAPI Router → Service Layer → Repository → In-Memory Storage
+```
+Services never access repositories directly — they use injected repository
+interfaces, making the business logic testable and storage-agnostic.
 
 ## Author
-**Phola Qwalana 211225347** | Software Engineering | April 2026
+**Phola Qwalana 211225347** | Software Engineering | May 2026
