@@ -54,6 +54,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+- name: Run tests
+  run: |
+    export PYTHONPATH=$PYTHONPATH:$(pwd)
+    pytest
+
       # Step 5 — Run domain model unit tests (Assignment 10)
       - name: Run domain model tests
         run: |
