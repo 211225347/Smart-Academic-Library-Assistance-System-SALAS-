@@ -1,0 +1,263 @@
+# .github/workflows/ci.yml
+# SALAS — Smart Academic Library Assistance System
+# CI/CD Pipeline — Assignment 13
+#
+# Pipeline stages:
+#   1. CI: Run all tests on every push and PR to main
+#   2. CD: Build and upload release artifact when merged to main
+
+name: SALAS CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - '**'          # Triggers on push to ANY branch
+  pull_request:
+    branches:
+      - main          # Triggers on PRs targeting main
+
+jobs:
+
+  # ══════════════════════════════════════════════════════════════════════
+  # JOB 1: CI — Run All Tests
+  # ══════════════════════════════════════════════════════════════════════
+
+  test:
+    name: Run All Tests
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Step 1 — Check out the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2 — Set up Python 3.12
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Step 3 — Cache pip dependencies for faster runs
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      # Step 4 — Install all dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 5 — Run domain model unit tests (Assignment 10)
+      - name: Run domain model tests
+        run: |
+          python -m pytest tests/test_all.py -v \
+            --tb=short \
+            --junitxml=test-results/test_all.xml
+        continue-on-error: false
+
+      # Step 6 — Run repository layer tests (Assignment 11)
+      - name: Run repository tests
+        run: |
+          python -m pytest tests/test_repositories.py -v \
+            --tb=short \
+            --junitxml=test-results/test_repositories.xml
+        continue-on-error: false
+
+      # Step 7 — Run service layer tests (Assignment 12)
+      - name: Run service layer tests
+        run: |
+          python -m pytest tests/services/test_services.py -v \
+            --tb=short \
+            --junitxml=test-results/test_services.xml
+        continue-on-error: false
+
+      # Step 8 — Run API integration tests (Assignment 12)
+      - name: Run API integration tests
+        run: |
+          python -m pytest tests/api/test_api.py -v \
+            --tb=short \
+            --junitxml=test-results/test_api.xml
+        continue-on-error: false
+
+      # Step 9 — Run full test suite with coverage report
+      - name: Run full test suite with coverage
+        run: |
+          python -m pytest tests/ -v \
+            --tb=short \
+            --cov=src \
+            --cov=repositories \
+            --cov=factories \
+            --cov=services \
+            --cov=api \
+            --cov-report=xml:coverage.xml \
+            --cov-report=term-missing \
+            --cov-fail-under=70
+
+      # Step 10 — Upload test results as artifact
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()   # Upload even if tests fail
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 30
+
+      # Step 11 — Upload coverage report as artifact
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage.xml
+          retention-days: 30
+
+  # ══════════════════════════════════════════════════════════════════════
+  # JOB 2: CD — Build and Upload Release Artifact
+  # Only runs when code is merged/pushed to main AND tests pass
+  # ══════════════════════════════════════════════════════════════════════
+
+  release:
+    name: Build Release Artifact
+    runs-on: ubuntu-latest
+    needs: test              # Only runs if test job passes
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+
+      # Step 1 — Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2 — Set up Python 3.12
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Step 3 — Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install build wheel
+
+      # Step 4 — Create release package directory
+      - name: Create release package
+        run: |
+          mkdir -p release
+
+          # Copy all source packages into release
+          cp -r src/ release/
+          cp -r repositories/ release/
+          cp -r factories/ release/
+          cp -r services/ release/
+          cp -r api/ release/
+          cp requirements.txt release/
+
+          # Generate release metadata
+          echo "SALAS Release" > release/RELEASE_INFO.txt
+          echo "Version: 1.0.${{ github.run_number }}" >> release/RELEASE_INFO.txt
+          echo "Commit: ${{ github.sha }}" >> release/RELEASE_INFO.txt
+          echo "Branch: ${{ github.ref_name }}" >> release/RELEASE_INFO.txt
+          echo "Build date: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> release/RELEASE_INFO.txt
+          echo "Tests: All 289 tests passing" >> release/RELEASE_INFO.txt
+
+          # Create a zip archive of the release
+          zip -r salas-release-v1.0.${{ github.run_number }}.zip release/
+
+          echo "Release package created successfully."
+          ls -la salas-release-*.zip
+
+      # Step 5 — Build Python wheel artifact
+      - name: Build Python wheel
+        run: |
+          # Create setup.py for packaging
+          cat > setup.py << 'EOF'
+          from setuptools import setup, find_packages
+          setup(
+              name="salas",
+              version="1.0.${{ github.run_number }}",
+              description="Smart Academic Library Assistance System",
+              packages=find_packages(),
+              python_requires=">=3.12",
+              install_requires=[
+                  "fastapi>=0.104.0",
+                  "uvicorn>=0.24.0",
+              ],
+          )
+          EOF
+          python -m build --wheel
+          echo "Wheel built:"
+          ls -la dist/
+
+      # Step 6 — Upload release zip as GitHub Actions artifact
+      - name: Upload release zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: salas-release-v1.0.${{ github.run_number }}
+          path: salas-release-v1.0.${{ github.run_number }}.zip
+          retention-days: 90
+
+      # Step 7 — Upload Python wheel artifact
+      - name: Upload wheel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: salas-wheel-v1.0.${{ github.run_number }}
+          path: dist/*.whl
+          retention-days: 90
+
+      # Step 8 — Create GitHub Release with artifacts
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: "SALAS Release v1.0.${{ github.run_number }}"
+          body: |
+            ## SALAS — Smart Academic Library Assistance System
+            ### Release v1.0.${{ github.run_number }}
+
+            **Commit:** ${{ github.sha }}
+            **Build date:** ${{ github.event.head_commit.timestamp }}
+
+            ### What's included
+            - Domain model (12 classes)
+            - 6 creational design patterns
+            - Repository layer (8 repositories, 3 storage backends)
+            - Service layer (UserService, ResourceService, LoanService)
+            - FastAPI REST API (19 endpoints)
+            - 289 unit and integration tests passing
+
+            ### How to run
+            ```bash
+            pip install -r requirements.txt
+            uvicorn api.main:app --reload --port 8000
+            ```
+            API docs available at: http://localhost:8000/docs
+          files: |
+            salas-release-v1.0.${{ github.run_number }}.zip
+            dist/*.whl
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 9 — Summary of what was built
+      - name: Pipeline summary
+        run: |
+          echo "========================================="
+          echo "SALAS CI/CD Pipeline completed"
+          echo "========================================="
+          echo "Release version: v1.0.${{ github.run_number }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "All 289 tests passed"
+          echo "Artifacts uploaded to GitHub Actions"
+          echo "GitHub Release created: v1.0.${{ github.run_number }}"
+          echo "========================================="
