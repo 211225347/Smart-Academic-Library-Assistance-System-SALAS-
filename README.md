@@ -1,6 +1,11 @@
+[README_A13.md](https://github.com/user-attachments/files/27629665/README_A13.md)
 # Smart Academic Library Assistance System (SALAS)
 
+[![CI/CD Pipeline](https://github.com/211225347/Smart-Academic-Library-Assistance-System-SALAS-/actions/workflows/ci.yml/badge.svg)](https://github.com/211225347/Smart-Academic-Library-Assistance-System-SALAS-/actions/workflows/ci.yml)
+
 An intelligent library platform for university students.
+
+---
 
 ## Project Documents
 
@@ -82,10 +87,106 @@ An intelligent library platform for university students.
 | [services/user_service.py](./services/user_service.py) | UserService |
 | [services/resource_service.py](./services/resource_service.py) | ResourceService |
 | [services/loan_service.py](./services/loan_service.py) | LoanService |
-| [api/main.py](./api/main.py) | FastAPI REST API |
+| [api/main.py](./api/main.py) | FastAPI REST API — 19 endpoints |
 | [docs/openapi.md](./docs/openapi.md) | API documentation |
 | [tests/services/test_services.py](./tests/services/test_services.py) | 55 service tests |
 | [tests/api/test_api.py](./tests/api/test_api.py) | 39 API tests |
+
+### Assignment 13 — CI/CD Pipeline
+| Document | Description |
+|---|---|
+| [.github/workflows/ci.yml](./.github/workflows/ci.yml) | GitHub Actions CI/CD workflow |
+| [PROTECTION.md](./PROTECTION.md) | Branch protection rules and justification |
+| [requirements.txt](./requirements.txt) | Python dependencies |
+| [assignment13_reflection.md](./assignment13_reflection.md) | Reflection on CI/CD implementation |
+
+---
+
+## CI/CD Pipeline
+
+### How It Works
+
+```
+Push to any branch
+       ↓
+CI Job: Run all 289 tests
+       ↓
+   Tests pass?
+   NO  → PR blocked, cannot merge
+   YES → PR can be reviewed and merged
+       ↓
+Merged to main
+       ↓
+CD Job: Build release artifact
+       ↓
+GitHub Release created with zip + wheel
+```
+
+### CI Pipeline (runs on every push and PR)
+- Sets up Python 3.12 on Ubuntu
+- Installs all dependencies from `requirements.txt`
+- Runs domain model tests (108 tests)
+- Runs repository tests (87 tests)
+- Runs service layer tests (55 tests)
+- Runs API integration tests (39 tests)
+- Generates coverage report (minimum 70% required)
+- Uploads test results and coverage as artifacts
+
+### CD Pipeline (runs only when merged to main)
+- Builds a release zip containing all source packages
+- Builds a Python wheel (`.whl`) artifact
+- Creates a versioned GitHub Release (v1.0.X)
+- Uploads both artifacts to the release
+
+### Branch Protection Rules
+- ✅ Pull request review required (1 approval)
+- ✅ CI status check must pass before merge
+- ✅ Direct pushes to main are blocked
+- ✅ Rules apply to administrators
+
+---
+
+## How to Run Tests Locally
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run all tests
+pytest tests/ -v
+
+# Run with coverage
+pytest tests/ --cov=src --cov=repositories --cov=factories \
+  --cov=services --cov=api --cov-report=term-missing
+
+# Run specific test suites
+pytest tests/test_all.py -v           # Domain model (108 tests)
+pytest tests/test_repositories.py -v  # Repository layer (87 tests)
+pytest tests/services/ -v             # Service layer (55 tests)
+pytest tests/api/ -v                  # API integration (39 tests)
+```
+
+**Expected result: 289 tests passing**
+
+---
+
+## How to Run the API
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Start the server
+uvicorn api.main:app --reload --port 8000
+
+# Open Swagger UI
+# http://localhost:8000/docs
+
+# OpenAPI JSON
+# http://localhost:8000/openapi.json
+```
+
+---
 
 ## Author
 **Phola Qwalana 211225347** | Software Engineering | May 2026
