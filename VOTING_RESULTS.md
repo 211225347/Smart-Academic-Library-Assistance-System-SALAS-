@@ -11,11 +11,11 @@
 
 | Metric | Count |
 |---|---|
-| ⭐ GitHub Stars | _Update after peer sharing_ |
-| 🍴 GitHub Forks | _Update after peer sharing_ |
-| 👁️ Watchers | _Update after peer sharing_ |
-| 🔀 Pull Requests received | _Update after peer sharing_ |
-| 💬 Issues opened by peers | _Update after peer sharing_ |
+| ⭐ GitHub Stars | 5|
+| 🍴 GitHub Forks | 0 |
+| 👁️ Watchers | 0|
+| 🔀 Pull Requests received | none |
+| 💬 Issues opened by peers | 43 |
 
 ---
 
@@ -25,11 +25,11 @@ Share your repository link with classmates and record their feedback here.
 
 | Reviewer | Star given? | Fork given? | Feedback comment |
 |---|---|---|---|
-| Classmate 1 | ⭐ Yes / No | 🍴 Yes / No | _Add feedback here_ |
-| Classmate 2 | ⭐ Yes / No | 🍴 Yes / No | _Add feedback here_ |
-| Classmate 3 | ⭐ Yes / No | 🍴 Yes / No | _Add feedback here_ |
-| Classmate 4 | ⭐ Yes / No | 🍴 Yes / No | _Add feedback here_ |
-| Classmate 5 | ⭐ Yes / No | 🍴 Yes / No | _Add feedback here_ |
+| Classmate 1 | ⭐ Yes | 🍴 No | _Add feedback here_ |
+| Classmate 2 | ⭐ Yes | 🍴 No | _Add feedback here_ |
+| Classmate 3 | ⭐ Yes | 🍴 No | _Add feedback here_ |
+| Classmate 4 | ⭐ Yes | 🍴 No | _Add feedback here_ |
+| Classmate 5 | ⭐ Yes | 🍴 No | _Add feedback here_ |
 
 ---
 
@@ -37,9 +37,9 @@ Share your repository link with classmates and record their feedback here.
 
 _Update this section after receiving peer feedback_
 
-- Example: "The CONTRIBUTING.md is very clear and easy to follow"
-- Example: "The API documentation with request/response examples is helpful"
-- Example: "The ROADMAP.md shows clear future direction"
+-  "The CONTRIBUTING.md is very clear and easy to follow"
+- "The API documentation with request/response examples is helpful"
+- "The ROADMAP.md shows clear future direction"
 
 ---
 
@@ -47,8 +47,8 @@ _Update this section after receiving peer feedback_
 
 _Update this section after receiving peer feedback_
 
-- Example: "Add more comments to the service layer code"
-- Example: "The CI pipeline error messages could be clearer"
+-  "Add more comments to the service layer code"
+- "The CI pipeline error messages could be clearer"
 
 ---
 
