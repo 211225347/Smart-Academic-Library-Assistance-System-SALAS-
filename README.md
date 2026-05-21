@@ -1,9 +1,136 @@
-[README_A13.md](https://github.com/user-attachments/files/27629665/README_A13.md)
+[README_A14.md](https://github.com/user-attachments/files/28105743/README_A14.md)
 # Smart Academic Library Assistance System (SALAS)
 
 [![CI/CD Pipeline](https://github.com/211225347/Smart-Academic-Library-Assistance-System-SALAS-/actions/workflows/ci.yml/badge.svg)](https://github.com/211225347/Smart-Academic-Library-Assistance-System-SALAS-/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://python.org)
 
-An intelligent library platform for university students.
+An intelligent library management platform for university students —
+featuring smart search, borrowing management, personalized recommendations,
+and a REST API built with FastAPI.
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Python 3.12+
+- Git
+
+### Quick Setup
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/211225347/Smart-Academic-Library-Assistance-System-SALAS-.git
+cd Smart-Academic-Library-Assistance-System-SALAS-
+
+# 2. Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate        # macOS/Linux
+venv\Scripts\activate           # Windows
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Run all tests
+pytest tests/ -v
+# Expected: 289 tests passing
+
+# 5. Start the API server
+uvicorn api.main:app --reload --port 8000
+# Swagger UI: http://localhost:8000/docs
+```
+
+---
+
+## Features for Contribution
+
+Want to contribute? Here are the open features:
+
+| Feature | Difficulty | Label | Description |
+|---|---|---|---|
+| Reservation API endpoints | ⭐ Beginner | `good-first-issue` | Add POST/GET/DELETE for reservations |
+| Fine management API | ⭐ Beginner | `good-first-issue` | Add pay/waive fine endpoints |
+| Email notifications | ⭐ Beginner | `good-first-issue` | Implement overdue email reminders |
+| Admin reporting dashboard | ⭐ Beginner | `good-first-issue` | Add top-borrowed and overdue reports |
+| Docker containerisation | ⭐ Beginner | `good-first-issue` | Create Dockerfile and docker-compose.yml |
+| PostgreSQL backend | 🔥 Intermediate | `feature-request` | Replace in-memory storage with PostgreSQL |
+| JWT authentication | 🔥 Intermediate | `feature-request` | Add token-based auth to all endpoints |
+| Elasticsearch search | 🔥 Intermediate | `feature-request` | Replace keyword search with Elasticsearch |
+| Redis caching | 🔥 Intermediate | `feature-request` | Cache search results and recommendations |
+| Recommendation engine | 🚀 Advanced | `feature-request` | Collaborative filtering for book suggestions |
+
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) to get started.
+
+---
+
+## How to Run Tests
+
+```bash
+# All 289 tests
+pytest tests/ -v
+
+# Individual suites
+pytest tests/test_all.py -v            # 108 domain model tests
+pytest tests/test_repositories.py -v   # 87 repository tests
+pytest tests/services/ -v              # 55 service tests
+pytest tests/api/ -v                   # 39 API integration tests
+
+# With coverage report
+pytest tests/ --cov=src --cov=repositories \
+  --cov=factories --cov=services --cov=api \
+  --cov-report=term-missing
+```
+
+---
+
+## How the CI/CD Pipeline Works
+
+```
+Push to any branch
+       ↓
+CI: Run 289 tests automatically
+       ↓
+   All pass? → PR can be reviewed and merged
+   Any fail? → PR is BLOCKED
+       ↓
+Merged to main
+       ↓
+CD: Build release artifact (zip + wheel)
+       ↓
+GitHub Release created automatically
+```
+
+Pipeline config: [.github/workflows/ci.yml](./.github/workflows/ci.yml)
+
+---
+
+## API Endpoints (19 total)
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/users/register/student` | Register student |
+| POST | `/api/users/register/librarian` | Register librarian |
+| POST | `/api/users/login` | Login |
+| GET | `/api/users` | Get all users |
+| GET | `/api/users/{id}` | Get user by ID |
+| PUT | `/api/users/{id}` | Update profile |
+| DELETE | `/api/users/{id}` | Delete user |
+| GET | `/api/resources` | Search/filter catalogue |
+| POST | `/api/resources` | Add resource |
+| GET | `/api/resources/{id}` | Get resource |
+| GET | `/api/resources/{id}/availability` | Check availability |
+| PUT | `/api/resources/{id}` | Update resource |
+| DELETE | `/api/resources/{id}` | Delete resource |
+| GET | `/api/loans` | All loans |
+| POST | `/api/loans/checkout` | Checkout resource |
+| POST | `/api/loans/{id}/return` | Return resource |
+| POST | `/api/loans/{id}/renew` | Renew loan |
+| GET | `/api/loans/{id}/fine` | Fine details |
+| GET | `/api/students/{id}/loans` | Student loans |
+
+Full API docs: [docs/openapi.md](./docs/openapi.md) |
+Live Swagger: `http://localhost:8000/docs`
 
 ---
 
@@ -87,104 +214,44 @@ An intelligent library platform for university students.
 | [services/user_service.py](./services/user_service.py) | UserService |
 | [services/resource_service.py](./services/resource_service.py) | ResourceService |
 | [services/loan_service.py](./services/loan_service.py) | LoanService |
-| [api/main.py](./api/main.py) | FastAPI REST API — 19 endpoints |
+| [api/main.py](./api/main.py) | FastAPI REST API |
 | [docs/openapi.md](./docs/openapi.md) | API documentation |
 | [tests/services/test_services.py](./tests/services/test_services.py) | 55 service tests |
 | [tests/api/test_api.py](./tests/api/test_api.py) | 39 API tests |
 
-### Assignment 13 — CI/CD Pipeline
+### Assignment 13
 | Document | Description |
 |---|---|
 | [.github/workflows/ci.yml](./.github/workflows/ci.yml) | GitHub Actions CI/CD workflow |
-| [PROTECTION.md](./PROTECTION.md) | Branch protection rules and justification |
+| [PROTECTION.md](./PROTECTION.md) | Branch protection rules |
 | [requirements.txt](./requirements.txt) | Python dependencies |
-| [assignment13_reflection.md](./assignment13_reflection.md) | Reflection on CI/CD implementation |
+| [assignment13_reflection.md](./assignment13_reflection.md) | Reflection |
+
+### Assignment 14
+| Document | Description |
+|---|---|
+| [CONTRIBUTING.md](./CONTRIBUTING.md) | Contribution guidelines |
+| [ROADMAP.md](./ROADMAP.md) | Future features and development roadmap |
+| [LICENSE](./LICENSE) | MIT License |
+| [VOTING_RESULTS.md](./VOTING_RESULTS.md) | Peer engagement results |
+| [REFLECTION14.md](./REFLECTION14.md) | Reflection on open-source collaboration |
 
 ---
 
-## CI/CD Pipeline
+## Contributing
 
-### How It Works
+We welcome contributions! Please read [CONTRIBUTING.md](./CONTRIBUTING.md)
+for setup instructions, coding standards, and how to submit a PR.
 
-```
-Push to any branch
-       ↓
-CI Job: Run all 289 tests
-       ↓
-   Tests pass?
-   NO  → PR blocked, cannot merge
-   YES → PR can be reviewed and merged
-       ↓
-Merged to main
-       ↓
-CD Job: Build release artifact
-       ↓
-GitHub Release created with zip + wheel
-```
-
-### CI Pipeline (runs on every push and PR)
-- Sets up Python 3.12 on Ubuntu
-- Installs all dependencies from `requirements.txt`
-- Runs domain model tests (108 tests)
-- Runs repository tests (87 tests)
-- Runs service layer tests (55 tests)
-- Runs API integration tests (39 tests)
-- Generates coverage report (minimum 70% required)
-- Uploads test results and coverage as artifacts
-
-### CD Pipeline (runs only when merged to main)
-- Builds a release zip containing all source packages
-- Builds a Python wheel (`.whl`) artifact
-- Creates a versioned GitHub Release (v1.0.X)
-- Uploads both artifacts to the release
-
-### Branch Protection Rules
-- ✅ Pull request review required (1 approval)
-- ✅ CI status check must pass before merge
-- ✅ Direct pushes to main are blocked
-- ✅ Rules apply to administrators
+Good first issues are labelled `good-first-issue` in the
+[Issues tab](https://github.com/211225347/Smart-Academic-Library-Assistance-System-SALAS-/issues).
 
 ---
 
-## How to Run Tests Locally
+## License
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Run all tests
-pytest tests/ -v
-
-# Run with coverage
-pytest tests/ --cov=src --cov=repositories --cov=factories \
-  --cov=services --cov=api --cov-report=term-missing
-
-# Run specific test suites
-pytest tests/test_all.py -v           # Domain model (108 tests)
-pytest tests/test_repositories.py -v  # Repository layer (87 tests)
-pytest tests/services/ -v             # Service layer (55 tests)
-pytest tests/api/ -v                  # API integration (39 tests)
-```
-
-**Expected result: 289 tests passing**
-
----
-
-## How to Run the API
-
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Start the server
-uvicorn api.main:app --reload --port 8000
-
-# Open Swagger UI
-# http://localhost:8000/docs
-
-# OpenAPI JSON
-# http://localhost:8000/openapi.json
-```
+This project is licensed under the MIT License —
+see [LICENSE](./LICENSE) for details.
 
 ---
 
