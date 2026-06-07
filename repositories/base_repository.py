@@ -26,4 +26,4 @@ class Repository(ABC, Generic[T, ID]):
     def delete(self, entity_id: ID) -> None:
         """Delete an entity by ID"""
         pass
-``
+

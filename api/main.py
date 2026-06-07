@@ -2,7 +2,7 @@
 api/main.py
 SALAS REST API — FastAPI application.
 
-Exposes RESTful endpoints for User, Resource, and Loan entities.
+Exposes RESTful endpoints for User, Resource, Loan, and Reservation entities.
 Auto-generates OpenAPI/Swagger documentation at /docs.
 
 Start server:
@@ -14,13 +14,17 @@ OpenAPI JSON: http://localhost:8000/openapi.json
 
 import sys
 import os
+import uuid
+from datetime import date
+from typing import List, Optional
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from fastapi import FastAPI, HTTPException, status, Query
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-from typing import List, Optional
 
+from src.models import Reservation, ReservationStatus
 from factories.repository_factory import RepositoryFactory
 from services.user_service import (
     UserService, UserNotFoundError, UserAlreadyExistsError,
@@ -42,7 +46,7 @@ app = FastAPI(
     description=(
         "REST API for the Smart Academic Library Assistance System. "
         "Provides endpoints for managing users, library resources, "
-        "and loan transactions. Built with FastAPI on top of a "
+        "loan transactions, and reservations. Built with FastAPI on top of a "
         "repository-based persistence layer (Assignment 11)."
     ),
     version="1.0.0",
@@ -64,6 +68,8 @@ resource_service = ResourceService(_repos["resources"], _repos["loans"])
 loan_service = LoanService(
     _repos["loans"], _repos["users"], _repos["resources"]
 )
+# Concrete reference to reservation storage layer for Issue #36
+reservation_repo = _repos["reservations"]
 
 # ── Pydantic Request / Response Models ───────────────────────────────────────
 
@@ -138,6 +144,17 @@ class LoanResponse(BaseModel):
     due_date: str
     status: str
     fine_amount: float
+
+class CreateReservationRequest(BaseModel):
+    user_id: str = Field(..., example="s001")
+    resource_id: str = Field(..., example="r001")
+
+class ReservationResponse(BaseModel):
+    reservation_id: str
+    user_id: str
+    resource_id: str
+    reservation_date: str
+    status: str
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -435,9 +452,7 @@ def delete_resource(resource_id: str):
         raise HTTPException(status_code=409, detail=str(e))
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# LOAN ENDPOINTS
-# ═══════════════════════════════════════════════════════════════════════════════
+# ── LOAN ENDPOINTS ────────────────────────────────────────────────────────────
 
 @app.get(
     "/api/loans",
@@ -558,6 +573,100 @@ def get_student_loans(student_id: str):
 )
 def get_overdue_loans():
     return [loan_to_response(l) for l in loan_service.get_overdue_loans()]
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# RESERVATION ENDPOINTS (Issue #36)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+@app.post(
+    "/api/reservations",
+    response_model=ReservationResponse,
+    status_code=status.HTTP_201_CREATED,
+    tags=["Reservations"],
+    summary="Create a new resource reservation",
+    description="Creates a valid reservation record. Applies strict business criteria checks."
+)
+def create_reservation(request: CreateReservationRequest):
+    try:
+        # 1. Core verification: Validate user and resource context via underlying services
+        student = user_service.get_user(request.user_id)
+        resource = resource_service.get_resource(request.resource_id)
+
+        # 2. Business Logic Guard: Blocks reservation if there are copies sitting available on the shelf
+        if resource.available_copies > 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Resource '{request.resource_id}' has available copies on shelf. Checkout instead."
+            )
+
+        # 3. Business Logic Guard: Cap active tracking entities per student
+        active_student_reservations = reservation_repo.find_by_student(request.user_id)
+        pending_or_queued = [
+            r for r in active_student_reservations 
+            if r.status in {ReservationStatus.PENDING, ReservationStatus.QUEUED}
+        ]
+        if len(pending_or_queued) >= 3:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Student has reached the maximum limit of 3 active reservations."
+            )
+
+        # 4. Process identity initialization
+        res_id = f"res-{uuid.uuid4().hex[:6]}"
+        reservation = Reservation(
+            reservation_id=res_id,
+            student=student,
+            resource=resource,
+            reservation_date=date.today()
+        )
+
+        # 5. Evaluate current waiting listing sizes to determine status allocation
+        existing_active = reservation_repo.find_active_by_resource(request.resource_id)
+        if len(existing_active) > 0:
+            reservation.status = ReservationStatus.QUEUED
+            reservation._queue_position = len(existing_active) + 1
+        else:
+            reservation.status = ReservationStatus.PENDING
+
+        # 6. Save directly to your persistent storage collection layer
+        reservation_repo.save(reservation)
+
+        return ReservationResponse(
+            reservation_id=reservation.reservation_id,
+            user_id=reservation._student.user_id,
+            resource_id=reservation._resource.resource_id,
+            reservation_date=str(reservation.reservation_date),
+            status=reservation.status.value
+        )
+
+    except (UserNotFoundError, ResourceNotFoundError) as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+
+@app.get(
+    "/api/reservations",
+    response_model=List[ReservationResponse],
+    tags=["Reservations"],
+    summary="Get all reservations",
+    description="Returns a tracked list array of system-wide academic reservations."
+)
+def get_all_reservations():
+    all_records = reservation_repo.find_all()
+    return [
+        ReservationResponse(
+            reservation_id=r.reservation_id,
+            user_id=r._student.user_id,
+            resource_id=r._resource.resource_id,
+            reservation_date=str(r.reservation_date),
+            status=r.status.value
+        )
+        for r in all_records
+    ]
 
 
 # ── Health Check ──────────────────────────────────────────────────────────────
